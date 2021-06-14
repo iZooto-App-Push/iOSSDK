@@ -1,0 +1,6 @@
+framework module MomagiciOSSDK {
+  umbrella header "MomagiciOSSDK-umbrella.h"
+
+  export *
+  module * { export * }
+}

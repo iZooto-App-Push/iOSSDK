@@ -1,0 +1,323 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		280739AD2675DF0400B681BE /* MomagiciOSSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280739AC2675DF0400B681BE /* MomagiciOSSDK.swift */; };
+		280739B52675E29A00B681BE /* RestClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280739B42675E29A00B681BE /* RestClient.swift */; };
+		280739B82675E33100B681BE /* Payload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280739B72675E33100B681BE /* Payload.swift */; };
+		280739BB2675E36D00B681BE /* AppConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280739BA2675E36D00B681BE /* AppConstant.swift */; };
+		280739BE2675E38900B681BE /* SharedUserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280739BD2675E38900B681BE /* SharedUserDefault.swift */; };
+		280739C12675E3AB00B681BE /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280739C02675E3AB00B681BE /* UserDefaults.swift */; };
+		280739C42675E3C200B681BE /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280739C32675E3C200B681BE /* Utils.swift */; };
+		280739C72675EF3100B681BE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280739C62675EF3100B681BE /* ViewController.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		280739A72675DF0400B681BE /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		280739A92675DF0400B681BE /* libMomagiciOSSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMomagiciOSSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		280739AC2675DF0400B681BE /* MomagiciOSSDK.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomagiciOSSDK.swift; sourceTree = "<group>"; };
+		280739B42675E29A00B681BE /* RestClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RestClient.swift; path = APIs/RestClient.swift; sourceTree = "<group>"; };
+		280739B72675E33100B681BE /* Payload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Payload.swift; path = Payload/Payload.swift; sourceTree = "<group>"; };
+		280739BA2675E36D00B681BE /* AppConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppConstant.swift; path = helper/AppConstant.swift; sourceTree = "<group>"; };
+		280739BD2675E38900B681BE /* SharedUserDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SharedUserDefault.swift; path = helper/SharedUserDefault.swift; sourceTree = "<group>"; };
+		280739C02675E3AB00B681BE /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UserDefaults.swift; path = helper/UserDefaults.swift; sourceTree = "<group>"; };
+		280739C32675E3C200B681BE /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		280739C62675EF3100B681BE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		280739A62675DF0400B681BE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		280739A02675DF0300B681BE = {
+			isa = PBXGroup;
+			children = (
+				280739AB2675DF0400B681BE /* MomagiciOSSDK */,
+				280739AA2675DF0400B681BE /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		280739AA2675DF0400B681BE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				280739A92675DF0400B681BE /* libMomagiciOSSDK.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		280739AB2675DF0400B681BE /* MomagiciOSSDK */ = {
+			isa = PBXGroup;
+			children = (
+				280739AC2675DF0400B681BE /* MomagiciOSSDK.swift */,
+				280739B42675E29A00B681BE /* RestClient.swift */,
+				280739B72675E33100B681BE /* Payload.swift */,
+				280739BA2675E36D00B681BE /* AppConstant.swift */,
+				280739BD2675E38900B681BE /* SharedUserDefault.swift */,
+				280739C02675E3AB00B681BE /* UserDefaults.swift */,
+				280739C32675E3C200B681BE /* Utils.swift */,
+				280739C62675EF3100B681BE /* ViewController.swift */,
+			);
+			path = MomagiciOSSDK;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		280739A82675DF0400B681BE /* MomagiciOSSDK */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 280739B02675DF0400B681BE /* Build configuration list for PBXNativeTarget "MomagiciOSSDK" */;
+			buildPhases = (
+				280739A52675DF0400B681BE /* Sources */,
+				280739A62675DF0400B681BE /* Frameworks */,
+				280739A72675DF0400B681BE /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MomagiciOSSDK;
+			productName = MomagiciOSSDK;
+			productReference = 280739A92675DF0400B681BE /* libMomagiciOSSDK.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		280739A12675DF0300B681BE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1230;
+				LastUpgradeCheck = 1230;
+				TargetAttributes = {
+					280739A82675DF0400B681BE = {
+						CreatedOnToolsVersion = 12.3;
+					};
+				};
+			};
+			buildConfigurationList = 280739A42675DF0300B681BE /* Build configuration list for PBXProject "MomagiciOSSDK" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 280739A02675DF0300B681BE;
+			productRefGroup = 280739AA2675DF0400B681BE /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				280739A82675DF0400B681BE /* MomagiciOSSDK */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		280739A52675DF0400B681BE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				280739B82675E33100B681BE /* Payload.swift in Sources */,
+				280739B52675E29A00B681BE /* RestClient.swift in Sources */,
+				280739C12675E3AB00B681BE /* UserDefaults.swift in Sources */,
+				280739C42675E3C200B681BE /* Utils.swift in Sources */,
+				280739BE2675E38900B681BE /* SharedUserDefault.swift in Sources */,
+				280739AD2675DF0400B681BE /* MomagiciOSSDK.swift in Sources */,
+				280739C72675EF3100B681BE /* ViewController.swift in Sources */,
+				280739BB2675E36D00B681BE /* AppConstant.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		280739AE2675DF0400B681BE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		280739AF2675DF0400B681BE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		280739B12675DF0400B681BE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = N2T2473XHF;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		280739B22675DF0400B681BE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = N2T2473XHF;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		280739A42675DF0300B681BE /* Build configuration list for PBXProject "MomagiciOSSDK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				280739AE2675DF0400B681BE /* Debug */,
+				280739AF2675DF0400B681BE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		280739B02675DF0400B681BE /* Build configuration list for PBXNativeTarget "MomagiciOSSDK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				280739B12675DF0400B681BE /* Debug */,
+				280739B22675DF0400B681BE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 280739A12675DF0300B681BE /* Project object */;
+}

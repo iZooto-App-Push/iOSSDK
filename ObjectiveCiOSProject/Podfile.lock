@@ -1,0 +1,16 @@
+PODS:
+  - MomagiciOSSDK (0.0.1)
+
+DEPENDENCIES:
+  - MomagiciOSSDK (from `../MomagiciOSSDK/`)
+
+EXTERNAL SOURCES:
+  MomagiciOSSDK:
+    :path: "../MomagiciOSSDK/"
+
+SPEC CHECKSUMS:
+  MomagiciOSSDK: 8408db5c48d18e028e92a79e944ee5c585c807d9
+
+PODFILE CHECKSUM: e51d52948ba09093e03fbb1f61ee010b9e10577c
+
+COCOAPODS: 1.10.1

@@ -1,0 +1,6 @@
+framework module Pods_ObjectiveCiOSProject {
+  umbrella header "Pods-ObjectiveCiOSProject-umbrella.h"
+
+  export *
+  module * { export * }
+}
