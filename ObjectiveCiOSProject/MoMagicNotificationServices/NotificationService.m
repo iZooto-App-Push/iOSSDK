@@ -25,7 +25,7 @@
     {
         [DATB didReceiveNotificationExtensionRequestWithRequest:self.receivedRequest bestAttemptContent:  self.bestAttemptContent  contentHandler: self.contentHandler ];
     }
-    self.contentHandler(self.bestAttemptContent);
+   // self.contentHandler(self.bestAttemptContent);
 }
 
 - (void)serviceExtensionTimeWillExpire {

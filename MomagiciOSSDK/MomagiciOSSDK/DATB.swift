@@ -51,12 +51,9 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
     
    @objc public static func initialisation(momagic_app_id : String, application : UIApplication,MoMagicInitSettings : Dictionary<String,Any>)
          {
-
-              
             momagic_uuid = momagic_app_id
             keySettingDetails = MoMagicInitSettings
             RestAPI.createRequest(uuid: momagic_uuid) { (output) in
-                print(output)
                 let jsonString = output.fromBase64()
                 if(jsonString != nil)
                 {
@@ -68,7 +65,6 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
 
                     sharedUserDefault?.set(dictionary["pid"]!, forKey: SharedUserDefault.Key.registerID)
                     momagic_id = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!
-                    print(dictionary["pid"]!)
                   }
                   else{
                     print("Some error occured")
@@ -233,7 +229,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
        {
            let userInfo = request.content.userInfo
            let notifcationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
-           notificationReceivedDelegate?.onNotificationReceived(payload: notifcationData!)
+          // notificationReceivedDelegate?.onNotificationReceived(payload: notifcationData!)
     bestAttemptContent.sound = UNNotificationSound.default()
 
            if let userDefaults = UserDefaults(suiteName: "group.com.MoMagic-iOS-SDK") {
@@ -601,7 +597,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
       let appstate = UIApplication.shared.applicationState
       if (appstate == .active && displayNotification == "InAppAlert")
         {
-            let userInfo = notification.request.content.userInfo
+        let userInfo = notification.request.content.userInfo
             let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
             let alert = UIAlertController(title: notificationData?.alert?.title, message:notificationData?.alert?.body, preferredStyle: UIAlertController.Style.alert)
             if (notificationData?.act1name != nil && notificationData?.act1name != ""){
@@ -619,43 +615,44 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
             alert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
             UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
             }
+    else
+      {
+        let userInfo = notification.request.content.userInfo
+        let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
+        notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
+        if (notificationData?.cfg != nil)
+        {
+            let str = String((notificationData?.cfg)!)
+            let binaryString = (str.data(using: .utf8, allowLossyConversion: false)?.reduce("") { (a, b) -> String in a + String(b, radix: 2) })
+            let lastChar = binaryString?.last!
+            let str1 = String((lastChar)!)
+            let impr = Int(str1)
+            if(impr == 1)
+            {
+                RestAPI.callImpression(notificationData: notificationData!,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!)
+            }
+            }
+       
+      }
+  
         }
     // Handle the clicks the notification from Banner,Button
   @objc  public static func notificationHandler(response : UNNotificationResponse)
     {
-        
-        let userInfo = response.notification.request.content.userInfo
+    
+    let userInfo = response.notification.request.content.userInfo
         let notifcationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
-        notificationReceivedDelegate?.onNotificationReceived(payload: notifcationData!)
         if let userDefaults = UserDefaults(suiteName: "group.com.MoMagic-iOS-SDK")
          {
             userDefaults.set(0, forKey: AppConstant.BADGE)
         }
         UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count number
-    //               let num = notifcationData?.cfg! as! Int
-    //                let str = String(num, radix: 2)
-    //                print(str) // prints "10110"
-    //                let last = str.suffix(1)
-    //                print(last) // prints "10110"
-    //               let myInt1 = Int(last)
-    //
-    //
-    //
-    //                if checkData == myInt1
-    //               {
-                         RestAPI.callImpression(notificationData: notifcationData!,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
-    //                }
-    //               else{
-    //                    print("No call")
-    //                }
-                    
-    ////////
-                   
-
-                    
     if notifcationData?.fetchurl != nil && notifcationData?.fetchurl != ""
       {
-        RestAPI.clickTrack(notificationData: notifcationData!, type: "0",userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
+       
+        
+       clickTrack(notificationData: notifcationData!, actionType: "0")
+
         if let url = URL(string: notifcationData!.fetchurl!)
              {
             URLSession.shared.dataTask(with: url) { data, response, error in
@@ -669,17 +666,13 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                 if notifcationData?.act1name != nil && notifcationData?.act1name != ""
                     {
                 if let url = URL(string:notifcationData!.url!) {
-//                    UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
-
-               // UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
+                    handleBroserNotification(url: url)
     }
         }
     else
         {
           if let url = URL(string:notifcationData!.url!) {
-//            UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
-
-           // UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
+            handleBroserNotification(url: url)
             }
         }
       }
@@ -691,16 +684,15 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
         if notifcationData?.act1name != nil && notifcationData?.act1name != ""
          {
            if let url = URL(string:notifcationData!.url!) {
-//            UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
+            handleBroserNotification(url: url)
 
-              // UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
                 }
         }
     else
     {
-//        UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
 
-      // UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
+        handleBroserNotification(url: url)
+
     }
             
     }
@@ -721,7 +713,8 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
              {
                   case "FirstButton" :
                    type = "1"
-                   RestAPI.clickTrack(notificationData: notifcationData!, type: type,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
+                    clickTrack(notificationData: notifcationData!, actionType: "1")
+
                 if notifcationData?.ap != "" && notifcationData?.ap != nil
                     {
                         handleClicks(response: response, actionType: "1")
@@ -735,9 +728,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                         {
                          if let url = URL(string: launchURl!)
                           {
-//                            UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
-
-                           // UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
+                            handleBroserNotification(url: url)
                             }
                                                                                                    
                         }
@@ -764,17 +755,14 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                         if(notifcationData?.fetchurl != "" && notifcationData?.fetchurl != nil)
                             {
                                 if let url = URL(string: notifcationData!.url!) {
-//                                    UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
+                                    handleBroserNotification(url: url)
 
-                                 //UIApplication.shared.open(url, options: //convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
                                     }
                             }
                         else
                             {
                             if let url = URL(string: notifcationData!.act1link!) {
-//                                UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
-
-                               // UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
+                                handleBroserNotification(url: url)
                                         }
                                     }
                             }
@@ -785,7 +773,8 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
     break
     case "SecondButton" :
                     type = "2"
-                    RestAPI.clickTrack(notificationData: notifcationData!, type: type,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
+        clickTrack(notificationData: notifcationData!, actionType: "2")
+
 
                 if notifcationData?.ap != "" && notifcationData?.ap != nil
                  {
@@ -800,9 +789,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                      {
                       if let url = URL(string: launchURl!)
                       {
-//                        UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
-
-                      //  UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
+                        handleBroserNotification(url: url)
                         }
                        }
                     else
@@ -826,9 +813,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                      {
                         if let url = URL(string: notifcationData!.act2link!)
                          {
-//                            UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
-
-                               // UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
+                            handleBroserNotification(url: url)
                          }
                      }
                     }
@@ -837,7 +822,8 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
     break
     default:
                 type = "0"
-                RestAPI.clickTrack(notificationData: notifcationData!, type: type,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
+        clickTrack(notificationData: notifcationData!, actionType: "0")
+
                 if notifcationData?.ap != "" && notifcationData?.ap != nil
                     {
                      handleClicks(response: response, actionType: "0")
@@ -859,9 +845,11 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
          }
          else{
             if let url = URL(string: notifcationData!.url!) {
-//                UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
+        
+                handleBroserNotification(url: url)
 
-             //   UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
+
+              
                  }
 
                                       
@@ -872,7 +860,8 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
     }// close if
     else{
          type = "0"
-         RestAPI.clickTrack(notificationData: notifcationData!, type: type,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
+        clickTrack(notificationData: notifcationData!, actionType: "0")
+
               if notifcationData?.ap != "" && notifcationData?.ap != nil
                 {
                     handleClicks(response: response, actionType: "0")
@@ -897,16 +886,16 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                 else
                 {
                     if let url = URL(string: notifcationData!.url!) {
-//                        UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
+                        handleBroserNotification(url: url)
 
-                       // UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
-                                        }
+                    }
                 }
                                         
             }
         } //close else
                 }
     }
+   
        // Fetching the Advertisement ID
     @objc  public static  func identifierForAdvertising() -> String? {
             // check if advertising tracking is enabled in user’s setting
@@ -939,7 +928,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                 onHandleLandingURL(response: response, actionType: actionType, launchURL: launchURL)
             }
             
-           RestAPI.clickTrack(notificationData: notifcationData!, type: type,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
+          
             
         }
         // handle the borwser
@@ -951,9 +940,9 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                {
                    if let url = URL(string: launchURL) {
                     if #available(iOS 10.0, *) {
-//                        UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
-
-                      //  UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
+                       // UIApplication.shared.open(url, options: [:])
+                        handleBroserNotification(url: url)
+                       // UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
                     }
                                                                 
                 }
@@ -964,10 +953,10 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
         // Check the notification subscribe or not 0-> Subscribe 2- UNSubscribe
       @objc  public static func setSubscription(isSubscribe : Bool)
         {
-            var value = 0
+            var value = 2
             if isSubscribe
             {
-                value = 2
+                value = 0
             }
         
              let token = sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)
@@ -984,11 +973,9 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
         // handle the addtional data
         private static func handleClicks(response : UNNotificationResponse , actionType : String)
             {
-                           
-                
-                let userInfo = response.notification.request.content.userInfo
-                             let notifcationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
-                                 var data = Dictionary<String,Any>()
+            let userInfo = response.notification.request.content.userInfo
+            let notifcationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
+            var data = Dictionary<String,Any>()
                                         data["button1ID"] = notifcationData?.act1id
                                           data["button1Title"] = notifcationData?.act1name
                                          data["button1URL"] = notifcationData?.act1link
@@ -1002,6 +989,23 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
 
 
             }
+    private static func clickTrack(notificationData : Payload,actionType : String)
+    {
+        if(notificationData.cfg != nil)
+        {
+            let str = notificationData.cfg
+            let binaryString = (str!.data(using: .utf8, allowLossyConversion: false)?.reduce("") { (a, b) -> String in a + String(b, radix: 2) })
+        let data = binaryString!.suffix(2)
+            let clickCFG = data.prefix(1)
+            let click = Int(clickCFG)
+
+            if(click == 1)
+            {
+                RestAPI.clickTrack(notificationData: notificationData, type: actionType,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
+            }
+        }
+        
+    }
         
 
           public static func getQueryStringParameter(url: String, param: String) -> String? {
@@ -1049,6 +1053,15 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
         }
             
             }
+    
+    @objc private static func  handleBroserNotification(url : URL)
+    {
+        if(url != nil)
+        {
+             UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
+        }
+        
+    }
        
        
         

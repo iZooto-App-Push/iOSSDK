@@ -19,7 +19,7 @@
         [momagicInitSetting setObject:@NO forKey:@"nativeWebview"];
         [momagicInitSetting setObject:@NO forKey:@"provisionalAuthorization"];
     // initalise the MoMagic SDK
-    [DATB initialisationWithMomagic_app_id: @"984f308a1e7d9790b85739efdead3abd5829ff09" application:application MoMagicInitSettings:momagicInitSetting];
+    [DATB initialisationWithMomagic_app_id: @"de1bdb0a32007eed602064192bb129b7e5e3cc32" application:application MoMagicInitSettings:momagicInitSetting];
         
     });
     NSMutableDictionary *myDictionary = [NSMutableDictionary new];
@@ -27,9 +27,11 @@
        [myDictionary setObject:@"Amit" forKey:@"rollnum"];
        [myDictionary setObject:@"Hundred" forKey:@"mark"];
     [myDictionary setObject:@"false" forKey:@"average"];
-    [ DATB addUserPropertiesWithData:myDictionary];
-    [DATB addEventWithEventName:@"ObjectiveC" data:myDictionary];
-   // initlialise the Delegate 
+   // [ DATB addUserPropertiesWithData:myDictionary];
+   // [DATB addEventWithEventName:@"ObjectiveC" data:myDictionary];
+   // initlialise the Delegate
+   // [DATB setSubscriptionWithIsSubscribe:true];
+    DATB.notificationReceivedDelegate = self;
     DATB.landingURLDelegate = self;
     DATB.notificationOpenDelegate = self;
     return YES;
@@ -42,6 +44,8 @@
 }
 
 -(void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler{
+    NSLog(@"Received");
+    [DATB handleForeGroundNotificationWithNotification:notification displayNotification:@"NONE"];
     completionHandler(UNNotificationPresentationOptionAlert);
 }
 -(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
@@ -62,9 +66,15 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 }
 
 - (void)onNotificationOpenWithAction:(NSDictionary<NSString *,id> * _Nonnull)action {
-    
+    NSLog(@"NSString = %@", action);
+
 }
 
+
+- (void)onNotificationReceivedWithPayload:(Payload * _Nonnull)payload {
+    NSLog(@"NSString = %@",payload);
+
+}
 
 @end
 

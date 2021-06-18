@@ -29,7 +29,7 @@ import Foundation
     public var act2link : String?
     public var ap : String?
     public var fetchurl : String?
-    public var cfg : Int?
+    public var cfg : String?
     public var inApp : String?
 
 
@@ -62,7 +62,7 @@ import Foundation
         act2name = dictionary["b2"] as? String   // button 2 name
         act2link = dictionary["l2"] as? String    // button 2 link
         ap = dictionary["ap"] as? String          // additional parameeter
-        cfg = dictionary["cfg"] as? Int           // cfg
+        cfg = dictionary["cfg"] as? String           // cfg
         fetchurl = dictionary["fu"] as? String    // fetch_url
         inApp = dictionary["ia"] as? String          // inApp
         act1id = dictionary["d1"] as? String //action1 id
@@ -94,9 +94,7 @@ public func dictionaryRepresentation() -> NSDictionary {
        dictionary.setValue(self.inApp, forKey: "ia")
        dictionary.setValue(self.act1id, forKey: "d1")
        dictionary.setValue(self.act2id, forKey: "d2")
-
-
-        return dictionary
+       return dictionary
     }
 
 }

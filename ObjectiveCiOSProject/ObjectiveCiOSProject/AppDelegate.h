@@ -9,10 +9,12 @@
 #import <UserNotifications/UserNotifications.h>
 @import MomagiciOSSDK;
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate,UNUserNotificationCenterDelegate,LandingURLDelegate,NotificationOpenDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate,UNUserNotificationCenterDelegate,LandingURLDelegate,NotificationOpenDelegate,NotificationReceiveDelegate>
 @property (strong, nonatomic) UIWindow * window;
 @property(nonatomic, weak)id <LandingURLDelegate> landingURLDelegate;
 @property(nonatomic, weak)id <NotificationOpenDelegate> notificationOpenDelegate;
+@property(nonatomic, weak)id <NotificationReceiveDelegate> notificationReceivedDelegate;
+
 
 
 @end
