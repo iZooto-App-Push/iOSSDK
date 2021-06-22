@@ -14,8 +14,5 @@
 @property(nonatomic, weak)id <LandingURLDelegate> landingURLDelegate;
 @property(nonatomic, weak)id <NotificationOpenDelegate> notificationOpenDelegate;
 @property(nonatomic, weak)id <NotificationReceiveDelegate> notificationReceivedDelegate;
-
-
-
 @end
 

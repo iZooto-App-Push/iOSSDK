@@ -20,17 +20,10 @@
         [momagicInitSetting setObject:@NO forKey:@"provisionalAuthorization"];
     // initalise the MoMagic SDK
     [DATB initialisationWithMomagic_app_id: @"de1bdb0a32007eed602064192bb129b7e5e3cc32" application:application MoMagicInitSettings:momagicInitSetting];
+       
         
     });
-    NSMutableDictionary *myDictionary = [NSMutableDictionary new];
-       [myDictionary setObject:@"Vignesh" forKey:@"name"];
-       [myDictionary setObject:@"Amit" forKey:@"rollnum"];
-       [myDictionary setObject:@"Hundred" forKey:@"mark"];
-    [myDictionary setObject:@"false" forKey:@"average"];
-   // [ DATB addUserPropertiesWithData:myDictionary];
-   // [DATB addEventWithEventName:@"ObjectiveC" data:myDictionary];
-   // initlialise the Delegate
-   // [DATB setSubscriptionWithIsSubscribe:true];
+  
     DATB.notificationReceivedDelegate = self;
     DATB.landingURLDelegate = self;
     DATB.notificationOpenDelegate = self;
