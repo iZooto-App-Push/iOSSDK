@@ -25,7 +25,7 @@ public class RestAPI
     private static var REGISTRATION_URL="https://aevents.izooto.com/app.php?";
 
 
-   public static func registerToken(token : String, MoMagic_id : Int)
+ @objc  public static func registerToken(token : String, MoMagic_id : Int)
     {
     var request = URLRequest(url: URL(string:RestAPI.REGISTRATION_URL+"s=2&pid=\(MoMagic_id)&btype=8&dtype=3&tz=\(currentTimeInMilliSeconds())&bver=\(getVersion())&os=5&allowed=1&bKey=\(token)&check=\(getAppVersion())&deviceName=\(getDeviceName())&osVersion=\(getVersion())&it=\(getUUID())&adid=\(identifierForAdvertising()!)")!)
    
@@ -42,11 +42,9 @@ public class RestAPI
 
                  
              }
-    public static func callSubscription(isSubscribe : Int,token : String,userid : Int)
+   @objc public static func callSubscription(isSubscribe : Int,token : String,userid : Int)
         
     {
-
-            
         var request = URLRequest(url: URL(string: "https://usub.izooto.com/sunsub?pid=\(userid)&btype=8&dtype=3&pte=3&bver=\(getVersion())&os=5&pt=0&bKey=\(token)&ge=1&action=\(isSubscribe)")!)
         request.httpMethod = AppConstant.REQUEST_POST
                        URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
@@ -56,7 +54,7 @@ public class RestAPI
                        }).resume()
     }
 
-   static  public func createRequest(uuid: String, completionBlock: @escaping (String) -> Void) -> Void
+  @objc static  public func createRequest(uuid: String, completionBlock: @escaping (String) -> Void) -> Void
     {
     DispatchQueue.main.async {
     let requestURL = URL(string: "https://cdn.izooto.com/app/app_\(uuid).dat")
@@ -77,20 +75,20 @@ public class RestAPI
     }
         
     
-    static func currentTimeInMilliSeconds()-> Int
+   @objc static func currentTimeInMilliSeconds()-> Int
       {
           let currentDate = Date()
           let since1970 = currentDate.timeIntervalSince1970
           return Int(since1970 * 1000)
       }
 
-     static func getDeviceName()->String
+    @objc static func getDeviceName()->String
      {
         let name = UIDevice.current.model
         return name
        
     }
-    static func getUUID()->String
+   @objc static func getUUID()->String
     {
         let device_id = UIDevice.current.identifierForVendor!.uuidString
         
@@ -98,34 +96,34 @@ public class RestAPI
 
     }
       
-       static func  getVersion() -> String {
+      @objc static func  getVersion() -> String {
         return UIDevice.current.systemVersion
 
       }
     
-   static func getAppInfo()->String {
+  @objc static func getAppInfo()->String {
         let dictionary = Bundle.main.infoDictionary!
         let version = dictionary["CFBundleShortVersionString"] as! String
         let build = dictionary["CFBundleVersion"] as! String
         return version + "(" + build + ")"
     }
-    static func getAppName()->String {
+   @objc static func getAppName()->String {
         let appName = Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as! String
         return appName
     }
-    static func getOSInfo()->String {
+    @objc static func getOSInfo()->String {
         let os = ProcessInfo().operatingSystemVersion
         return String(os.majorVersion) + "." + String(os.minorVersion) + "." + String(os.patchVersion)
     }
     
-    static func getAppVersion() -> String {
+    @objc static func getAppVersion() -> String {
            let dictionary = Bundle.main.infoDictionary!
            let version = dictionary["CFBundleShortVersionString"] as! String
            return "\(version)"
        }
 
     
-    public static func callEvents(eventName : String, data : NSString,userid : Int,token : String)
+    @objc public static func callEvents(eventName : String, data : NSString,userid : Int,token : String)
       {
         if( eventName != " "  ){
         let escapedString = data.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.urlQueryAllowed)
@@ -146,7 +144,7 @@ public class RestAPI
 
           
       }
-    public static func callUserProperties( data : NSString,userid : Int,token : String)
+    @objc  public static func callUserProperties( data : NSString,userid : Int,token : String)
          {
         if( data != "" ){
 
@@ -166,7 +164,7 @@ public class RestAPI
             
             
          }
-    public static func callImpression(notificationData : Payload,userid : Int,token : String)
+    @objc public static func callImpression(notificationData : Payload,userid : Int,token : String)
     {
         var request = URLRequest(url: URL(string: RestAPI.IMPRESSION_URL+"pid=\(userid)&cid=\(notificationData.id!)&rid=\(notificationData.rid!)&bKey=\(token)&op=view")!)
     
@@ -181,7 +179,7 @@ public class RestAPI
 
         
     }
-    public static func clickTrack(notificationData : Payload,type : String, userid : Int,token : String)
+    @objc public static func clickTrack(notificationData : Payload,type : String, userid : Int,token : String)
     {
         var request = URLRequest(url: URL(string: RestAPI.CLICK_URL+"pid=\(userid)&cid=\(notificationData.id!)&rid=\(notificationData.rid!)&bKey=\(token)&op=click&btn=\(type)&ver=\(getVersion())")!)
         
@@ -194,7 +192,7 @@ public class RestAPI
                    }).resume()
 
     }
-    public static func performRequest(with urlString : String)
+    @objc public static func performRequest(with urlString : String)
     {
         if let url = URL(string: urlString)
         {
@@ -215,10 +213,10 @@ public class RestAPI
         }
     }
     
-   public static func identifierForAdvertising() -> String? {
+    @objc public static func identifierForAdvertising() -> String? {
         // Check whether advertising tracking is enabled
         guard ASIdentifierManager.shared().isAdvertisingTrackingEnabled else {
-            return nil
+            return "No Fetching"
         }
 
         // Get and return IDFA

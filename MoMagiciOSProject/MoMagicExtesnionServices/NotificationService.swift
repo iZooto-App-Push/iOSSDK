@@ -7,19 +7,22 @@
 
 import UserNotifications
 import MomagiciOSSDK
+import AVFoundation
 
 class NotificationService: UNNotificationServiceExtension {
+    var bombSoundEffect: AVAudioPlayer?
 
     var contentHandler: ((UNNotificationContent) -> Void)?
       var bestAttemptContent: UNMutableNotificationContent?
       var receivedRequest: UNNotificationRequest!
       override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
-        print("Response",request)
           self.receivedRequest = request;
           self.contentHandler = contentHandler
           bestAttemptContent = (request.content.mutableCopy() as? UNMutableNotificationContent)
           if let bestAttemptContent = bestAttemptContent {
           DATB.didReceiveNotificationExtensionRequest(request: receivedRequest, bestAttemptContent: bestAttemptContent,contentHandler: contentHandler)
+         
+          
            
         }
         }

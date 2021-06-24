@@ -153,7 +153,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
        
         
         // provision setting
-        private static func   registerForPushNotificationsProvisional()
+     @objc   private static func   registerForPushNotificationsProvisional()
         {
             
             if #available(iOS 12.0, *) {
@@ -167,7 +167,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
         }
 
        //  Handle notification prompt setting
-        private static func getNotificationSettings() {
+    @objc   private static func getNotificationSettings() {
                 if #available(iOS 10.0, *) {
                     UNUserNotificationCenter.current().getNotificationSettings { settings in
        
@@ -181,7 +181,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                 }
                 }
         // Handle provisional setting
-           private static func getNotificationSettingsProvisional() {
+    @objc  private static func getNotificationSettingsProvisional() {
             if #available(iOS 10.0, *) {
                 UNUserNotificationCenter.current().getNotificationSettings { settings in
                     if #available(iOS 12.0, *) {
@@ -223,15 +223,15 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                }
             }
         }
+    
+   
     // Handle the payload and show the notification
    @available(iOS 10.0, *)
  @objc   public static func didReceiveNotificationExtensionRequest(request : UNNotificationRequest, bestAttemptContent :UNMutableNotificationContent,contentHandler:((UNNotificationContent) -> Void)?)
        {
-           let userInfo = request.content.userInfo
+        let userInfo = request.content.userInfo
            let notifcationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
-          // notificationReceivedDelegate?.onNotificationReceived(payload: notifcationData!)
-    bestAttemptContent.sound = UNNotificationSound.default()
-
+      
            if let userDefaults = UserDefaults(suiteName: "group.com.MoMagic-iOS-SDK") {
 
                let badgeCount = userDefaults.integer(forKey: AppConstant.BADGE)
@@ -416,7 +416,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
            
           
        }
-    private static func getParseArrayValue(jsonData :[[String : Any]], sourceString : String) -> String
+    @objc private static func getParseArrayValue(jsonData :[[String : Any]], sourceString : String) -> String
        {
           
            if(sourceString.contains("~"))
@@ -487,7 +487,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
         }
     }
     // for jsonObject
-    private static func getParseValue(jsonData :[String : Any], sourceString : String) -> String
+    @objc   private static func getParseValue(jsonData :[String : Any], sourceString : String) -> String
     {
     if(sourceString.contains("~"))
         {
@@ -579,7 +579,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
      
 
     // Parsing the jsonObject
-       private static func convertToDictionary(text: String) -> [String: Any]? {
+    @objc  private static func convertToDictionary(text: String) -> [String: Any]? {
             if let data = text.data(using: .utf8) {
                 do {
                     return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
@@ -971,7 +971,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
         }
         
         // handle the addtional data
-        private static func handleClicks(response : UNNotificationResponse , actionType : String)
+    @objc  private static func handleClicks(response : UNNotificationResponse , actionType : String)
             {
             let userInfo = response.notification.request.content.userInfo
             let notifcationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
@@ -989,7 +989,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
 
 
             }
-    private static func clickTrack(notificationData : Payload,actionType : String)
+    @objc private static func clickTrack(notificationData : Payload,actionType : String)
     {
         if(notificationData.cfg != nil)
         {

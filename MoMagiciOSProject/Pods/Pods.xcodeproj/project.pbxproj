@@ -48,6 +48,7 @@
 		097693962E4EB536B1255829A5D8A46E /* Pods_MoMagiciOSProject.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MoMagiciOSProject.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		172D1B065CE00DF659982A626D4D63C2 /* Payload.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Payload.swift; sourceTree = "<group>"; };
 		1F6049094672CBAEC554A1CD8F4DAC3C /* DATB.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DATB.swift; path = MomagiciOSSDK/DATB.swift; sourceTree = "<group>"; };
+		28BF2A90268310260053DA91 /* pikachu.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = pikachu.mp3; sourceTree = "<group>"; };
 		31169B6E67A9160F8348769FE622BD0F /* Pods-MoMagiciOSProject-MoMagicExtesnionServices-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-MoMagiciOSProject-MoMagicExtesnionServices-acknowledgements.markdown"; sourceTree = "<group>"; };
 		373FE47C3D33EF052A08A5AFAB3292D7 /* Pods-MoMagiciOSProject-MoMagicExtesnionServices-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-MoMagiciOSProject-MoMagicExtesnionServices-dummy.m"; sourceTree = "<group>"; };
 		3D8885D95502C53A30ABC528C2B5BE8C /* Pods-MoMagiciOSProject-MoMagicExtesnionServices.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-MoMagiciOSProject-MoMagicExtesnionServices.modulemap"; sourceTree = "<group>"; };
@@ -143,6 +144,7 @@
 		4956F0F23D34D8468E8FA3DE7195ACB2 /* MomagiciOSSDK */ = {
 			isa = PBXGroup;
 			children = (
+				28BF2A90268310260053DA91 /* pikachu.mp3 */,
 				1F6049094672CBAEC554A1CD8F4DAC3C /* DATB.swift */,
 				AFD5685A6DE39E471A95CAEE185F69F6 /* Utils.swift */,
 				5EEE056727C450F6035235FF57F9BAE3 /* ViewController.swift */,
