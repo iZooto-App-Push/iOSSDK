@@ -203,6 +203,10 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                          return String(format: "%02.2hhx", data)
                      }
             let token = tokenParts.joined()
+            let date = Date()
+            let format = DateFormatter()
+            format.dateFormat = "yyyy-MM-dd"
+            let formattedDate = format.string(from: date)
             if UserDefaults.getRegistered()
             {
 
@@ -210,6 +214,12 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                 else
                 {return}
                 print(AppConstant.DEVICE_TOKEN," \(token)")
+                if(formattedDate != (sharedUserDefault?.string(forKey: "LastVisit")))
+                {
+                    RestAPI.lastVisit(userid: momagic_id, token:token)
+                    sharedUserDefault?.set(formattedDate, forKey: "LastVisit")
+
+                }
             }
             else
             {
@@ -217,6 +227,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                {
                 RestAPI.registerToken(token: token, MoMagic_id: momagic_id)
                 sharedUserDefault?.set(token, forKey: SharedUserDefault.Key.token)
+                
                }
                else{
                 print("Account ID is not found")
@@ -408,13 +419,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
 
           }
            }
-           let state = UIApplication.shared.applicationState
-           if state == .active {
-             
-               
-           }
-           
-          
+         
        }
     @objc private static func getParseArrayValue(jsonData :[[String : Any]], sourceString : String) -> String
        {

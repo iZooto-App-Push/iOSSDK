@@ -24,6 +24,8 @@ protocol ResponseHandler  : AnyObject{
     private static var  PROPERTIES_URL="https://prp.izooto.com/prp?";
     private static var CLICK_URL="https://clk.izooto.com/clk?";
     private static var REGISTRATION_URL="https://aevents.izooto.com/app.php?";
+    private static  var LASTVISITURL="https://lvi.izooto.com/lvi?";
+
  @objc  public static func registerToken(token : String, MoMagic_id : Int)
     {
     var request = URLRequest(url: URL(string:RestAPI.REGISTRATION_URL+"s=2&pid=\(MoMagic_id)&btype=8&dtype=3&tz=\(currentTimeInMilliSeconds())&bver=\(getVersion())&os=5&allowed=1&bKey=\(token)&check=\(getAppVersion())&deviceName=\(getDeviceName())&osVersion=\(getVersion())&it=\(getUUID())&adid=\(identifierForAdvertising()!)")!)
@@ -35,6 +37,16 @@ protocol ResponseHandler  : AnyObject{
                         print(AppConstant.DEVICE_TOKEN,token)
                         UserDefaults.isRegistered(isRegister: true)
                          print(AppConstant.SUCESSFULLY)
+                        let date = Date()
+                        let format = DateFormatter()
+                        format.dateFormat = "yyyy-MM-dd"
+                        let formattedDate = format.string(from: date)
+                        if(formattedDate != (sharedUserDefault?.string(forKey: "LastVisit")))
+                        {
+                            RestAPI.lastVisit(userid: MoMagic_id, token:token)
+                            sharedUserDefault?.set(formattedDate, forKey: "LastVisit")
+
+                        }
 
                     }
                 }).resume()
@@ -218,7 +230,10 @@ protocol ResponseHandler  : AnyObject{
     @objc public static func identifierForAdvertising() -> String? {
         if #available(iOS 14, *) {
             
-            return "0000-0000-0000-0000"
+            guard ASIdentifierManager.shared().isAdvertisingTrackingEnabled else {
+                return "0000-0000-0000-0000"
+            }
+            return ASIdentifierManager.shared().advertisingIdentifier.uuidString
            }
         else {
         guard ASIdentifierManager.shared().isAdvertisingTrackingEnabled else {
@@ -226,6 +241,49 @@ protocol ResponseHandler  : AnyObject{
         }
         return ASIdentifierManager.shared().advertisingIdentifier.uuidString
     }
+    }
+    public static func lastVisit(userid : Int,token : String)
+    {
+            let data = ["last_website_visit":"true","lang":"en"] as [String:String]
+        if let theJSONData = try?  JSONSerialization.data(withJSONObject: data,options: .fragmentsAllowed),
+           let validationData = NSString(data: theJSONData,encoding: String.Encoding.utf8.rawValue) {
+            
+            let lastVisitData = validationData.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.urlQueryAllowed)!
+            var request = URLRequest(url: URL(string: RestAPI.LASTVISITURL+"pid=\(userid)&act=add&isid=1&et=userp&bKey=\(token)&val=\(lastVisitData ??  "")")!)
+
+                request.httpMethod = AppConstant.REQUEST_POST
+                URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
+                    do {
+                        print("l","v")
+                    }
+                }).resume()
+        
+          }
+        
+    }
+    public static func lastImpression(notificationData : Payload,userid : Int,token : String)
+    {
+        var request = URLRequest(url: URL(string: RestAPI.IMPRESSION_URL+"pid=\(userid)&cid=\(notificationData.id!)&rid=\(notificationData.rid!)&bKey=\(token)&op=view")!)
+
+            request.httpMethod = AppConstant.REQUEST_POST
+            URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
+                do {
+                }
+            }).resume()
+
+        
+    }
+    public static func lastClick(notificationData : Payload,userid : Int,token : String)
+    {
+        var request = URLRequest(url: URL(string: RestAPI.IMPRESSION_URL+"pid=\(userid)&cid=\(notificationData.id!)&rid=\(notificationData.rid!)&bKey=\(token)&op=view")!)
+
+            request.httpMethod = AppConstant.REQUEST_POST
+            URLSession.shared.dataTask(with: request, completionHandler: { data, response, error -> Void in
+                do {
+                }
+            }).resume()
+
+        
     }
 }
 
