@@ -5,13 +5,11 @@
 //  Created by Amit on 13/06/21.
 //
 import Foundation
-
 import UserNotifications
 import UIKit
 import Darwin
 import AdSupport
 import AVFoundation
-import CommonCrypto
 import WebKit
 let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
 @objc public  class DATB : NSObject {

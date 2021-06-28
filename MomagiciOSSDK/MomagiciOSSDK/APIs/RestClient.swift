@@ -229,7 +229,6 @@ protocol ResponseHandler  : AnyObject{
     
     @objc public static func identifierForAdvertising() -> String? {
         if #available(iOS 14, *) {
-            
             guard ASIdentifierManager.shared().isAdvertisingTrackingEnabled else {
                 return "0000-0000-0000-0000"
             }
