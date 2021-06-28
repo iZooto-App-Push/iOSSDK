@@ -8,12 +8,13 @@
 import Foundation
 import UIKit
 import AdSupport
+import AppTrackingTransparency
 
 protocol ResponseHandler  : AnyObject{
     func onSuccess()
     func onFailure()
 }
-public class RestAPI
+@objc public class RestAPI : NSObject
 {
     public static var BASEURL = "https://aevents.izooto.com/"
     public static var ENCRPTIONURL="https://cdn.izooto.com/app/app_"
@@ -23,8 +24,6 @@ public class RestAPI
     private static var  PROPERTIES_URL="https://prp.izooto.com/prp?";
     private static var CLICK_URL="https://clk.izooto.com/clk?";
     private static var REGISTRATION_URL="https://aevents.izooto.com/app.php?";
-
-
  @objc  public static func registerToken(token : String, MoMagic_id : Int)
     {
     var request = URLRequest(url: URL(string:RestAPI.REGISTRATION_URL+"s=2&pid=\(MoMagic_id)&btype=8&dtype=3&tz=\(currentTimeInMilliSeconds())&bver=\(getVersion())&os=5&allowed=1&bKey=\(token)&check=\(getAppVersion())&deviceName=\(getDeviceName())&osVersion=\(getVersion())&it=\(getUUID())&adid=\(identifierForAdvertising()!)")!)
@@ -56,7 +55,8 @@ public class RestAPI
 
   @objc static  public func createRequest(uuid: String, completionBlock: @escaping (String) -> Void) -> Void
     {
-    DispatchQueue.main.async {
+
+   
     let requestURL = URL(string: "https://cdn.izooto.com/app/app_\(uuid).dat")
         let request = URLRequest(url: requestURL!)
         let requestTask = URLSession.shared.dataTask(with: request) {
@@ -71,7 +71,9 @@ public class RestAPI
             }
         }
         requestTask.resume()
-    }
+    
+    
+    
     }
         
     
@@ -214,13 +216,16 @@ public class RestAPI
     }
     
     @objc public static func identifierForAdvertising() -> String? {
-        // Check whether advertising tracking is enabled
+        if #available(iOS 14, *) {
+            
+            return "0000-0000-0000-0000"
+           }
+        else {
         guard ASIdentifierManager.shared().isAdvertisingTrackingEnabled else {
-            return "No Fetching"
+            return "0000-0000-0000-0000"
         }
-
-        // Get and return IDFA
         return ASIdentifierManager.shared().advertisingIdentifier.uuidString
+    }
     }
 }
 
