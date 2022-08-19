@@ -104,7 +104,11 @@ public class Utils
 
                return returnString
            }
-
+    public static func getBundleName()->String
+        {
+            let bundleID = Bundle.main.bundleIdentifier
+            return "group."+bundleID! + ".DATB"
+        }
 }
 public  func checkTopicNameValidation(topicName : Dictionary<String,String>)-> Bool
 {

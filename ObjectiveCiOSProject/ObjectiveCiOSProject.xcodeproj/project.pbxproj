@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		287682BD2677491C0038A450 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 287682BC2677491C0038A450 /* AppDelegate.m */; };
-		287682C02677491C0038A450 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 287682BF2677491C0038A450 /* SceneDelegate.m */; };
 		287682C32677491C0038A450 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 287682C22677491C0038A450 /* ViewController.m */; };
 		287682C62677491C0038A450 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 287682C42677491C0038A450 /* Main.storyboard */; };
 		287682C82677491F0038A450 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 287682C72677491F0038A450 /* Assets.xcassets */; };
@@ -17,9 +16,9 @@
 		287682E326778FE00038A450 /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 287682E226778FE00038A450 /* NotificationService.m */; };
 		287682E726778FE00038A450 /* MoMagicNotificationServices.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 287682DF26778FE00038A450 /* MoMagicNotificationServices.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		28A5DA332685B2160046C0A4 /* Pods_ObjectiveCiOSProject.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B3894FF60292401C56AB1D5 /* Pods_ObjectiveCiOSProject.framework */; };
-		28A5DA342685B2160046C0A4 /* Pods_ObjectiveCiOSProject.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B3894FF60292401C56AB1D5 /* Pods_ObjectiveCiOSProject.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		28AD908E2688BAFE00DE559A /* Pods_ObjectiveCiOSProject_MoMagicNotificationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9809C8FC334A720CDC99626 /* Pods_ObjectiveCiOSProject_MoMagicNotificationServices.framework */; };
 		28AD908F2688BAFE00DE559A /* Pods_ObjectiveCiOSProject_MoMagicNotificationServices.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C9809C8FC334A720CDC99626 /* Pods_ObjectiveCiOSProject_MoMagicNotificationServices.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6C7E4F7328AFBC3500D3FF0C /* pikachu.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6C7E4F7228AFBC3400D3FF0C /* pikachu.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,17 +43,6 @@
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		28A5DA352685B2160046C0A4 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				28A5DA342685B2160046C0A4 /* Pods_ObjectiveCiOSProject.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		28AD90902688BAFE00DE559A /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -72,8 +60,6 @@
 		287682B82677491C0038A450 /* ObjectiveCiOSProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ObjectiveCiOSProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		287682BB2677491C0038A450 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		287682BC2677491C0038A450 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		287682BE2677491C0038A450 /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
-		287682BF2677491C0038A450 /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
 		287682C12677491C0038A450 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		287682C22677491C0038A450 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		287682C52677491C0038A450 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -89,6 +75,7 @@
 		287682F3267795540038A450 /* MoMagicNotificationServices.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MoMagicNotificationServices.entitlements; sourceTree = "<group>"; };
 		2B20E259653A87567D9694CC /* Pods-ObjectiveCiOSProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ObjectiveCiOSProject.debug.xcconfig"; path = "Target Support Files/Pods-ObjectiveCiOSProject/Pods-ObjectiveCiOSProject.debug.xcconfig"; sourceTree = "<group>"; };
 		5C60FA64E0633BB437C55527 /* Pods-ObjectiveCiOSProject-MoMagicNotificationServices.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ObjectiveCiOSProject-MoMagicNotificationServices.debug.xcconfig"; path = "Target Support Files/Pods-ObjectiveCiOSProject-MoMagicNotificationServices/Pods-ObjectiveCiOSProject-MoMagicNotificationServices.debug.xcconfig"; sourceTree = "<group>"; };
+		6C7E4F7228AFBC3400D3FF0C /* pikachu.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = pikachu.mp3; sourceTree = "<group>"; };
 		712E246EF040789EFFD3DDC9 /* Pods-ObjectiveCiOSProject.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ObjectiveCiOSProject.release.xcconfig"; path = "Target Support Files/Pods-ObjectiveCiOSProject/Pods-ObjectiveCiOSProject.release.xcconfig"; sourceTree = "<group>"; };
 		8BAC1BB359F6CD8A1BD5FAB3 /* Pods-ObjectiveCiOSProject-MoMagicNotificationServices.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ObjectiveCiOSProject-MoMagicNotificationServices.release.xcconfig"; path = "Target Support Files/Pods-ObjectiveCiOSProject-MoMagicNotificationServices/Pods-ObjectiveCiOSProject-MoMagicNotificationServices.release.xcconfig"; sourceTree = "<group>"; };
 		9B3894FF60292401C56AB1D5 /* Pods_ObjectiveCiOSProject.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ObjectiveCiOSProject.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -138,11 +125,10 @@
 		287682BA2677491C0038A450 /* ObjectiveCiOSProject */ = {
 			isa = PBXGroup;
 			children = (
+				6C7E4F7228AFBC3400D3FF0C /* pikachu.mp3 */,
 				287682D9267769780038A450 /* ObjectiveCiOSProject.entitlements */,
 				287682BB2677491C0038A450 /* AppDelegate.h */,
 				287682BC2677491C0038A450 /* AppDelegate.m */,
-				287682BE2677491C0038A450 /* SceneDelegate.h */,
-				287682BF2677491C0038A450 /* SceneDelegate.m */,
 				287682C12677491C0038A450 /* ViewController.h */,
 				287682C22677491C0038A450 /* ViewController.m */,
 				287682C42677491C0038A450 /* Main.storyboard */,
@@ -198,7 +184,6 @@
 				287682B62677491C0038A450 /* Resources */,
 				DB7E9C9EC4E5DCBAE3931A13 /* [CP] Embed Pods Frameworks */,
 				287682EB26778FE00038A450 /* Embed App Extensions */,
-				28A5DA352685B2160046C0A4 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -271,6 +256,7 @@
 			files = (
 				287682CB2677491F0038A450 /* LaunchScreen.storyboard in Resources */,
 				287682C82677491F0038A450 /* Assets.xcassets in Resources */,
+				6C7E4F7328AFBC3500D3FF0C /* pikachu.mp3 in Resources */,
 				287682C62677491C0038A450 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -356,7 +342,6 @@
 				287682C32677491C0038A450 /* ViewController.m in Sources */,
 				287682BD2677491C0038A450 /* AppDelegate.m in Sources */,
 				287682CE2677491F0038A450 /* main.m in Sources */,
-				287682C02677491C0038A450 /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -521,7 +506,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N2T2473XHF;
 				INFOPLIST_FILE = ObjectiveCiOSProject/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -544,7 +529,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N2T2473XHF;
 				INFOPLIST_FILE = ObjectiveCiOSProject/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -565,7 +550,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N2T2473XHF;
 				INFOPLIST_FILE = MoMagicNotificationServices/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -588,7 +573,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N2T2473XHF;
 				INFOPLIST_FILE = MoMagicNotificationServices/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

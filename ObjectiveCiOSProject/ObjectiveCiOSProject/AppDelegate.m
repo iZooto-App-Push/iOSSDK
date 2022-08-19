@@ -12,14 +12,24 @@
 @end
 @implementation AppDelegate
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    
+    if (launchOptions != nil)
+        {
+            [UNUserNotificationCenter currentNotificationCenter].delegate = self;
+        }
+    
+    
     dispatch_async(dispatch_get_main_queue(), ^{
+        
 //define settings
         NSMutableDictionary *momagicInitSetting = [[NSMutableDictionary alloc]init];
         [momagicInitSetting setObject:@YES forKey:@"auto_prompt"];
         [momagicInitSetting setObject:@NO forKey:@"nativeWebview"];
         [momagicInitSetting setObject:@NO forKey:@"provisionalAuthorization"];
     // initalise the MoMagic SDK
-    [DATB initialisationWithMomagic_app_id: @"de1bdb0a32007eed602064192bb129b7e5e3cc32" application:application MoMagicInitSettings:momagicInitSetting];
+    [DATB initialisationWithMomagic_app_id: @"299adcc1794992daee9e54ace947459946735792" application:application MoMagicInitSettings:momagicInitSetting];
+        [application setApplicationIconBadgeNumber:0];
        
         
     });
@@ -44,6 +54,7 @@
 -(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
     
 }
+
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center
 didReceiveNotificationResponse:(UNNotificationResponse *)response
          withCompletionHandler:(void (^)(void))completionHandler
@@ -51,6 +62,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     [DATB notificationHandlerWithResponse:response];
     completionHandler();
 }
+
 
 
 

@@ -11,6 +11,6 @@ struct SharedUserDefault {
     struct Key {
       static let token = "saveToken"
       static let registerID = "momagic_id"
+      static let subscriberID = "subscriber_id"
     }
-    
 }

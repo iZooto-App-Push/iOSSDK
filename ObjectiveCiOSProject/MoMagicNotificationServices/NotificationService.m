@@ -23,15 +23,14 @@
     self.bestAttemptContent = [request.content mutableCopy];
     if (self.bestAttemptContent != nil)
     {
-        [DATB didReceiveNotificationExtensionRequestWithRequest:self.receivedRequest bestAttemptContent:  self.bestAttemptContent  contentHandler: self.contentHandler ];
+        [DATB didReceiveNotificationExtensionRequestWithRequest:self.receivedRequest bundleName:@"com.momagic.ObjectiveCiOSProject" soundName:@"pikac.mp3" bestAttemptContent:self.bestAttemptContent contentHandler:self.contentHandler];
     }
-   // self.contentHandler(self.bestAttemptContent);
 }
 
 - (void)serviceExtensionTimeWillExpire {
-    // Called just before the extension will be terminated by the system.
-    // Use this as an opportunity to deliver your "best attempt" at modified content, otherwise the original push payload will be used.
-    self.contentHandler(self.bestAttemptContent);
+   
+    [DATB didReceiveNotificationExtensionRequestWithRequest:self.receivedRequest bundleName:@"com.momagic.ObjectiveCiOSProject" soundName:@"pikac.mp3" bestAttemptContent:self.bestAttemptContent contentHandler:self.contentHandler];
+    //self.contentHandler(self.bestAttemptContent);
 }
 
 @end
