@@ -273,6 +273,9 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
     {
         let userInfo = request.content.userInfo
         let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
+        
+        if(notificationData?.inApp != nil)
+        {
         badgeNumber = (sharedUserDefault?.integer(forKey: "BADGECOUNT"))!
         
         
@@ -315,8 +318,14 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                     let impr = Int(str1)
                     if(impr == 1)
                     {
-                        RestAPI.callImpression(notificationData: notificationData!,userid: pid,token:"\(deviceToken)")
-                    }
+                            RestAPI.callImpression(notificationData: notificationData!,userid: pid,token:"\(deviceToken)")
+
+                        }
+                        
+                        
+                        
+                        
+                    
                 }
                 userDefaults.synchronize()
             }
@@ -464,6 +473,12 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                 //}
                 
             }
+        }
+        }
+        else
+        {
+            print("MoMagic payload is not exist\(userInfo)")
+
         }
         
     }
@@ -643,9 +658,9 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
     
     
     
-    @objc  public static func handleForeGroundNotification(notification : UNNotification,displayNotification : String)
-    {
+    @objc public static func handleForeGroundNotification(notification : UNNotification,displayNotification : String,completionHandler : @escaping (UNNotificationPresentationOptions) -> Void){
         let appstate = UIApplication.shared.applicationState
+        
         if (appstate == .active && displayNotification == "InAppAlert")
         {
             let userInfo = notification.request.content.userInfo
@@ -669,7 +684,10 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
         else
         {
             let userInfo = notification.request.content.userInfo
+            
             let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
+            if(notificationData?.inApp != nil)
+            {
             notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
             if (notificationData?.cfg != nil)
             {
@@ -680,11 +698,25 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                 let impr = Int(str1)
                 if(impr == 1)
                 {
-                    RestAPI.callImpression(notificationData: notificationData!,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!)
+                   
+                        RestAPI.callImpression(notificationData: notificationData!,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!)
+                    
+
+                   
                 }
             }
+            completionHandler([.badge, .alert, .sound])
+            }
+            else
+            {
+                print("MoMagic payload is not exist\(userInfo)")
+                  RestAPI.sendExceptionToServer(exceptionName: "MoMagic payload is not exist \(userInfo)", className: "DATB", methodName: "handleForeGroundNotification", pid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!, token: (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! , rid: "",cid : "")
+            }
+
+
             
         }
+        
         
     }
     // Handle the clicks the notification from Banner,Button
@@ -693,16 +725,35 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
         
         let userInfo = response.notification.request.content.userInfo
         let notifcationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
-        if let userDefaults = UserDefaults(suiteName: "group.com.MoMagic-iOS-SDK")
-        {
-            userDefaults.set(0, forKey: AppConstant.BADGE)
-        }
-        UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count number
+
+        // custom badge count
+        badgeNumber = (sharedUserDefault?.integer(forKey: "BADGECOUNT"))!
+            if(badgeNumber == -1)
+            {
+                UIApplication.shared.applicationIconBadgeNumber = -1 // clear the badge count // notification is not removed
+
+
+            }
+            else
+            {
+                UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count
+               
+            }
+            if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
+                userDefaults.set(0, forKey: "Badge")
+                userDefaults.synchronize()
+           }
+        
+        
+        
+        clickTrack(notificationData: notifcationData!, actionType: "0")
+
+        
+        
         if notifcationData?.fetchurl != nil && notifcationData?.fetchurl != ""
         {
             
             
-            clickTrack(notificationData: notifcationData!, actionType: "0")
             
             if let url = URL(string: notifcationData!.fetchurl!)
             {
@@ -767,7 +818,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                 {
                 case "FirstButton" :
                     type = "1"
-                    clickTrack(notificationData: notifcationData!, actionType: "1")
+                   // clickTrack(notificationData: notifcationData!, actionType: "1")
                     
                     if notifcationData?.ap != "" && notifcationData?.ap != nil
                     {
@@ -830,7 +881,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                     break
                 case "SecondButton" :
                     type = "2"
-                    clickTrack(notificationData: notifcationData!, actionType: "2")
+                   // clickTrack(notificationData: notifcationData!, actionType: "2")
                     
                     
                     if notifcationData?.ap != "" && notifcationData?.ap != nil
@@ -880,7 +931,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                     break
                 default:
                     type = "0"
-                    clickTrack(notificationData: notifcationData!, actionType: "0")
+                   // clickTrack(notificationData: notifcationData!, actionType: "0")
                     
                     if notifcationData?.ap != "" && notifcationData?.ap != nil
                     {
@@ -918,7 +969,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
             }// close if
             else{
                 type = "0"
-                clickTrack(notificationData: notifcationData!, actionType: "0")
+               // clickTrack(notificationData: notifcationData!, actionType: "0")
                 
                 if notifcationData?.ap != "" && notifcationData?.ap != nil
                 {
@@ -1161,7 +1212,7 @@ extension UNNotificationAttachment {
         } catch let error {
             let userID = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID)) ?? 0
             let token = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)) ?? "No token here"
-            RestAPI.sendExceptionToServer(exceptionName: error.localizedDescription, className: AppConstant.IZ_TAG, methodName: "saveImageToDisk", accoundID: userID, token: token, rid: "0", cid: "0")
+            RestAPI.sendExceptionToServer(exceptionName: error.localizedDescription, className: AppConstant.IZ_TAG, methodName: "saveImageToDisk", pid: userID, token: token, rid: "0", cid: "0")
         }
         
         

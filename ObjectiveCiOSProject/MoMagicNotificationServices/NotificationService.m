@@ -30,7 +30,6 @@
 - (void)serviceExtensionTimeWillExpire {
    
     [DATB didReceiveNotificationExtensionRequestWithRequest:self.receivedRequest bundleName:@"com.momagic.ObjectiveCiOSProject" soundName:@"pikac.mp3" bestAttemptContent:self.bestAttemptContent contentHandler:self.contentHandler];
-    //self.contentHandler(self.bestAttemptContent);
 }
 
 @end

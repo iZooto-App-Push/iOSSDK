@@ -16,25 +16,29 @@ protocol ResponseHandler  : AnyObject{
 }
 @objc public class RestAPI : NSObject
 {
-    public static var BASEURL = "https://aevents.izooto.com/app.php"
-    public static var ENCRPTIONURL="https://cdn.izooto.com/app/app_"
-    private static var  IMPRESSION_URL="https://impr.izooto.com/imp?";
-    public static var LOG = "MoMagic :"
-    private static  var EVENT_URL = "https://et.izooto.com/evt?";
-    private static var  PROPERTIES_URL="https://prp.izooto.com/prp?";
-    private static var CLICK_URL="https://clk.izooto.com/clk?";
-    private static  var LASTVISITURL="https://lvi.izooto.com/lvi?";
-    //MoMagic new added
-    public static var MOMAGIC_SUBSCRIPTION_URL="https://irctc.truenotify.in/momagicflow/appenp";
-    public static var MOMAGIC_USER_PROPERTY="https://irctc.truenotify.in/momagicflow/appup";
-    public static var MOMAGIC_CLICK="https://irctc.truenotify.in/momagicflow/appclk";
-    public static var SUBSCRIBER_URL="https://pp.izooto.com/idsyn";
+   
+        public static var   BASEURL = "https://aevents.izooto.com/app.php"
+        public static var   ENCRPTIONURL="https://cdn.izooto.com/app/app_"
+        private static var  IMPRESSION_URL="https://impr.izooto.com/imp";
+        public static var   LOG = "MoMagic :"
+        private static var  EVENT_URL = "https://et.izooto.com/evt";
+        private static var  PROPERTIES_URL="https://prp.izooto.com/prp";
+        private static var  CLICK_URL="https://clk.izooto.com/clk";
+        private static  var LASTNOTIFICATIONCLICKURL="https://lci.izooto.com/lci";
+        private static  var LASTNOTIFICATIONVIEWURL="https://lim.izooto.com/lim";
+        private static  var LASTVISITURL="https://lvi.izooto.com/lvi";
+        private static var  EXCEPTION_URL="https://aerr.izooto.com/aerr";
+        private static var SUBSCRIBER_URL="https://pp.izooto.com/idsyn";
+        private static let  SDKVERSION = "1.0.1"
     
-    static let EXCEPTION_URL="https://aerr.izooto.com/aer";
-    static let SDKVERSION = "2.0.2"
+     // MOMAGIC URL
     
-    static let LASTNOTIFICATIONCLICKURL="https://lci.izooto.com/lci";
-    static let LASTNOTIFICATIONVIEWURL="https://lim.izooto.com/lim";
+        private static var MOMAGIC_SUBSCRIPTION_URL="https://irctc.truenotify.in/momagicflow/appenp";
+        private static var MOMAGIC_USER_PROPERTY="https://irctc.truenotify.in/momagicflow/appup";
+        private static var MOMAGIC_CLICK="https://irctc.truenotify.in/momagicflow/appclk";
+        
+        
+   
     
     
     // register the token on our panel
@@ -64,7 +68,6 @@ protocol ResponseHandler  : AnyObject{
             request.allHTTPHeaderFields = requestHeaders
             request.httpBody = requestBodyComponents.query?.data(using: .utf8)
             URLSession.shared.dataTask(with: request){(data,response,error) in
-                print("ERROR \(String(describing: error))")
                 do {
                     print(AppConstant.DEVICE_TOKEN,token)
                     UserDefaults.isRegistered(isRegister: true)
@@ -91,7 +94,7 @@ protocol ResponseHandler  : AnyObject{
         else
         {
             print(AppConstant.IZ_TAG,AppConstant.iZ_KEY_DEVICE_TOKEN_ERROR)
-            sendExceptionToServer(exceptionName: AppConstant.iZ_KEY_DEVICE_TOKEN_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD, accoundID: 0, token: "", rid: "", cid: "")
+            sendExceptionToServer(exceptionName: AppConstant.iZ_KEY_DEVICE_TOKEN_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD, pid: 0, token: "", rid: "", cid: "")
             
         }
         
@@ -133,7 +136,7 @@ protocol ResponseHandler  : AnyObject{
         else
         {
             print(AppConstant.IZ_TAG,AppConstant.iZ_KEY_DEVICE_TOKEN_ERROR)
-            sendExceptionToServer(exceptionName: AppConstant.iZ_KEY_DEVICE_TOKEN_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD, accoundID: 0, token: "", rid: "", cid: "")
+            sendExceptionToServer(exceptionName: AppConstant.iZ_KEY_DEVICE_TOKEN_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD, pid: 0, token: "", rid: "", cid: "")
             
         }
         
@@ -177,7 +180,7 @@ protocol ResponseHandler  : AnyObject{
         else
         {
             sharedUserDefault?.set(false,forKey: AppConstant.iZ_KEY_ADVERTISEMENT_ID)
-            sendExceptionToServer(exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD, accoundID: 0, token: "", rid: "", cid: "")
+            sendExceptionToServer(exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD, pid: 0, token: "", rid: "", cid: "")
         }
     }
     
@@ -208,7 +211,7 @@ protocol ResponseHandler  : AnyObject{
         }
         else
         {
-          sendExceptionToServer(exceptionName: "isSubscribe\(isSubscribe)", className:AppConstant.iZ_REST_API_CLASS_NAME, methodName: "callSubscription", accoundID: userid, token: token , rid: "",cid : "")
+            sendExceptionToServer(exceptionName: "isSubscribe\(isSubscribe)", className:AppConstant.iZ_REST_API_CLASS_NAME, methodName: "callSubscription", pid: userid, token: token , rid: "",cid : "")
         }
       }
     
@@ -220,7 +223,7 @@ protocol ResponseHandler  : AnyObject{
         let requestTask = URLSession.shared.dataTask(with: request) {
           (data: Data?, response: URLResponse?, error: Error?) in
           if(error != nil) {
-            sendExceptionToServer(exceptionName: error?.localizedDescription ?? "not found", className: "Rest API", methodName: "getRequest", accoundID: 0, token: "" , rid: "",cid : "")
+              sendExceptionToServer(exceptionName: error?.localizedDescription ?? "not found", className: "Rest API", methodName: "getRequest", pid: 0, token: "" , rid: "",cid : "")
           }else
           {
             if let httpResponse = response as? HTTPURLResponse {
@@ -324,7 +327,7 @@ protocol ResponseHandler  : AnyObject{
         }
         else{
           print(AppConstant.ERROR_EVENT)
-          sendExceptionToServer(exceptionName: "User Event name and data are blank", className: "Rest API", methodName: "callEvents", accoundID: userid, token: token , rid: "",cid : "")
+            sendExceptionToServer(exceptionName: "User Event name and data are blank", className: "Rest API", methodName: "callEvents", pid: userid, token: token , rid: "",cid : "")
         }
       }
     
@@ -356,7 +359,7 @@ protocol ResponseHandler  : AnyObject{
         }
         else
         {
-          sendExceptionToServer(exceptionName: "User Properties data are blank", className: "Rest API", methodName: "callUserProperties", accoundID: userid, token: token , rid: "",cid : "")
+            sendExceptionToServer(exceptionName: "User Properties data are blank", className: "Rest API", methodName: "callUserProperties", pid: userid, token: token , rid: "",cid : "")
         }
       }
     
@@ -390,7 +393,7 @@ protocol ResponseHandler  : AnyObject{
         }
         else
         {
-            sendExceptionToServer(exceptionName: "Notification payload is not loading", className: "Rest API", methodName: "Impression", accoundID: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
+            sendExceptionToServer(exceptionName: "Notification payload is not loading", className: "Rest API", methodName: "Impression", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
             
         }
         
@@ -425,7 +428,7 @@ protocol ResponseHandler  : AnyObject{
         }
         else
         {
-            sendExceptionToServer(exceptionName: "Notification payload is not loading", className: "Rest API", methodName: "clickTrack", accoundID: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
+            sendExceptionToServer(exceptionName: "Notification payload is not loading", className: "Rest API", methodName: "clickTrack", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
         }
     }
     
@@ -460,7 +463,7 @@ protocol ResponseHandler  : AnyObject{
         }
         else
         {
-            sendExceptionToServer(exceptionName: "subscriberID should not be blank", className: "Rest API", methodName: "clickTrack", accoundID: userid, token: token , rid: "",cid : subscriberID)
+            sendExceptionToServer(exceptionName: "subscriberID should not be blank", className: "Rest API", methodName: "clickTrack", pid: userid, token: token , rid: "",cid : subscriberID)
             sharedUserDefault?.set(subscriberID, forKey: SharedUserDefault.Key.subscriberID)
         }
     }
@@ -494,7 +497,7 @@ protocol ResponseHandler  : AnyObject{
         }
         else
         {
-            sendExceptionToServer(exceptionName: "subscriberID should not be blank", className: "Rest API", methodName: "clickTrack", accoundID: userid, token: token , rid: "",cid : subscriberID)
+            sendExceptionToServer(exceptionName: "subscriberID should not be blank", className: "Rest API", methodName: "clickTrack", pid: userid, token: token , rid: "",cid : subscriberID)
         }
     }
     
@@ -528,7 +531,7 @@ protocol ResponseHandler  : AnyObject{
         }
         else
         {
-            sendExceptionToServer(exceptionName: "Notification payload is not loading", className: "Rest API", methodName: "clickTrack", accoundID: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
+            sendExceptionToServer(exceptionName: "Notification payload is not loading", className: "Rest API", methodName: "clickTrack", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
         }
     }
     
@@ -603,7 +606,7 @@ protocol ResponseHandler  : AnyObject{
         }
         else
         {
-            sendExceptionToServer(exceptionName: "Token or pid or missing", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastImpression", accoundID: userid, token: token , rid: "",cid :"")
+            sendExceptionToServer(exceptionName: "Token or pid or missing", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastImpression", pid: userid, token: token , rid: "",cid :"")
         }
         
     }
@@ -636,7 +639,7 @@ protocol ResponseHandler  : AnyObject{
         else
         {
             
-            sendExceptionToServer(exceptionName: "Notification payload is not loading", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastImpression", accoundID: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
+            sendExceptionToServer(exceptionName: "Notification payload is not loading", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastImpression", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
             
         }
         
@@ -669,15 +672,15 @@ protocol ResponseHandler  : AnyObject{
         }
         else
         {
-            sendExceptionToServer(exceptionName: "Notification payload is not loading", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastClick", accoundID: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
+            sendExceptionToServer(exceptionName: "Notification payload is not loading", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastClick", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
         }
     }
     
-    static func sendExceptionToServer(exceptionName : String ,className : String ,methodName: String,accoundID :Int ,token : String,rid : String,cid : String)
+    static func sendExceptionToServer(exceptionName : String ,className : String ,methodName: String,pid :Int ,token : String,rid : String,cid : String)
     {
         let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
         var requestBodyComponents = URLComponents()
-        requestBodyComponents.queryItems = [URLQueryItem(name: "pid", value: "\(accoundID)"),
+        requestBodyComponents.queryItems = [URLQueryItem(name: "pid", value: "\(pid)"),
                                             URLQueryItem(name: "exceptionName", value: "\(exceptionName)"),
                                             URLQueryItem(name: "methodName", value: "\(methodName)"),
                                             URLQueryItem(name: "className", value:"\(className))"),
