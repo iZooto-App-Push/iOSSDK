@@ -29,6 +29,7 @@
         [momagicInitSetting setObject:@NO forKey:@"provisionalAuthorization"];
     // initalise the MoMagic SDK
     [DATB initialisationWithMomagic_app_id: @"bc6ee2048976060d2cc2654d0880554a1f809f35" application:application MoMagicInitSettings:momagicInitSetting];
+        [DATB setBadgeCountWithBadgeNumber:1];
         [application setApplicationIconBadgeNumber:0];
        
         
@@ -47,7 +48,6 @@
 }
 
 -(void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler{
-    NSLog(@"Received");
     [DATB handleForeGroundNotificationWithNotification:notification displayNotification:@"NONE" completionHandler: completionHandler];
     
 }

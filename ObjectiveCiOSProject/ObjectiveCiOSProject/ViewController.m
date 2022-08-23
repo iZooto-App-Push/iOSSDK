@@ -6,6 +6,7 @@
 //
 
 #import "ViewController.h"
+@import MomagiciOSSDK;
 
 @interface ViewController ()
 
@@ -15,6 +16,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+   // [DATB setSubscriberIDWithSubscriberID:@"123456"]
     // Do any additional setup after loading the view.
 }
 

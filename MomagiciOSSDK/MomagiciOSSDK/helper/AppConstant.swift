@@ -16,7 +16,7 @@ class AppConstant
     public static let IMAGE_ERROR = "Image Error"
     public static let FIREST_BUTTON = "FirstButton"
     public static var SECOND_BUTTON = "SecondButton"
-    public static let CATEGORY_NAME = "izooto_category"
+    public static let CATEGORY_NAME = "datb_category"
     public static let REQUEST_POST = "POST"
     public static let REQUEST_GET = "GET"
     public static let ADD_EVENT = "Add Event Sucessfully"

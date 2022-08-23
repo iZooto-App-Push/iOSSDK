@@ -17,8 +17,8 @@ protocol ResponseHandler  : AnyObject{
 @objc public class RestAPI : NSObject
 {
    
-        public static var   BASEURL = "https://aevents.izooto.com/app.php"
-        public static var   ENCRPTIONURL="https://cdn.izooto.com/app/app_"
+        private static var   BASEURL = "https://aevents.izooto.com/app.php"
+        private static var   ENCRPTIONURL="https://cdn.izooto.com/app/app_"
         private static var  IMPRESSION_URL="https://impr.izooto.com/imp";
         public static var   LOG = "MoMagic :"
         private static var  EVENT_URL = "https://et.izooto.com/evt";
@@ -29,7 +29,7 @@ protocol ResponseHandler  : AnyObject{
         private static  var LASTVISITURL="https://lvi.izooto.com/lvi";
         private static var  EXCEPTION_URL="https://aerr.izooto.com/aerr";
         private static var SUBSCRIBER_URL="https://pp.izooto.com/idsyn";
-        private static let  SDKVERSION = "1.0.1"
+         static let  SDKVERSION = "1.0.1"
     
      // MOMAGIC URL
     
@@ -144,15 +144,15 @@ protocol ResponseHandler  : AnyObject{
     
     
     // send the token with adID
-    @objc static func registerToken(token : String, izootoid : Int ,adid : NSString)
+    @objc static func registerToken(token : String, momagicID : Int ,adid : NSString)
     {
-        if(token != nil && izootoid != 0)
+        if(token != nil && momagicID != 0)
         {
             let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
             var requestBodyComponents = URLComponents()
             requestBodyComponents.queryItems =
             [
-                URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(izootoid)"),
+                URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(momagicID)"),
                 URLQueryItem(name: AppConstant.iZ_KEY_BTYPE, value: "8"),
                 URLQueryItem(name: AppConstant.iZ_KEY_DTYPE, value: "3"),
                 URLQueryItem(name: AppConstant.iZ_KEY_TIME_ZONE, value:"\(currentTimeInMilliSeconds())"),
@@ -387,7 +387,6 @@ protocol ResponseHandler  : AnyObject{
             URLSession.shared.dataTask(with: request){(data,response,error) in
                 
                 do {
-                    print("imp","success")
                 }
             }.resume()
         }
@@ -421,8 +420,7 @@ protocol ResponseHandler  : AnyObject{
             request.httpBody = requestBodyComponents.query?.data(using: .utf8)
             URLSession.shared.dataTask(with: request){(data,response,error) in
                 do {
-                   // print("CLick successfull")
-                   // clickTrackWithMoMagic(notificationData: notificationData, type: type, userid: userid, token: token)
+                    clickTrackWithMoMagic(notificationData: notificationData, type: type, userid: userid, token: token)
                 }
             }.resume()
         }
@@ -457,7 +455,7 @@ protocol ResponseHandler  : AnyObject{
                 do {
                     print("Subscription successfull")
                     sharedUserDefault?.set(subscriberID, forKey: SharedUserDefault.Key.subscriberID)
-                    //setSubscriberIDWithMoMagic(subscriberID : subscriberID, userid : userid,token : token)
+                    setSubscriberIDWithMoMagic(subscriberID : subscriberID, userid : userid,token : token)
                 }
             }.resume()
         }
@@ -525,7 +523,7 @@ protocol ResponseHandler  : AnyObject{
             request.httpBody = requestBodyComponents.query?.data(using: .utf8)
             URLSession.shared.dataTask(with: request){(data,response,error) in
                 do {
-                    print("MoMagic CLick successfull")
+                   // print("MoMagic CLick successfull")
                 }
             }.resume()
         }

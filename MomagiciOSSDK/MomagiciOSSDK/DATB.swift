@@ -68,7 +68,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                     momagic_id = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!
                 }
                 else{
-                    print("Some error occured")
+                    debugPrint("Some error occured\(momagic_app_id)")
                 }
             }
             
@@ -79,7 +79,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                 if nativeWebviewKey{
                     sharedUserDefault?.set(keySettingDetails["nativeWebview"]!, forKey:AppConstant.ISWEBVIEW)
                 } else {
-                    print("The nativeWebview  key is not present in the dictionary")
+                    debugPrint("The nativeWebview  key is not present in the dictionary")
                 }
                 let provisionalKey = keySettingDetails["provisionalAuthorization"] != nil
                 if(provisionalKey)
@@ -94,7 +94,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                 }
                 else
                 {
-                    print("The provisional Authorization key  is not present in the dictionary")
+                    debugPrint("The provisional Authorization key  is not present in the dictionary")
                     
                 }
                 let autoPromptkey = keySettingDetails["auto_prompt"] != nil
@@ -112,7 +112,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                     }
                 }
                 else {
-                    print("The auto_prompt  key is not present in the dictionary")
+                    debugPrint("The auto_prompt  key is not present in the dictionary")
                 }
                 
                 if #available(iOS 10.0, *) {
@@ -138,7 +138,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
             
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
                 (granted, error) in
-                print(AppConstant.PERMISSION_GRANTED ,"\(granted)")
+                debugPrint(AppConstant.PERMISSION_GRANTED ,"\(granted)")
                 guard granted else { return }
                 getNotificationSettings()
                 
@@ -157,7 +157,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
         if #available(iOS 12.0, *) {
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge,.provisional]) {
                 (granted, error) in
-                print(AppConstant.PERMISSION_GRANTED ,"\(granted)")
+                debugPrint(AppConstant.PERMISSION_GRANTED ,"\(granted)")
                 guard granted else { return }
                 getNotificationSettingsProvisional()
             }
@@ -211,7 +211,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
             guard let token = sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)
             else
             {return}
-            print(AppConstant.DEVICE_TOKEN," \(token)")
+            debugPrint(AppConstant.DEVICE_TOKEN," \(token)")
             if(formattedDate != (sharedUserDefault?.string(forKey: "LastVisit")))
             {
                 RestAPI.lastVisit(userid: momagic_id, token:token)
@@ -223,13 +223,23 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                 userDefaults.set(momagic_id, forKey: "PID")
                 userDefaults.synchronize()
             }
+            
+            if(RestAPI.SDKVERSION != sharedUserDefault?.string(forKey: "SDKVERSION"))
+            {
+                sharedUserDefault?.set(RestAPI.SDKVERSION, forKey: "SDKVERSION")
+                RestAPI.registerToken(token: token, MoMagic_id: momagic_id)
+                RestAPI.registerTokenWithMomagic(token: token, MoMagic_id: momagic_id)
+                
+            }
+            
         }
         else
         {
             if(momagic_id != 0)
             {
                 RestAPI.registerToken(token: token, MoMagic_id: momagic_id)
-                // RestAPI.registerTokenWithMomagic(token: token, MoMagic_id: momagic_id)
+                sharedUserDefault?.set(RestAPI.SDKVERSION, forKey: "SDKVERSION")
+                RestAPI.registerTokenWithMomagic(token: token, MoMagic_id: momagic_id)
                 sharedUserDefault?.set(token, forKey: SharedUserDefault.Key.token)
                 if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
                     userDefaults.set(token, forKey: "DEVICETOKEN")
@@ -239,7 +249,8 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                 
             }
             else{
-                print("MoMAgic app id  is missing, kindly check on panel...")
+                debugPrint("MoMagic app id  is missing, kindly check on panel...")
+                RestAPI.sendExceptionToServer(exceptionName: "MoMagic app id  is missing, kindly check on panel...",  className: "DATB", methodName: "getToken", pid: momagic_id, token: token, rid: "", cid: "")
             }
         }
     }
@@ -281,7 +292,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
         
         if (soundName != "")
         {
-            print(soundName)
+
             bestAttemptContent.sound = UNNotificationSound(named: UNNotificationSoundName(string: soundName) as String)
         }
         else
@@ -331,7 +342,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
             }
             else
             {
-                print(AppConstant.IZ_TAG,AppConstant.iZ_APP_GROUP_ERROR_)
+                debugPrint(AppConstant.IZ_TAG,AppConstant.iZ_APP_GROUP_ERROR_)
             }
         }
         if #available(iOS 15.0, *) {
@@ -354,16 +365,23 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
         
         if notificationData?.fetchurl != nil && notificationData?.fetchurl != ""
         {
-            if let url = URL(string: notificationData!.fetchurl!) {
+            let izUrlString = notificationData?.fetchurl!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+            if let url = URL(string: izUrlString!) {
                 URLSession.shared.dataTask(with: url) { data, response, error in
                     if let data = data {
                         do {
-                            
-                            
+                            if(error != nil) {
+                                debugPrint("No Notification Data error")
+                                return
+                            }
+                            else
+                            {
                             
                             let json = try JSONSerialization.jsonObject(with: data)
+
                             if let jsonArray = json as? [[String:Any]] {
                                 bestAttemptContent.title = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.alert!.title)!))"
+                                print(bestAttemptContent.title)
                                 bestAttemptContent.body = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.alert!.body)!))"
                                 if notificationData?.url != "" {
                                     notificationData?.url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.url)!))"
@@ -371,15 +389,12 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                 }
                                 if notificationData?.alert?.attachment_url != "" {
                                     notificationData?.alert?.attachment_url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.alert!.attachment_url)!))"
-                                    if (notificationData?.alert?.attachment_url!.contains(".webp"))!
-                                    {
-                                        notificationData?.alert?.attachment_url = notificationData?.alert?.attachment_url?.replacingOccurrences(of: ".webp", with: ".jpg")
-                                    }
                                     
+
                                 }
                                 
                             } else if let jsonDictionary = json as? [String:Any] {
-                                // print("Hello",jsonDictionary)
+                                
                                 
                                 bestAttemptContent.title = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert!.title)!))"
                                 bestAttemptContent.body = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert!.body)!))"
@@ -390,15 +405,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                     
                                     
                                     notificationData?.alert?.attachment_url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert!.attachment_url)!))"
-                                    if (notificationData?.alert?.attachment_url!.contains(".webp"))!
-                                    {
-                                        notificationData?.alert?.attachment_url = notificationData?.alert?.attachment_url?.replacingOccurrences(of: ".webp", with: ".jpeg")
-                                        
-                                    }
-                                    if (notificationData?.alert?.attachment_url!.contains("http:"))!
-                                    {
-                                        notificationData?.alert?.attachment_url = notificationData?.alert?.attachment_url?.replacingOccurrences(of: "http:", with: "https:")
-                                    }
+                                    
                                 }
                             }
                             
@@ -414,19 +421,20 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                     let urlExtension: String? = url?.pathExtension
                                     
                                     guard let attachment = UNNotificationAttachment.saveImageToDisk(fileIdentifier: "img."+urlExtension!, data: imageData, options: nil) else {
-                                        print(AppConstant.IMAGE_ERROR)
+                                        debugPrint(AppConstant.IMAGE_ERROR)
                                         contentHandler!(bestAttemptContent)
                                         return
                                     }
                                     bestAttemptContent.attachments = [ attachment ]
                                 }
                             }
-                        
-                            contentHandler!(bestAttemptContent)
-                            
+                        contentHandler!(bestAttemptContent)
+                               
+                            }
                         } catch let error {
-                            print("Error",error)
+                            debugPrint("Error",error)
                             
+                        
                         }
                     }
                     
@@ -434,7 +442,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
             }
             
             let firstAction = UNNotificationAction( identifier: "FirstButton", title: "Sponsored", options: .foreground)
-            let  category = UNNotificationCategory( identifier: "izooto_category", actions: [firstAction], intentIdentifiers: [], options: [])
+            let  category = UNNotificationCategory( identifier: "datb_category", actions: [firstAction], intentIdentifiers: [], options: [])
             UNUserNotificationCenter.current().setNotificationCategories([category])
             
             
@@ -458,7 +466,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                         let urlExtension: String? = url?.pathExtension
                         
                         guard let attachment = UNNotificationAttachment.saveImageToDisk(fileIdentifier: "img."+urlExtension!, data: imageData, options: nil) else {
-                            print(AppConstant.IMAGE_ERROR)
+                            debugPrint(AppConstant.IMAGE_ERROR)
                             contentHandler!(bestAttemptContent)
                             return
                         }
@@ -477,7 +485,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
         }
         else
         {
-            print("MoMagic payload is not exist\(userInfo)")
+            debugPrint("MoMagic payload is not exist\(userInfo)")
 
         }
         
@@ -511,13 +519,15 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
         
         return sourceString
     }
+  
+
     
     // Check the notification enable or not from device setting
     @objc  public static func checkNotificationEnable()
     {
         let isNotificationEnabled = UIApplication.shared.currentUserNotificationSettings?.types.contains(UIUserNotificationType.alert)
         if isNotificationEnabled!{
-            print("enabled notification setting")
+            debugPrint("enabled notification setting")
         }else{
             
             let alert = UIAlertController(title: "Please enable notifications for \(Bundle.main.object(forInfoDictionaryKey: "CFBundleName") ?? "APP Name")", message: "To receive these updates,you must first allow to receive \(Bundle.main.object(forInfoDictionaryKey: "CFBundleName") ?? "APP Name") notification from settings", preferredStyle: UIAlertController.Style.alert)
@@ -627,7 +637,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                 }
                 if (count == 6)
                 {
-                    print(sourceString)
+                    debugPrint(sourceString)
                     
                 }
             }
@@ -650,7 +660,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
             do {
                 return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
             } catch {
-                print(error.localizedDescription)
+                debugPrint(error.localizedDescription)
             }
         }
         return nil
@@ -709,7 +719,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
             }
             else
             {
-                print("MoMagic payload is not exist\(userInfo)")
+                debugPrint("MoMagic payload is not exist\(userInfo)")
                   RestAPI.sendExceptionToServer(exceptionName: "MoMagic payload is not exist \(userInfo)", className: "DATB", methodName: "handleForeGroundNotification", pid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!, token: (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! , rid: "",cid : "")
             }
 
@@ -754,8 +764,9 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
         {
             
             
-            
-            if let url = URL(string: notifcationData!.fetchurl!)
+            let izUrlString = notifcationData?.fetchurl!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+
+            if let url = URL(string: izUrlString!)
             {
                 URLSession.shared.dataTask(with: url) { data, response, error in
                     if let data = data {
@@ -764,47 +775,20 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                             if let jsonArray = json as? [[String:Any]] {
                                 if notifcationData?.url != "" {
                                     notifcationData?.url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notifcationData?.url)!))"
-                                    notifcationData?.url = "https:"+notifcationData!.url!
-                                    if notifcationData?.act1name != nil && notifcationData?.act1name != ""
-                                    {
-                                        if let url = URL(string:notifcationData!.url!) {
-                                            handleBroserNotification(url: (notifcationData!.url!))
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if let url = URL(string:notifcationData!.url!) {
-                                            //handleBroserNotification(url: (notifcationData!.url!))
-                                            handleBroserNotification(url: (notifcationData!.url!))
-                                        }
-                                    }
+                                    handleBroserNotification(url: (notifcationData!.url!))
+
                                 }
                             }
                             else if let jsonDictionary = json as? [String:Any] {
                                 if notifcationData?.url != "" {
                                     notifcationData?.url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notifcationData?.url)!))"
-                                    if let url = URL(string:notifcationData!.url!) {
-                                        if notifcationData?.act1name != nil && notifcationData?.act1name != ""
-                                        {
-                                            if let url = URL(string:notifcationData!.url!) {
-                                                // handleBroserNotification(url: (notifcationData!.url!))
-                                                handleBroserNotification(url: (notifcationData!.url!))
-                                                
-                                            }
-                                        }
-                                        else
-                                        {
-                                            
-                                            //handleBroserNotification(url: (notifcationData!.url!))
-                                            handleBroserNotification(url: (notifcationData!.url!))
-                                            
-                                        }
-                                        
-                                    }
+                                    handleBroserNotification(url: (notifcationData!.url!))
+
+                                   
                                 }
                             }
                         } catch let error {
-                            print(AppConstant.TAG,error)
+                            debugPrint(AppConstant.TAG,error)
                         }
                     }
                 }.resume()
@@ -833,7 +817,6 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                             {
                                 if let url = URL(string: launchURl!)
                                 {
-                                    // handleBroserNotification(url: (notifcationData!.url!))
                                     handleBroserNotification(url: (notifcationData!.url!))
                                 }
                                 
@@ -1073,7 +1056,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
             RestAPI.callSubscription(isSubscribe : value,token : token!,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!)
         }
         else{
-            print("No Subscription Call")
+            debugPrint("No Subscription Call")
         }
         
     }
@@ -1164,7 +1147,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
     
     @objc private static func  handleBroserNotification(url : String)
     {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             let izUrlString = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
             if let izUrl = URL(string: izUrlString!) {
                 UIApplication.shared.open(izUrl)
@@ -1176,14 +1159,13 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
         
         if subscriberID != ""{
             let subs_id = sharedUserDefault?.string(forKey: SharedUserDefault.Key.subscriberID) ?? ""
-            print(subs_id)
             let userID = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!
             let tokens = sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)
             if subscriberID != subs_id {
                 RestAPI.setSubscriberID(subscriberID: subscriberID, userid: userID, token: tokens!)
             }else{
-                print("\(subscriberID)")
-                print("Store subscriberID\(subs_id)")
+                debugPrint("Store subscriberID\(subs_id)")
+               
             }
         }
     }
@@ -1248,6 +1230,13 @@ extension String {
         guard let data = Data(base64Encoded: self) else { return nil }
         return String(data: data, encoding: .utf8)
     }
+}
+extension String {
+   var containsSpecialCharacter: Bool {
+      let regex = ".*[^A-Za-z0-9].*"
+      let testString = NSPredicate(format:"SELF MATCHES %@", regex)
+      return testString.evaluate(with: self)
+   }
 }
 
 
