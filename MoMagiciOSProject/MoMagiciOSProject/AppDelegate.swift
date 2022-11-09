@@ -30,16 +30,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     var window: UIWindow?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
                 let momagicInitSettings = ["auto_prompt": true,"nativeWebview": false, "provisionalAuthorization":false]
-        DispatchQueue.main.async {
-           // DATB.initialisation(momagic_app_id: "05e3574fafb1c149ca6e89ac4010e22fd0402215", application: application, MoMagicInitSettings:momagicInitSettings)
-            //18f94b90dccebaeb457b7584d59636b89cb0456e
-            DATB.initialisation(momagic_app_id: "18f94b90dccebaeb457b7584d59636b89cb0456e", application: application, MoMagicInitSettings:momagicInitSettings)
-            
-        }
-        
-       
+//        DispatchQueue.main.async {
+//           // DATB.initialisation(momagic_app_id: "05e3574fafb1c149ca6e89ac4010e22fd0402215", application: application, MoMagicInitSettings:momagicInitSettings)
+//            //18f94b90dccebaeb457b7584d59636b89cb0456e
+//           
+//            
+//        }
+        DATB.initialisation(momagic_app_id: "18f94b90dccebaeb457b7584d59636b89cb0456e", application: application, MoMagicInitSettings:momagicInitSettings)
            UNUserNotificationCenter.current().delegate = self
-         DATB.registerForPushNotifications()
+        // DATB.registerForPushNotifications()
 
            DATB.notificationOpenDelegate = self
            DATB.notificationReceivedDelegate = self
@@ -52,9 +51,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
      
      @available(iOS 10.0, *)
      func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void)     {
-        DATB.handleForeGroundNotification(notification: notification, displayNotification: "None")
+        DATB.handleForeGroundNotification(notification: notification, displayNotification: "None",completionHandler: completionHandler)
        
-       completionHandler([.badge, .alert, .sound])
      }
      
      // @available(iOS 10.0, *)

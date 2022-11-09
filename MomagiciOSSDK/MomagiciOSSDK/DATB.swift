@@ -13,7 +13,6 @@ import AVFoundation
 import WebKit
 let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
 @objc public  class DATB : NSObject {
-    static var  appDelegate = UIApplication.shared.delegate!
     private  static var momagic_id = Int()
     private static var rid : String!
     private static var cid : String!
@@ -116,14 +115,18 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                 }
                 
                 if #available(iOS 10.0, *) {
-                    UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
+                    DispatchQueue.main.async {
+                        UNUserNotificationCenter.current().delegate = UIApplication.shared.delegate as? UNUserNotificationCenterDelegate
+                    }
                 }
             }
             else{
                 registerForPushNotifications() // check for prompt
                 
                 if #available(iOS 10.0, *) {
-                    UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
+                    DispatchQueue.main.async {
+                        UNUserNotificationCenter.current().delegate = UIApplication.shared.delegate as? UNUserNotificationCenterDelegate
+                    }
                 }
                 
             }
@@ -132,7 +135,9 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
     
     @objc  public  static  func registerForPushNotifications() {
         if #available(iOS 10.0, *) {
-            UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
+            DispatchQueue.main.async {
+                UNUserNotificationCenter.current().delegate = UIApplication.shared.delegate as? UNUserNotificationCenterDelegate
+            }
         }
         if #available(iOS 10.0, *) {
             
@@ -228,7 +233,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
             {
                 sharedUserDefault?.set(RestAPI.SDKVERSION, forKey: "SDKVERSION")
                 RestAPI.registerToken(token: token, MoMagic_id: momagic_id)
-                RestAPI.registerTokenWithMomagic(token: token, MoMagic_id: momagic_id)
+               // RestAPI.registerTokenWithMomagic(token: token, MoMagic_id: momagic_id)
                 
             }
             
@@ -279,6 +284,8 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
     
     
     // Handle the payload and show the notification
+    
+    // Handle the payload and show the notification
     @available(iOS 10.0, *)
     @objc public static func didReceiveNotificationExtensionRequest(request : UNNotificationRequest, bundleName : String, soundName :String, bestAttemptContent :UNMutableNotificationContent,contentHandler:((UNNotificationContent) -> Void)?)
     {
@@ -287,209 +294,290 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
         
         if(notificationData?.inApp != nil)
         {
-        badgeNumber = (sharedUserDefault?.integer(forKey: "BADGECOUNT"))!
-        
-        
-        if (soundName != "")
-        {
-
-            bestAttemptContent.sound = UNNotificationSound(named: UNNotificationSoundName(string: soundName) as String)
-        }
-        else
-        {
-            bestAttemptContent.sound = .default()
-        }
-        if(bundleName != nil)
-        {
-            let groupName = "group."+bundleName+".DATB"
-            if let userDefaults = UserDefaults(suiteName: groupName) {
-                badgeCount = userDefaults.integer(forKey:"Badge")
-                if badgeCount > 0 {
-                    if(badgeNumber > 0)
-                    {
-                        bestAttemptContent.badge = 1 as NSNumber
+            badgeNumber = (sharedUserDefault?.integer(forKey: "BADGECOUNT"))!
+            
+            
+            if (soundName != "")
+            {
+                
+                bestAttemptContent.sound = UNNotificationSound(named: UNNotificationSoundName(string: soundName) as String)
+            }
+            else
+            {
+                bestAttemptContent.sound = .default()
+            }
+            if(bundleName != nil)
+            {
+                let groupName = "group."+bundleName+".DATB"
+                if let userDefaults = UserDefaults(suiteName: groupName) {
+                    badgeCount = userDefaults.integer(forKey:"Badge")
+                    if badgeCount > 0 {
+                        if(badgeNumber > 0)
+                        {
+                            bestAttemptContent.badge = 1 as NSNumber
+                        }
+                        else
+                        {
+                            userDefaults.set(badgeCount + 1, forKey: "Badge")
+                            bestAttemptContent.badge = badgeCount + 1 as NSNumber
+                        }
+                    } else {
+                        userDefaults.set(1, forKey: "Badge")
+                        bestAttemptContent.badge = 1
                     }
-                    else
+                    
+                    let deviceToken = userDefaults.string(forKey: "DEVICETOKEN")
+                    let pid = userDefaults.integer(forKey: "PID")
+                    if (notificationData?.cfg != nil)
                     {
-                        userDefaults.set(badgeCount + 1, forKey: "Badge")
-                        bestAttemptContent.badge = badgeCount + 1 as NSNumber
-                    }
-                } else {
-                    userDefaults.set(1, forKey: "Badge")
-                    bestAttemptContent.badge = 1
-                }
-                let deviceToken = userDefaults.string(forKey: "DEVICETOKEN")
-                let pid = userDefaults.integer(forKey: "PID")
-                if (notificationData?.cfg != nil)
-                {
-                    let str = String((notificationData?.cfg)!)
-                    let binaryString = (str.data(using: .utf8, allowLossyConversion: false)?.reduce("") { (a, b) -> String in a + String(b, radix: 2) })
-                    let lastChar = binaryString?.last!
-                    let str1 = String((lastChar)!)
-                    let impr = Int(str1)
-                    if(impr == 1)
-                    {
+                        let str = String((notificationData?.cfg)!)
+                        let binaryString = (str.data(using: .utf8, allowLossyConversion: false)?.reduce("") { (a, b) -> String in a + String(b, radix: 2) })
+                        let lastChar = binaryString?.last!
+                        let str1 = String((lastChar)!)
+                        let impr = Int(str1)
+                        if(impr == 1)
+                        {
                             RestAPI.callImpression(notificationData: notificationData!,userid: pid,token:"\(deviceToken)")
-
+                            
                         }
                         
                         
                         
                         
+                        
+                    }
+                    userDefaults.synchronize()
+                }
+                else
+                {
+                    debugPrint(AppConstant.IZ_TAG,AppConstant.iZ_APP_GROUP_ERROR_)
+                }
+            }
+            if #available(iOS 15.0, *) {
+                bestAttemptContent.relevanceScore = notificationData?.relevence_score ?? 0
+                if(notificationData?.interrutipn_level == 1 )
+                {
+                    bestAttemptContent.interruptionLevel  = UNNotificationInterruptionLevel.passive
+                }
+                if(notificationData?.interrutipn_level == 2)
+                {
+                    bestAttemptContent.interruptionLevel  = UNNotificationInterruptionLevel.timeSensitive
                     
                 }
-                userDefaults.synchronize()
+                if(notificationData?.interrutipn_level == 3)
+                {
+                    bestAttemptContent.interruptionLevel  = UNNotificationInterruptionLevel.critical
+                    
+                }
             }
-            else
+            
+            if notificationData?.fetchurl != nil && notificationData?.fetchurl != ""
             {
-                debugPrint(AppConstant.IZ_TAG,AppConstant.iZ_APP_GROUP_ERROR_)
-            }
-        }
-        if #available(iOS 15.0, *) {
-            bestAttemptContent.relevanceScore = notificationData?.relevence_score ?? 0
-            if(notificationData?.interrutipn_level == 1 )
-            {
-                bestAttemptContent.interruptionLevel  = UNNotificationInterruptionLevel.passive
-            }
-            if(notificationData?.interrutipn_level == 2)
-            {
-                bestAttemptContent.interruptionLevel  = UNNotificationInterruptionLevel.timeSensitive
+                let izUrlString = notificationData?.fetchurl!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+                if let url = URL(string: izUrlString!) {
+                    URLSession.shared.dataTask(with: url) { data, response, error in
+                        if(error != nil)
+                        {
+                            fallBackAdsApi(bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                        }
+                        if let data = data {
+                            do {
+                                let json = try JSONSerialization.jsonObject(with: data)
+                                
+                                //To Check FallBack
+                                if let jsonDictionary = json as? [String:Any] {
+                                    if let value = jsonDictionary["msgCode"] as? String {
+                                        fallBackAdsApi(bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                    }
+                                    
+                                }
+                                else
+                                {
+                                    
+                                    let json = try JSONSerialization.jsonObject(with: data)
+                                    
+                                    if let jsonArray = json as? [[String:Any]] {
+                                        bestAttemptContent.title = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.alert!.title)!))"
+                                        print(bestAttemptContent.title)
+                                        bestAttemptContent.body = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.alert!.body)!))"
+                                        if notificationData?.url != "" {
+                                            notificationData?.url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.url)!))"
+                                            
+                                        }
+                                        if notificationData?.alert?.attachment_url != "" {
+                                            notificationData?.alert?.attachment_url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.alert!.attachment_url)!))"
+                                            
+                                            
+                                        }
+                                        
+                                    } else if let jsonDictionary = json as? [String:Any] {
+                                        
+                                        
+                                        bestAttemptContent.title = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert!.title)!))"
+                                        bestAttemptContent.body = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert!.body)!))"
+                                        if notificationData?.url != "" {
+                                            notificationData?.url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.url)!))"
+                                        }
+                                        if notificationData?.alert?.attachment_url != "" {
+                                            
+                                            
+                                            notificationData?.alert?.attachment_url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert!.attachment_url)!))"
+                                            
+                                        }
+                                    }
+                                    
+                                    autoreleasepool {
+                                        if let urlString = (notificationData?.alert?.attachment_url),
+                                           let fileUrl = URL(string: urlString ) {
+                                            guard let imageData = NSData(contentsOf: fileUrl) else {
+                                                contentHandler!(bestAttemptContent)
+                                                return
+                                            }
+                                            let string = notificationData?.alert?.attachment_url
+                                            let url: URL? = URL(string: string!)
+                                            let urlExtension: String? = url?.pathExtension
+                                            
+                                            guard let attachment = UNNotificationAttachment.saveImageToDisk(fileIdentifier: "img."+urlExtension!, data: imageData, options: nil) else {
+                                                debugPrint(AppConstant.IMAGE_ERROR)
+                                                contentHandler!(bestAttemptContent)
+                                                return
+                                            }
+                                            bestAttemptContent.attachments = [ attachment ]
+                                        }
+                                    }
+                                    contentHandler!(bestAttemptContent)
+                                    
+                                }
+                            } catch let error {
+                                debugPrint("Error",error)
+                                
+                                
+                            }
+                        }
+                        
+                    }.resume()
+                }else{
+                    print("NOT Found")
+                }
+                
+                let firstAction = UNNotificationAction( identifier: "FirstButton", title: "Sponsored", options: .foreground)
+                let  category = UNNotificationCategory( identifier: "datb_category", actions: [firstAction], intentIdentifiers: [], options: [])
+                UNUserNotificationCenter.current().setNotificationCategories([category])
+                
                 
             }
-            if(notificationData?.interrutipn_level == 3)
-            {
-                bestAttemptContent.interruptionLevel  = UNNotificationInterruptionLevel.critical
-                
-            }
-        }
-        
-        if notificationData?.fetchurl != nil && notificationData?.fetchurl != ""
-        {
-            let izUrlString = notificationData?.fetchurl!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-            if let url = URL(string: izUrlString!) {
-                URLSession.shared.dataTask(with: url) { data, response, error in
-                    if let data = data {
-                        do {
-                            if(error != nil) {
-                                debugPrint("No Notification Data error")
+            
+            
+            else{
+                if notificationData != nil
+                {
+                    
+                    
+                    autoreleasepool {
+                        if let urlString = (notificationData?.alert?.attachment_url),
+                           let fileUrl = URL(string: urlString ) {
+                            guard let imageData = NSData(contentsOf: fileUrl) else {
+                                contentHandler!(bestAttemptContent)
                                 return
                             }
-                            else
-                            {
+                            let string = notificationData?.alert?.attachment_url
+                            let url: URL? = URL(string: string!)
+                            let urlExtension: String? = url?.pathExtension
                             
-                            let json = try JSONSerialization.jsonObject(with: data)
-
-                            if let jsonArray = json as? [[String:Any]] {
-                                bestAttemptContent.title = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.alert!.title)!))"
-                                print(bestAttemptContent.title)
-                                bestAttemptContent.body = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.alert!.body)!))"
-                                if notificationData?.url != "" {
-                                    notificationData?.url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.url)!))"
+                            guard let attachment = UNNotificationAttachment.saveImageToDisk(fileIdentifier: "img."+urlExtension!, data: imageData, options: nil) else {
+                                debugPrint(AppConstant.IMAGE_ERROR)
+                                contentHandler!(bestAttemptContent)
+                                return
+                            }
+                            bestAttemptContent.attachments = [ attachment ]
+                        }
+                    }
+                    
+                    
+                    contentHandler!(bestAttemptContent)
+                    
+                    
+                    //}
+                    
+                }
+            }
+        }
+        else
+        {
+            debugPrint("MoMagic payload is not exist\(userInfo)")
+            
+        }
+        
+    }
+    
+    
+    // Fallback Url Call
+    @available(iOS 10.0, *)
+    @objc private static func fallBackAdsApi(bestAttemptContent :UNMutableNotificationContent, contentHandler:((UNNotificationContent) -> Void)?){
+        
+        let str = RestAPI.FALLBACK_URL
+        let izUrlString = (str.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
+        if let url = URL(string: izUrlString) {
+            URLSession.shared.dataTask(with: url) { data, response, error in
+                if let data = data {
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data)
+                        if let jsonDictionary = json as? [String:Any] {
+                            let notificationData = Payload(dictionary: (jsonDictionary) as NSDictionary)
+                            bestAttemptContent.title = jsonDictionary["t"] as! String
+                            bestAttemptContent.body = jsonDictionary["m"] as! String
+                            if notificationData?.url! != "" {
+                                notificationData?.url = jsonDictionary["bi"] as? String
+                                if (notificationData?.url!.contains(".webp"))!
+                                {
+                                    notificationData?.url! = (notificationData?.url?.replacingOccurrences(of: ".webp", with: ".jpeg"))!
                                     
                                 }
-                                if notificationData?.alert?.attachment_url != "" {
-                                    notificationData?.alert?.attachment_url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.alert!.attachment_url)!))"
-                                    
-
-                                }
-                                
-                            } else if let jsonDictionary = json as? [String:Any] {
-                                
-                                
-                                bestAttemptContent.title = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert!.title)!))"
-                                bestAttemptContent.body = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert!.body)!))"
-                                if notificationData?.url != "" {
-                                    notificationData?.url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.url)!))"
-                                }
-                                if notificationData?.alert?.attachment_url != "" {
-                                    
-                                    
-                                    notificationData?.alert?.attachment_url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.alert!.attachment_url)!))"
+                                if (notificationData?.url!.contains("http:"))!
+                                {
+                                    notificationData?.url! = (notificationData?.url?.replacingOccurrences(of: "http:", with: "https:"))!
                                     
                                 }
                             }
                             
                             autoreleasepool {
-                                if let urlString = (notificationData?.alert?.attachment_url),
+                                if let urlString = (notificationData?.url!),
                                    let fileUrl = URL(string: urlString ) {
+                                    
                                     guard let imageData = NSData(contentsOf: fileUrl) else {
                                         contentHandler!(bestAttemptContent)
                                         return
                                     }
-                                    let string = notificationData?.alert?.attachment_url
+                                    let string = notificationData?.url!
                                     let url: URL? = URL(string: string!)
                                     let urlExtension: String? = url?.pathExtension
-                                    
                                     guard let attachment = UNNotificationAttachment.saveImageToDisk(fileIdentifier: "img."+urlExtension!, data: imageData, options: nil) else {
-                                        debugPrint(AppConstant.IMAGE_ERROR)
+                                        print(AppConstant.IMAGE_ERROR)
                                         contentHandler!(bestAttemptContent)
                                         return
                                     }
                                     bestAttemptContent.attachments = [ attachment ]
                                 }
                             }
-                        contentHandler!(bestAttemptContent)
-                               
-                            }
-                        } catch let error {
-                            debugPrint("Error",error)
                             
+                        }
+                        contentHandler!(bestAttemptContent)
                         
-                        }
-                    }
-                    
-                }.resume()
-            }
-            
-            let firstAction = UNNotificationAction( identifier: "FirstButton", title: "Sponsored", options: .foreground)
-            let  category = UNNotificationCategory( identifier: "datb_category", actions: [firstAction], intentIdentifiers: [], options: [])
-            UNUserNotificationCenter.current().setNotificationCategories([category])
-            
-            
-        }
-        
-        
-        else{
-            if notificationData != nil
-            {
-                
-                
-                autoreleasepool {
-                    if let urlString = (notificationData?.alert?.attachment_url),
-                       let fileUrl = URL(string: urlString ) {
-                        guard let imageData = NSData(contentsOf: fileUrl) else {
-                            contentHandler!(bestAttemptContent)
-                            return
-                        }
-                        let string = notificationData?.alert?.attachment_url
-                        let url: URL? = URL(string: string!)
-                        let urlExtension: String? = url?.pathExtension
-                        
-                        guard let attachment = UNNotificationAttachment.saveImageToDisk(fileIdentifier: "img."+urlExtension!, data: imageData, options: nil) else {
-                            debugPrint(AppConstant.IMAGE_ERROR)
-                            contentHandler!(bestAttemptContent)
-                            return
-                        }
-                        bestAttemptContent.attachments = [ attachment ]
+                    } catch let error {
+                        print("Error",error)
                     }
                 }
-             
                 
-                contentHandler!(bestAttemptContent)
-                
-                
-                //}
-                
-            }
+            }.resume()
         }
-        }
-        else
-        {
-            debugPrint("MoMagic payload is not exist\(userInfo)")
-
-        }
-        
     }
+    
+    
+    
+    
+    
+    
+    
     @objc private static func getParseArrayValue(jsonData :[[String : Any]], sourceString : String) -> String
     {
         
@@ -519,8 +607,8 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
         
         return sourceString
     }
-  
-
+    
+    
     
     // Check the notification enable or not from device setting
     @objc  public static func checkNotificationEnable()
@@ -698,97 +786,157 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
             let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
             if(notificationData?.inApp != nil)
             {
-            notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
-            if (notificationData?.cfg != nil)
-            {
-                let str = String((notificationData?.cfg)!)
-                let binaryString = (str.data(using: .utf8, allowLossyConversion: false)?.reduce("") { (a, b) -> String in a + String(b, radix: 2) })
-                let lastChar = binaryString?.last!
-                let str1 = String((lastChar)!)
-                let impr = Int(str1)
-                if(impr == 1)
+                notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
+                if (notificationData?.cfg != nil)
                 {
-                   
+                    let str = String((notificationData?.cfg)!)
+                    let binaryString = (str.data(using: .utf8, allowLossyConversion: false)?.reduce("") { (a, b) -> String in a + String(b, radix: 2) })
+                    let lastChar = binaryString?.last!
+                    let str1 = String((lastChar)!)
+                    let impr = Int(str1)
+                    if(impr == 1)
+                    {
+                        
                         RestAPI.callImpression(notificationData: notificationData!,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!)
-                    
-
-                   
+                        
+                        
+                        
+                    }
                 }
-            }
-            completionHandler([.badge, .alert, .sound])
+                completionHandler([.badge, .alert, .sound])
             }
             else
             {
                 debugPrint("MoMagic payload is not exist\(userInfo)")
-                  RestAPI.sendExceptionToServer(exceptionName: "MoMagic payload is not exist \(userInfo)", className: "DATB", methodName: "handleForeGroundNotification", pid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!, token: (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! , rid: "",cid : "")
+                RestAPI.sendExceptionToServer(exceptionName: "MoMagic payload is not exist \(userInfo)", className: "DATB", methodName: "handleForeGroundNotification", pid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!, token: (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! , rid: "",cid : "")
             }
-
-
+            
+            
             
         }
         
         
     }
+    
+    
+    
+    // handel the fallback url
+    
+    @objc public static func fallbackClickHandler(){
+        
+        let str = RestAPI.FALLBACK_URL
+        let izUrlString = (str.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
+        if let url = URL(string: izUrlString) {
+            URLSession.shared.dataTask(with: url) { data, response, error in
+                if let data = data {
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data)
+                        if let jsonDictionary = json as? [String:Any] {
+                            let notificationData = Payload(dictionary: (jsonDictionary) as NSDictionary)
+                            if notificationData?.url! != "" {
+                                
+                                notificationData?.url = jsonDictionary["ln"] as? String
+                                
+                                let izUrlStr = notificationData?.url!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+                                
+                                if let url = URL(string:izUrlStr!) {
+                                    if notificationData?.act1name != nil && notificationData?.act1name != ""
+                                    {
+                                        DispatchQueue.main.async {
+                                            UIApplication.shared.open(url)
+                                        }
+                                    }
+                                    else
+                                    {
+                                        DispatchQueue.main.async {
+                                            UIApplication.shared.open(url)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } catch let error {
+                        print("Error",error)
+                    }
+                }
+            }.resume()
+        }else{
+            print("Wrong URL")
+        }
+    }
+    
+    
+    
     // Handle the clicks the notification from Banner,Button
     @objc  public static func notificationHandler(response : UNNotificationResponse)
     {
         
+        if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
+            let badgeC = userDefaults.integer(forKey:"Badge")
+            self.badgeCount = badgeC
+            userDefaults.set(badgeC - 1, forKey: "Badge")
+            userDefaults.synchronize()
+        }
+        
+        badgeNumber = (sharedUserDefault?.integer(forKey: "BADGECOUNT"))!
+        if(badgeNumber == -1)
+        {
+            UIApplication.shared.applicationIconBadgeNumber = -1 // clear the badge count // notification is not removed
+        }
+        else if(badgeNumber == 1)
+        {
+            UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count
+            
+        }else{
+            
+            UIApplication.shared.applicationIconBadgeNumber = self.badgeCount - 1 //set badge default value
+        }
+        
         let userInfo = response.notification.request.content.userInfo
         let notifcationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
-
-        // custom badge count
-        badgeNumber = (sharedUserDefault?.integer(forKey: "BADGECOUNT"))!
-            if(badgeNumber == -1)
-            {
-                UIApplication.shared.applicationIconBadgeNumber = -1 // clear the badge count // notification is not removed
-
-
-            }
-            else
-            {
-                UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count
-               
-            }
-            if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
-                userDefaults.set(0, forKey: "Badge")
-                userDefaults.synchronize()
-           }
-        
-        
         
         clickTrack(notificationData: notifcationData!, actionType: "0")
-
-        
         
         if notifcationData?.fetchurl != nil && notifcationData?.fetchurl != ""
         {
-            
-            
             let izUrlString = notifcationData?.fetchurl!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-
+            
             if let url = URL(string: izUrlString!)
             {
                 URLSession.shared.dataTask(with: url) { data, response, error in
+                    
+                    if error != nil{
+                        self.fallbackClickHandler()
+                    }
                     if let data = data {
                         do {
                             let json = try JSONSerialization.jsonObject(with: data)
-                            if let jsonArray = json as? [[String:Any]] {
-                                if notifcationData?.url != "" {
-                                    notifcationData?.url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notifcationData?.url)!))"
-                                    handleBroserNotification(url: (notifcationData!.url!))
-
+                            
+                            //To Check FallBack
+                            if let jsonDictionary = json as? [String:Any] {
+                                if let value = jsonDictionary["msgCode"] as? String {
+                                    self.fallbackClickHandler()
                                 }
                             }
-                            else if let jsonDictionary = json as? [String:Any] {
-                                if notifcationData?.url != "" {
-                                    notifcationData?.url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notifcationData?.url)!))"
-                                    handleBroserNotification(url: (notifcationData!.url!))
-
-                                   
+                            else
+                            {
+                                if let jsonArray = json as? [[String:Any]] {
+                                    if notifcationData?.url != "" {
+                                        notifcationData?.url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notifcationData?.url)!))"
+                                        handleBroserNotification(url: (notifcationData!.url!))
+                                        
+                                    }
+                                }
+                                else if let jsonDictionary = json as? [String:Any] {
+                                    if notifcationData?.url != "" {
+                                        notifcationData?.url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notifcationData?.url)!))"
+                                        handleBroserNotification(url: (notifcationData!.url!))
+                                    }
                                 }
                             }
                         } catch let error {
                             debugPrint(AppConstant.TAG,error)
+                            self.fallbackClickHandler()
                         }
                     }
                 }.resume()
@@ -802,7 +950,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                 {
                 case "FirstButton" :
                     type = "1"
-                   // clickTrack(notificationData: notifcationData!, actionType: "1")
+                    // clickTrack(notificationData: notifcationData!, actionType: "1")
                     
                     if notifcationData?.ap != "" && notifcationData?.ap != nil
                     {
@@ -864,7 +1012,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                     break
                 case "SecondButton" :
                     type = "2"
-                   // clickTrack(notificationData: notifcationData!, actionType: "2")
+                    // clickTrack(notificationData: notifcationData!, actionType: "2")
                     
                     
                     if notifcationData?.ap != "" && notifcationData?.ap != nil
@@ -914,14 +1062,14 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                     break
                 default:
                     type = "0"
-                   // clickTrack(notificationData: notifcationData!, actionType: "0")
+                    // clickTrack(notificationData: notifcationData!, actionType: "0")
                     
                     if notifcationData?.ap != "" && notifcationData?.ap != nil
                     {
                         handleClicks(response: response, actionType: "0")
                     }
                     else{
-                        if ((notifcationData?.inApp?.contains("1"))! && notifcationData?.inApp != "")
+                        if ((notifcationData?.inApp?.contains("1"))! && notifcationData?.inApp != "" && notifcationData?.url != nil && notifcationData?.url != "")
                         {
                             
                             let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
@@ -936,15 +1084,11 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                             }
                         }
                         else{
-                            if let url = URL(string: notifcationData!.url!) {
-                                
-                                handleBroserNotification(url: (notifcationData!.url!))
-                                
-                                
-                                
+                            if notifcationData!.url == nil {
+                                print("")
+                            }else{
+                                handleBroserNotification(url: (notifcationData?.url)!)
                             }
-                            
-                            
                         }
                     }
                 }//close switch
@@ -952,7 +1096,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
             }// close if
             else{
                 type = "0"
-               // clickTrack(notificationData: notifcationData!, actionType: "0")
+                // clickTrack(notificationData: notifcationData!, actionType: "0")
                 
                 if notifcationData?.ap != "" && notifcationData?.ap != nil
                 {
@@ -961,7 +1105,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                 }
                 else
                 {
-                    if ((notifcationData?.inApp?.contains("1"))! && notifcationData?.inApp != "")
+                    if ((notifcationData?.inApp?.contains("1"))! && notifcationData?.inApp != "" && notifcationData?.url != nil && notifcationData?.url != "")
                     {
                         
                         let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
@@ -977,12 +1121,12 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                     }
                     else
                     {
-                        if let url = URL(string: notifcationData!.url!) {
-                            handleBroserNotification(url: (notifcationData!.url!))
-                            
+                        if notifcationData!.url == nil {
+                            print("")
+                        }else{
+                            handleBroserNotification(url: (notifcationData?.url)!)
                         }
                     }
-                    
                 }
             } //close else
         }
@@ -1165,7 +1309,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                 RestAPI.setSubscriberID(subscriberID: subscriberID, userid: userID, token: tokens!)
             }else{
                 debugPrint("Store subscriberID\(subs_id)")
-               
+                
             }
         }
     }
@@ -1232,11 +1376,11 @@ extension String {
     }
 }
 extension String {
-   var containsSpecialCharacter: Bool {
-      let regex = ".*[^A-Za-z0-9].*"
-      let testString = NSPredicate(format:"SELF MATCHES %@", regex)
-      return testString.evaluate(with: self)
-   }
+    var containsSpecialCharacter: Bool {
+        let regex = ".*[^A-Za-z0-9].*"
+        let testString = NSPredicate(format:"SELF MATCHES %@", regex)
+        return testString.evaluate(with: self)
+    }
 }
 
 

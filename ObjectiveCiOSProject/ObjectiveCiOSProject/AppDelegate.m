@@ -28,16 +28,25 @@
         [momagicInitSetting setObject:@NO forKey:@"nativeWebview"];
         [momagicInitSetting setObject:@NO forKey:@"provisionalAuthorization"];
     // initalise the MoMagic SDK
-    [DATB initialisationWithMomagic_app_id: @"bc6ee2048976060d2cc2654d0880554a1f809f35" application:application MoMagicInitSettings:momagicInitSetting];
+    [DATB initialisationWithMomagic_app_id: @"299adcc1794992daee9e54ace947459946735792" application:application MoMagicInitSettings:momagicInitSetting];
         [DATB setBadgeCountWithBadgeNumber:1];
         [application setApplicationIconBadgeNumber:0];
-       
+       // NSMutableDictionary *userPropertiesdata = [[NSMutableDictionary alloc] init];
+       // [userPropertiesdata setObject:@"male" forKey:@"gender"];
+       // [DATB addUserPropertiesWithData:userPropertiesdata];
         
+        
+       
+        [DATB checkNotificationEnable];
+        [DATB setSubscriptionWithIsSubscribe:@true];
     });
   
     DATB.notificationReceivedDelegate = self;
     DATB.landingURLDelegate = self;
     DATB.notificationOpenDelegate = self;
+     NSMutableDictionary *userPropertiesdata = [[NSMutableDictionary alloc] init];
+     [userPropertiesdata setObject:@"male" forKey:@"gender"];
+     [DATB addEventWithEventName:@"Clicks" data:userPropertiesdata];
     return YES;
 }
 

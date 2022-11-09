@@ -30,6 +30,8 @@ protocol ResponseHandler  : AnyObject{
         private static var  EXCEPTION_URL="https://aerr.izooto.com/aerr";
         private static var SUBSCRIBER_URL="https://pp.izooto.com/idsyn";
          static let  SDKVERSION = "1.0.1"
+    //Fallback
+        static let FALLBACK_URL = "https://flbk.izooto.com/default.json"
     
      // MOMAGIC URL
     
@@ -127,9 +129,7 @@ protocol ResponseHandler  : AnyObject{
             request.allHTTPHeaderFields = requestHeaders
             request.httpBody = requestBodyComponents.query?.data(using: .utf8)
             URLSession.shared.dataTask(with: request){(data,response,error) in
-                print("Mo ERROR \(String(describing: error))")
                 do {
-                    print("Momagic API successfully registered")
                 }
             }.resume()
         }

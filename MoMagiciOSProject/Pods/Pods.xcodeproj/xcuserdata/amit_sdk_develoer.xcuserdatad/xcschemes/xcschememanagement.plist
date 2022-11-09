@@ -4,15 +4,20 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>MoMagicNotificationServices.xcscheme_^#shared#^_</key>
+		<key>MomagiciOSSDK.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>1</integer>
+			<integer>3</integer>
 		</dict>
-		<key>ObjectiveCiOSProject.xcscheme_^#shared#^_</key>
+		<key>Pods-MoMagiciOSProject-MoMagicExtesnionServices.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
+		</dict>
+		<key>Pods-MoMagiciOSProject.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>4</integer>
 		</dict>
 	</dict>
 </dict>

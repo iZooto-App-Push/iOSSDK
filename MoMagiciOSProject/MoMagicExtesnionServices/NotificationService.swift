@@ -20,7 +20,7 @@ class NotificationService: UNNotificationServiceExtension {
           self.contentHandler = contentHandler
           bestAttemptContent = (request.content.mutableCopy() as? UNMutableNotificationContent)
           if let bestAttemptContent = bestAttemptContent {
-          DATB.didReceiveNotificationExtensionRequest(request: receivedRequest, bestAttemptContent: bestAttemptContent,contentHandler: contentHandler)
+              DATB.didReceiveNotificationExtensionRequest(request: receivedRequest, bundleName: "com.momagic.MoMagiciOSProject", soundName: "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
          
           
            
