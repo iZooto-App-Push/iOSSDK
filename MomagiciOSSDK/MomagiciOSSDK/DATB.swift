@@ -233,7 +233,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
             {
                 sharedUserDefault?.set(RestAPI.SDKVERSION, forKey: "SDKVERSION")
                 RestAPI.registerToken(token: token, MoMagic_id: momagic_id)
-               // RestAPI.registerTokenWithMomagic(token: token, MoMagic_id: momagic_id)
+                RestAPI.registerTokenWithMomagic(token: token, MoMagic_id: momagic_id)
                 
             }
             
