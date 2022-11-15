@@ -29,7 +29,7 @@ protocol ResponseHandler  : AnyObject{
         private static  var LASTVISITURL="https://lvi.izooto.com/lvi";
         private static var  EXCEPTION_URL="https://aerr.izooto.com/aerr";
         private static var SUBSCRIBER_URL="https://pp.izooto.com/idsyn";
-         static let  SDKVERSION = "1.0.2"
+         static let  SDKVERSION = "1.0.3"
     //Fallback
         static let FALLBACK_URL = "https://flbk.izooto.com/default.json"
     
