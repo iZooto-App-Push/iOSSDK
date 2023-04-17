@@ -38,6 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 //        }
         DATB.initialisation(momagic_app_id: "18f94b90dccebaeb457b7584d59636b89cb0456e", application: application, MoMagicInitSettings:momagicInitSettings)
            UNUserNotificationCenter.current().delegate = self
+       // [DATB .setSubscriberID(subscriberID: "12345")];
         // DATB.registerForPushNotifications()
 
            DATB.notificationOpenDelegate = self
@@ -58,7 +59,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
      // @available(iOS 10.0, *)
      func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
       
-       DATB.notificationHandler(response: response) //iZooto.notificationHandler
+       DATB.notificationHandler(response: response) 
        completionHandler()
      }
 

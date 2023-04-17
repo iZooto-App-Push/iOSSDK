@@ -1,0 +1,14 @@
+{
+  'version': 0,
+  'use-external-names': 'false',
+  'case-sensitive': 'false',
+  'roots': [{
+    'type': 'directory',
+    'name': "/Users/amit_sdk_develoer/Documents/AndroidSDK/momagiciOSSDK/iOSSDK/MoMagiciOSProject/build/Debug-iphoneos/MomagiciOSSDK/MomagiciOSSDK.framework/Modules"
+    'contents': [{
+      'type': 'file',
+      'name': "module.modulemap",
+      'external-contents': "/Users/amit_sdk_develoer/Documents/AndroidSDK/momagiciOSSDK/iOSSDK/MoMagiciOSProject/build/Pods.build/Debug-iphoneos/MomagiciOSSDK.build/unextended-module.modulemap",
+    }]
+  }]
+}

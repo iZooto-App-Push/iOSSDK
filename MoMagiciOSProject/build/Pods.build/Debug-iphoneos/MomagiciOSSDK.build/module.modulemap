@@ -1,0 +1,11 @@
+framework module MomagiciOSSDK {
+  umbrella header "MomagiciOSSDK-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module MomagiciOSSDK.Swift {
+  header "MomagiciOSSDK-Swift.h"
+  requires objc
+}

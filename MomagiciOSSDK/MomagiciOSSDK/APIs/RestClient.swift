@@ -17,29 +17,34 @@ protocol ResponseHandler  : AnyObject{
 @objc public class RestAPI : NSObject
 {
    
-        private static var   BASEURL = "https://aevents.izooto.com/app.php"
-        private static var   ENCRPTIONURL="https://cdn.izooto.com/app/app_"
-        private static var  IMPRESSION_URL="https://impr.izooto.com/imp";
-        public static var   LOG = "MoMagic :"
-        private static var  EVENT_URL = "https://et.izooto.com/evt";
-        private static var  PROPERTIES_URL="https://prp.izooto.com/prp";
-        private static var  CLICK_URL="https://clk.izooto.com/clk";
-        private static  var LASTNOTIFICATIONCLICKURL="https://lci.izooto.com/lci";
-        private static  var LASTNOTIFICATIONVIEWURL="https://lim.izooto.com/lim";
-        private static  var LASTVISITURL="https://lvi.izooto.com/lvi";
-        private static var  EXCEPTION_URL="https://aerr.izooto.com/aerr";
-        private static var SUBSCRIBER_URL="https://pp.izooto.com/idsyn";
-         static let  SDKVERSION = "1.0.3"
+         static var   BASEURL = "https://aevents.izooto.com/app.php"
+         static var   ENCRPTIONURL="https://cdn.izooto.com/app/app_"
+         static var  IMPRESSION_URL="https://impr.izooto.com/imp";
+         public static var   LOG = "MoMagic :"
+         static var  EVENT_URL = "https://et.izooto.com/evt";
+         static var  PROPERTIES_URL="https://prp.izooto.com/prp";
+         static var  CLICK_URL="https://clk.izooto.com/clk";
+         static  var LASTNOTIFICATIONCLICKURL="https://lci.izooto.com/lci";
+         static  var LASTNOTIFICATIONVIEWURL="https://lim.izooto.com/lim";
+         static let LASTVISITURL="https://lvi.izooto.com/lvi";
+         static var  EXCEPTION_URL="https://aerr.izooto.com/aerr";
+         static var SUBSCRIBER_URL="https://pp.izooto.com/idsyn";
+         static let MEDIATION_IMPRESSION_URL = "https://med.izooto.com/medi";
+         static let MEDIATION_CLICK_URL = "https://med.izooto.com/medc"
+         static let UNSUBSCRITPION_SUBSCRIPTION = "https://usub.izooto.com/sunsub"
+    //fallback url
+        static var fallBackLandingUrl = ""
+        static let  SDKVERSION = "1.0.4"
     //Fallback
         static let FALLBACK_URL = "https://flbk.izooto.com/default.json"
-    
      // MOMAGIC URL
-    
-        private static var MOMAGIC_SUBSCRIPTION_URL="https://irctc.truenotify.in/momagicflow/appenp";
-        private static var MOMAGIC_USER_PROPERTY="https://irctc.truenotify.in/momagicflow/appup";
-        private static var MOMAGIC_CLICK="https://irctc.truenotify.in/momagicflow/appclk";
+     static var MOMAGIC_SUBSCRIPTION_URL="https://irctc.truenotify.in/momagicflow/appenp";
+     static var MOMAGIC_USER_PROPERTY="https://irctc.truenotify.in/momagicflow/appup";
+     static var MOMAGIC_CLICK="https://irctc.truenotify.in/momagicflow/appclk";
+    static var MOMAGIC_IMPRESSION = "https://irctc.truenotify.in/momagicflow/appimpr"
         
         
+     
    
     
     
@@ -71,6 +76,8 @@ protocol ResponseHandler  : AnyObject{
             request.httpBody = requestBodyComponents.query?.data(using: .utf8)
             URLSession.shared.dataTask(with: request){(data,response,error) in
                 do {
+                    print("iZooto Subscriber+1")
+
                     print(AppConstant.DEVICE_TOKEN,token)
                     UserDefaults.isRegistered(isRegister: true)
                     print(AppConstant.SUCESSFULLY)
@@ -130,6 +137,7 @@ protocol ResponseHandler  : AnyObject{
             request.httpBody = requestBodyComponents.query?.data(using: .utf8)
             URLSession.shared.dataTask(with: request){(data,response,error) in
                 do {
+                    print("Momagic Subscriber+1")
                 }
             }.resume()
         }
@@ -198,7 +206,7 @@ protocol ResponseHandler  : AnyObject{
                             URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN,value: token),
                             URLQueryItem(name: AppConstant.iZ_KEY_OS, value: "5"),
                             URLQueryItem(name: AppConstant.iZ_KEY_PT, value: "0")]
-          var request = URLRequest(url: URL(string: "https://usub.izooto.com/sunsub")!)
+            var request = URLRequest(url: URL(string: RestAPI.UNSUBSCRITPION_SUBSCRIPTION)!)
           request.httpMethod = AppConstant.iZ_POST_REQUEST
           request.allHTTPHeaderFields = requestHeaders
           request.httpBody = requestBodyComponents.query?.data(using: .utf8)
@@ -218,7 +226,8 @@ protocol ResponseHandler  : AnyObject{
     
     public static  func getRequest(uuid: String, completionBlock: @escaping (String) -> Void) -> Void
       {
-        let requestURL = URL(string: "https://cdn.izooto.com/app/app_\(uuid).dat")
+          let requestURL = URL(string: "\(ENCRPTIONURL)\(uuid).dat")
+          print(requestURL)
         let request = URLRequest(url: requestURL!)
         let requestTask = URLSession.shared.dataTask(with: request) {
           (data: Data?, response: URLResponse?, error: Error?) in
@@ -365,70 +374,198 @@ protocol ResponseHandler  : AnyObject{
     
     
     
-    @objc static func callImpression(notificationData : Payload,userid : Int,token : String)
+    // track the notification impression
+       static func callImpression(notificationData : Payload,userid : Int,token : String)
+       {
+           if notificationData.ankey != nil{
+               if(notificationData.global?.rid != nil && userid != 0 && token != "")
+               {
+                   let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
+                   var requestBodyComponents = URLComponents()
+                   requestBodyComponents.queryItems = [
+                       URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
+                       URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: "\(token)"),
+                       URLQueryItem(name: "cid", value: "\(String(describing: notificationData.global?.id!))"),
+                       URLQueryItem(name: "rid", value: "\(String(describing: notificationData.global?.rid!))"),
+                       URLQueryItem(name: "op", value: "view"),
+                       URLQueryItem(name: "ver", value: SDKVERSION)
+                   ]
+                   var request = URLRequest(url: URL(string: "\(RestAPI.IMPRESSION_URL)")!)
+                   request.httpMethod = AppConstant.iZ_POST_REQUEST
+                   request.allHTTPHeaderFields = requestHeaders
+                   request.httpBody = requestBodyComponents.query?.data(using: .utf8)
+                   URLSession.shared.dataTask(with: request){(data,response,error) in
+
+                       do {
+                           // print("imp","success")
+                       }
+                   }.resume()
+               }
+               else
+               {
+                   sendExceptionToServer(exceptionName: "Notification payload is not loading", className: "Rest API", methodName: "callImpression", pid: userid, token: token , rid: notificationData.global?.rid ?? "no rid value here",cid : notificationData.global?.id ?? "no cid value here")
+               }
+           }else{
+               if(notificationData.rid != nil && userid != 0 && token != "")
+               {
+                   let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
+                   var requestBodyComponents = URLComponents()
+                   requestBodyComponents.queryItems = [
+                       URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
+                       URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                       URLQueryItem(name: "cid", value: "\(notificationData.id!)"),
+                       URLQueryItem(name: "rid", value: "\(notificationData.rid!)"),
+                       URLQueryItem(name: "op", value: "view"),
+                       URLQueryItem(name: "ver", value: SDKVERSION)
+                   ]
+                   var request = URLRequest(url: URL(string: "\(RestAPI.IMPRESSION_URL)")!)
+                   request.httpMethod = AppConstant.iZ_POST_REQUEST
+                   request.allHTTPHeaderFields = requestHeaders
+                   request.httpBody = requestBodyComponents.query?.data(using: .utf8)
+                   URLSession.shared.dataTask(with: request){(data,response,error) in
+
+                       do {
+                           // print("imp","success")
+                       }
+                   }.resume()
+               }
+               else
+               {
+                   sendExceptionToServer(exceptionName: "Notification payload is not loading", className: "Rest API", methodName: "callImpression", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
+               }
+           }
+           
+       }
+    @objc static func callMoMagicImpression(notificationData : Payload,userid : Int,token : String)
     
     {
-        if(notificationData != nil && userid != 0 && token != nil)
-        {
-            let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
-            var requestBodyComponents = URLComponents()
-            requestBodyComponents.queryItems = [
-                URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
-                URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
-                URLQueryItem(name: "cid", value: "\(notificationData.id!)"),
-                URLQueryItem(name: "rid", value: "\(notificationData.rid!)"),
-                URLQueryItem(name: "op", value: "view"),
-                URLQueryItem(name: "ver", value: SDKVERSION)
-            ]
-            var request = URLRequest(url: URL(string: "https://impr.izooto.com/imp")!)
-            request.httpMethod = AppConstant.iZ_POST_REQUEST
-            request.allHTTPHeaderFields = requestHeaders
-            request.httpBody = requestBodyComponents.query?.data(using: .utf8)
-            URLSession.shared.dataTask(with: request){(data,response,error) in
-                
-                do {
-                }
-            }.resume()
-        }
-        else
-        {
-            sendExceptionToServer(exceptionName: "Notification payload is not loading", className: "Rest API", methodName: "Impression", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
-            
+        if notificationData.ankey != nil{
+            if(notificationData.global?.rid != nil && userid != 0 && token != "")
+            {
+                let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
+                var requestBodyComponents = URLComponents()
+                requestBodyComponents.queryItems = [
+                    URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
+                    URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: "\(token)"),
+                    URLQueryItem(name: "cid", value: "\(String(describing: notificationData.global?.id!))"),
+                    URLQueryItem(name: "rid", value: "\(String(describing: notificationData.global?.rid!))"),
+                    URLQueryItem(name: "op", value: "view"),
+                    URLQueryItem(name: "ver", value: SDKVERSION)
+                ]
+                var request = URLRequest(url: URL(string: "\(RestAPI.MOMAGIC_IMPRESSION)")!)
+                request.httpMethod = AppConstant.iZ_POST_REQUEST
+                request.allHTTPHeaderFields = requestHeaders
+                request.httpBody = requestBodyComponents.query?.data(using: .utf8)
+                URLSession.shared.dataTask(with: request){(data,response,error) in
+
+                    do {
+                        // print("imp","success")
+                    }
+                }.resume()
+            }
+            else
+            {
+                sendExceptionToServer(exceptionName: "Notification payload is not loading", className: "Rest API", methodName: "callImpression", pid: userid, token: token , rid: notificationData.global?.rid ?? "no rid value here",cid : notificationData.global?.id ?? "no cid value here")
+            }
+        }else{
+            if(notificationData.rid != nil && userid != 0 && token != "")
+            {
+                let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
+                var requestBodyComponents = URLComponents()
+                requestBodyComponents.queryItems = [
+                    URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
+                    URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                    URLQueryItem(name: "cid", value: "\(notificationData.id!)"),
+                    URLQueryItem(name: "rid", value: "\(notificationData.rid!)"),
+                    URLQueryItem(name: "op", value: "view"),
+                    URLQueryItem(name: "ver", value: SDKVERSION)
+                ]
+                var request = URLRequest(url: URL(string: "\(RestAPI.IMPRESSION_URL)")!)
+                request.httpMethod = AppConstant.iZ_POST_REQUEST
+                request.allHTTPHeaderFields = requestHeaders
+                request.httpBody = requestBodyComponents.query?.data(using: .utf8)
+                URLSession.shared.dataTask(with: request){(data,response,error) in
+
+                    do {
+                        // print("imp","success")
+                    }
+                }.resume()
+            }
+            else
+            {
+                sendExceptionToServer(exceptionName: "Notification payload is not loading", className: "Rest API", methodName: "callImpression", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
+            }
         }
         
     }
     
+  
+    
     // track the notification click
-    static func clickTrack(notificationData : Payload,type : String, userid : Int,token : String)
-    {
-        if(notificationData != nil && userid != 0 && token != "")
-        {
-            let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
-            var requestBodyComponents = URLComponents()
-            requestBodyComponents.queryItems = [
-                URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
-                URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
-                URLQueryItem(name: "cid", value: "\(notificationData.id!)"),
-                URLQueryItem(name: "rid", value: "\(notificationData.rid!)"),
-                URLQueryItem(name: "op", value: "click"),
-                URLQueryItem(name: "ver", value: SDKVERSION),
-                URLQueryItem(name: "btn", value: "\(type)")
-            ]
-            var request = URLRequest(url: URL(string: RestAPI.CLICK_URL)!)
-            request.httpMethod = AppConstant.iZ_POST_REQUEST
-            request.allHTTPHeaderFields = requestHeaders
-            request.httpBody = requestBodyComponents.query?.data(using: .utf8)
-            URLSession.shared.dataTask(with: request){(data,response,error) in
-                do {
-                    clickTrackWithMoMagic(notificationData: notificationData, type: type, userid: userid, token: token)
-                }
-            }.resume()
-        }
-        else
-        {
-            sendExceptionToServer(exceptionName: "Notification payload is not loading", className: "Rest API", methodName: "clickTrack", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
-        }
-    }
+      static func clickTrack(notificationData : Payload,type : String, userid : Int,token : String)
+      {
+          if notificationData.ankey != nil{
+              if(notificationData.global?.rid != nil && userid != 0 && token != "")
+              {
+                  let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
+                  var requestBodyComponents = URLComponents()
+                  requestBodyComponents.queryItems = [
+                      URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
+                      URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                      URLQueryItem(name: "cid", value: "\(String(describing: notificationData.global?.id!))"),
+                      URLQueryItem(name: "rid", value: "\(String(describing: notificationData.global?.rid!))"),
+                      URLQueryItem(name: "op", value: "click"),
+                      URLQueryItem(name: "ver", value: SDKVERSION),
+                      URLQueryItem(name: "btn", value: "\(type)")
+                  ]
+                  var request = URLRequest(url: URL(string: RestAPI.CLICK_URL)!)
+                  request.httpMethod = AppConstant.iZ_POST_REQUEST
+                  request.allHTTPHeaderFields = requestHeaders
+                  request.httpBody = requestBodyComponents.query?.data(using: .utf8)
+                  URLSession.shared.dataTask(with: request){(data,response,error) in
+                      do {
+                          clickTrackWithMoMagic(notificationData: notificationData, type: type, userid: userid, token: token)
+                      }
+                  }.resume()
+              }
+              else
+              {
+                  sendExceptionToServer(exceptionName: "Notification payload is not loading", className: "Rest API", methodName: "clickTrack", pid: userid, token: token , rid: notificationData.global?.rid ?? "no rid value here",cid : notificationData.global?.id ?? "no cid value here")
+              }
+          }else{
+              if(notificationData.rid != nil && userid != 0 && token != "")
+              {
+                  let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
+                  var requestBodyComponents = URLComponents()
+                  requestBodyComponents.queryItems = [
+                      URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
+                      URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                      URLQueryItem(name: "cid", value: "\(notificationData.id!)"),
+                      URLQueryItem(name: "rid", value: "\(notificationData.rid!)"),
+                      URLQueryItem(name: "op", value: "click"),
+                      URLQueryItem(name: "ver", value: SDKVERSION),
+                      URLQueryItem(name: "btn", value: "\(type)")
+                  ]
+                  var request = URLRequest(url: URL(string: RestAPI.CLICK_URL)!)
+                  request.httpMethod = AppConstant.iZ_POST_REQUEST
+                  request.allHTTPHeaderFields = requestHeaders
+                  request.httpBody = requestBodyComponents.query?.data(using: .utf8)
+                  URLSession.shared.dataTask(with: request){(data,response,error) in
+                      do {
+                          clickTrackWithMoMagic(notificationData: notificationData, type: type, userid: userid, token: token)                      }
+                  }.resume()
+              }
+              else
+              {
+                  sendExceptionToServer(exceptionName: "Notification payload is not loading", className: "Rest API", methodName: "clickTrack", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
+                  
+                  
+              }
+          }
+          
+          
+          
+      }
     
     //set subscriptionID
     static func setSubscriberID(subscriberID : String, userid : Int,token : String)
@@ -453,7 +590,7 @@ protocol ResponseHandler  : AnyObject{
             request.httpBody = requestBodyComponents.query?.data(using: .utf8)
             URLSession.shared.dataTask(with: request){(data,response,error) in
                 do {
-                    print("Subscription successfull")
+                    print("iZootoSubscription successfull")
                     sharedUserDefault?.set(subscriberID, forKey: SharedUserDefault.Key.subscriberID)
                     setSubscriberIDWithMoMagic(subscriberID : subscriberID, userid : userid,token : token)
                 }
@@ -489,7 +626,7 @@ protocol ResponseHandler  : AnyObject{
             URLSession.shared.dataTask(with: request){(data,response,error) in
                 do {
                     print("MoMagic subscription successfull")
-                   
+
                 }
             }.resume()
         }
@@ -501,35 +638,65 @@ protocol ResponseHandler  : AnyObject{
     
     
     //MoMagic click track
-    // track the notification click
     static func clickTrackWithMoMagic(notificationData : Payload,type : String, userid : Int,token : String)
     {
-        if(notificationData != nil && userid != 0 && token != nil)
-        {
-            let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
-            var requestBodyComponents = URLComponents()
-            requestBodyComponents.queryItems = [
-                URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
-                URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
-                URLQueryItem(name: "cid", value: "\(notificationData.id!)"),
-                URLQueryItem(name: "rid", value: "\(notificationData.rid!)"),
-                URLQueryItem(name: "op", value: "click"),
-                URLQueryItem(name: "ver", value: SDKVERSION),
-                URLQueryItem(name: "btn", value: "\(type)")
-            ]
-            var request = URLRequest(url: URL(string: RestAPI.MOMAGIC_CLICK)!)
-            request.httpMethod = AppConstant.iZ_POST_REQUEST
-            request.allHTTPHeaderFields = requestHeaders
-            request.httpBody = requestBodyComponents.query?.data(using: .utf8)
-            URLSession.shared.dataTask(with: request){(data,response,error) in
-                do {
-                   // print("MoMagic CLick successfull")
-                }
-            }.resume()
-        }
-        else
-        {
-            sendExceptionToServer(exceptionName: "Notification payload is not loading", className: "Rest API", methodName: "clickTrack", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
+        if notificationData.ankey != nil{
+            if(notificationData.global?.rid != nil && userid != 0 && token != "")
+            {
+                let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
+                var requestBodyComponents = URLComponents()
+                requestBodyComponents.queryItems = [
+                    URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
+                    URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                    URLQueryItem(name: "cid", value: "\(String(describing: notificationData.global?.id!))"),
+                    URLQueryItem(name: "rid", value: "\(String(describing: notificationData.global?.rid!))"),
+                    URLQueryItem(name: "op", value: "click"),
+                    URLQueryItem(name: "ver", value: SDKVERSION),
+                    URLQueryItem(name: "btn", value: "\(type)")
+                ]
+                var request = URLRequest(url: URL(string: RestAPI.MOMAGIC_CLICK)!)
+                request.httpMethod = AppConstant.iZ_POST_REQUEST
+                request.allHTTPHeaderFields = requestHeaders
+                request.httpBody = requestBodyComponents.query?.data(using: .utf8)
+                URLSession.shared.dataTask(with: request){(data,response,error) in
+                    do {
+                        
+                    }
+                }.resume()
+            }
+            else
+            {
+                sendExceptionToServer(exceptionName: "Notification payload is not loading", className: "Rest API", methodName: "clickTrack", pid: userid, token: token , rid: notificationData.global?.rid ?? "no rid value here",cid : notificationData.global?.id ?? "no cid value here")
+            }
+        }else{
+            if(notificationData.rid != nil && userid != 0 && token != "")
+            {
+                let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
+                var requestBodyComponents = URLComponents()
+                requestBodyComponents.queryItems = [
+                    URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
+                    URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                    URLQueryItem(name: "cid", value: "\(notificationData.id!)"),
+                    URLQueryItem(name: "rid", value: "\(notificationData.rid!)"),
+                    URLQueryItem(name: "op", value: "click"),
+                    URLQueryItem(name: "ver", value: SDKVERSION),
+                    URLQueryItem(name: "btn", value: "\(type)")
+                ]
+                var request = URLRequest(url: URL(string: RestAPI.MOMAGIC_CLICK)!)
+                request.httpMethod = AppConstant.iZ_POST_REQUEST
+                request.allHTTPHeaderFields = requestHeaders
+                request.httpBody = requestBodyComponents.query?.data(using: .utf8)
+                URLSession.shared.dataTask(with: request){(data,response,error) in
+                    do {
+                        clickTrackWithMoMagic(notificationData: notificationData, type: type, userid: userid, token: token)                      }
+                }.resume()
+            }
+            else
+            {
+                sendExceptionToServer(exceptionName: "Notification payload is not loading", className: "Rest API", methodName: "clickTrack", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
+                
+                
+            }
         }
     }
     
@@ -597,7 +764,7 @@ protocol ResponseHandler  : AnyObject{
                 URLSession.shared.dataTask(with: request){(data,response,error) in
                     
                     do {
-                        //print("l","v")
+                        print("l","v")
                     }
                 }.resume()
             }
@@ -630,7 +797,7 @@ protocol ResponseHandler  : AnyObject{
             URLSession.shared.dataTask(with: request){(data,response,error) in
                 
                 do {
-                    //print("l","i")
+                    print("l","i")
                 }
             }.resume()
         }
@@ -664,7 +831,7 @@ protocol ResponseHandler  : AnyObject{
             URLSession.shared.dataTask(with: request){(data,response,error) in
                 
                 do {
-                    // print("l","c")
+                    print("l","c")
                 }
             }.resume()
         }
@@ -699,6 +866,163 @@ protocol ResponseHandler  : AnyObject{
             }
         }.resume()
     }
+    
+    //Ad-Mediation Impression
+       @objc  static func callAdMediationImpressionApi(finalDict: NSDictionary){
+           
+           if (finalDict.count != 0) {
+               let jsonData = try? JSONSerialization.data(withJSONObject: finalDict as? [String: Any])
+               // create post request
+               let url = URL(string: "\(MEDIATION_IMPRESSION_URL)")!
+               var request = URLRequest(url: url)
+               request.httpMethod = "POST"
+               
+               // insert json data to the request
+               request.httpBody = jsonData
+               request.addValue("application/json", forHTTPHeaderField: "\(AppConstant.iZ_CONTENT_TYPE)")
+               request.addValue("application/json", forHTTPHeaderField: "Accept")
+               let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                   guard let data = data, error == nil else {
+                       print(error?.localizedDescription ?? "No data")
+                       return
+                   }
+                   let responseJSON = try? JSONSerialization.jsonObject(with: data, options: [])
+                   if let responseJSON = responseJSON as? [String: Any] {
+                       print(responseJSON)
+                   }
+               }
+               task.resume()
+           }else{
+               sendExceptionToServer(exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "Ad-mediation Impression API", pid: 0, token: "", rid: "", cid: "")
+           }
+       }
+       
+       
+       //Ad-Mediation ClickAPI
+       @objc  static func callAdMediationClickApi(finalDict: NSDictionary){
+           
+           if (finalDict.count != 0) {
+               let jsonData = try? JSONSerialization.data(withJSONObject: finalDict)
+               
+               // create post request
+               let url = URL(string: "\(MEDIATION_CLICK_URL)")!
+               var request = URLRequest(url: url)
+               request.httpMethod = "POST"
+               
+               // insert json data to the request
+               request.httpBody = jsonData
+               request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+               request.addValue("application/json", forHTTPHeaderField: "Accept")
+               
+               let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                   guard let data = data, error == nil else {
+                       print(error?.localizedDescription ?? "No data")
+                       return
+                   }
+                   let responseJSON = try? JSONSerialization.jsonObject(with: data, options: [])
+                   if let responseJSON = responseJSON as? [String: Any] {
+                       print(responseJSON)
+                   }
+               }
+               task.resume()
+               
+           }else{
+               sendExceptionToServer(exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "Ad-mediation Click API", pid: 0, token: "", rid: "", cid: "")
+           }
+       }
+       
+       
+       static func callRV_RC_Request( urlString : String)
+       {
+          // print("CLICKED URL ", urlString)
+           let request = NSMutableURLRequest(url: NSURL(string: urlString)! as URL)
+           let session = URLSession.shared
+           request.httpMethod = "GET"
+           request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+           request.addValue("application/json", forHTTPHeaderField: "Accept")
+
+           let task = session.dataTask(with: request as URLRequest, completionHandler: {data, response, error -> Void in
+                 if error != nil {
+                     debugPrint("Error: \(AppConstant.FAILURE)")
+                 } else {
+                     debugPrint("Response: \(AppConstant.SUCESS)")
+                 }
+            })
+
+            task.resume()
+       }
+       
+    // last impression send to server
+       @objc   static func lastImpression(notificationData : Payload,userid : Int,token : String,url : String)
+       {
+           if(notificationData.rid != nil && userid != 0 && token != "")
+           {
+               let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
+               var requestBodyComponents = URLComponents()
+               requestBodyComponents.queryItems = [
+                   URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
+                   URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                   URLQueryItem(name: "cid", value: "\(notificationData.id!)"),
+                   URLQueryItem(name: "rid", value: "\(notificationData.rid!)"),
+                   URLQueryItem(name: "op", value: "view")
+               ]
+               var request = URLRequest(url: URL(string: url)!)
+               request.httpMethod = AppConstant.iZ_POST_REQUEST
+               request.allHTTPHeaderFields = requestHeaders
+               request.httpBody = requestBodyComponents.query?.data(using: .utf8)
+               URLSession.shared.dataTask(with: request){(data,response,error) in
+                   
+                   do {
+                       print("l","i")
+                       
+                   }
+               }.resume()
+           }
+           else
+           {
+               
+               sendExceptionToServer(exceptionName: "Notification payload is not loading", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastImpression", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
+               
+               
+           }
+           
+           
+           
+       }
+       // last click data send to server
+       @objc   static func lastClick(notificationData : Payload,userid : Int,token : String,url : String)
+       {
+           if(userid != 0 && token != "" && notificationData.rid != nil)
+           {
+               let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
+               var requestBodyComponents = URLComponents()
+               requestBodyComponents.queryItems = [
+                   URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(userid)"),
+                   URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                   URLQueryItem(name: "cid", value: "\(notificationData.id!)"),
+                   URLQueryItem(name: "rid", value: "\(notificationData.rid!)"),
+                   URLQueryItem(name: "op", value: "view")
+               ]
+               
+               var request = URLRequest(url: URL(string: url)!)
+               request.httpMethod = AppConstant.iZ_POST_REQUEST
+               request.allHTTPHeaderFields = requestHeaders
+               request.httpBody = requestBodyComponents.query?.data(using: .utf8)
+               URLSession.shared.dataTask(with: request){(data,response,error) in
+                   
+                   do {
+                        print("l","c")
+                       
+                   }
+               }.resume()
+           }
+           else
+           {
+               sendExceptionToServer(exceptionName: "Notification payload is not loading", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastClick", pid: userid, token: token , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
+               
+           }
+           
+       }
         
 }
 

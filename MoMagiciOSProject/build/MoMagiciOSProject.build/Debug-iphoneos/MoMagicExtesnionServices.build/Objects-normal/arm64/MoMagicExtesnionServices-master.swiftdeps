@@ -1,0 +1,7 @@
+version: "Apple Swift version 5.7.2 (swiftlang-5.7.2.135.5 clang-1400.0.29.51)"
+options: "2f207fb4a03585db3e0e8659b3bb5d8def6bf430d3b9e51f14e93701fbb0c9b8"
+build_start_time: [1681730092, 748136043]
+build_end_time: [1681730093, 803092002]
+inputs:
+  ? "/Users/amit_sdk_develoer/Documents/AndroidSDK/momagiciOSSDK/iOSSDK/MoMagiciOSProject/MoMagicExtesnionServices/NotificationService.swift"
+  : [1681717187, 585889816]

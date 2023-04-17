@@ -1,0 +1,8 @@
+version: "Apple Swift version 5.7.2 (swiftlang-5.7.2.135.5 clang-1400.0.29.51)"
+options: "86ea232091fc0f1f815d277e27101bdfce9ed964e4d21dd3c8ae2bc865325c75"
+build_start_time: [1681730093, 920994043]
+build_end_time: [1681730098, 826833963]
+inputs:
+  "/Users/amit_sdk_develoer/Documents/AndroidSDK/momagiciOSSDK/iOSSDK/MoMagiciOSProject/MoMagiciOSProject/AppDelegate.swift": [1681730084, 813678264]
+  "/Users/amit_sdk_develoer/Documents/AndroidSDK/momagiciOSSDK/iOSSDK/MoMagiciOSProject/MoMagiciOSProject/SceneDelegate.swift": [1660717394, 861685752]
+  "/Users/amit_sdk_develoer/Documents/AndroidSDK/momagiciOSSDK/iOSSDK/MoMagiciOSProject/MoMagiciOSProject/ViewController.swift": [1660717394, 862150192]
