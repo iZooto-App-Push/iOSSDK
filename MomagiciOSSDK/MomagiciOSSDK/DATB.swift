@@ -3163,7 +3163,6 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
     
     @objc private static func handleBroserNotification(url : String)
     {
-       print("Data")
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             let izUrlString = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
             if let izUrl = URL(string: izUrlString!) {
@@ -3178,12 +3177,18 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
             let subs_id = sharedUserDefault?.string(forKey: SharedUserDefault.Key.subscriberID) ?? ""
             let userID = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!
             let tokens = sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)
-            if subscriberID != subs_id {
-                sharedUserDefault?.set(subscriberID, forKey: SharedUserDefault.Key.subscriberID)
-                RestAPI.setSubscriberID(subscriberID: subscriberID, userid: userID, token: tokens!)
-            }else{
-                debugPrint("Store subscriberID\(subs_id)")
-                
+            if(tokens != nil && userID != 0){
+                if subscriberID != subs_id {
+                    sharedUserDefault?.set(subscriberID, forKey: SharedUserDefault.Key.subscriberID)
+                    RestAPI.setSubscriberID(subscriberID: subscriberID, userid: userID, token: tokens!)
+                }else{
+                    debugPrint("Already sent subscriberID\(subs_id)")
+                    
+                }
+            }
+            else
+            {
+                debugPrint("Check your device token is generated properly or not")
             }
         }
     }

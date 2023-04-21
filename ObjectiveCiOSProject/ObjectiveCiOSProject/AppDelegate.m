@@ -50,6 +50,7 @@
         
         DATB.notificationReceivedDelegate = self;
         DATB.landingURLDelegate = self;
+        [DATB setSubscriberIDWithSubscriberID:@"12345678"];
         DATB.notificationOpenDelegate = self;
         NSMutableDictionary *userPropertiesdata = [[NSMutableDictionary alloc] init];
         [userPropertiesdata setObject:@"male" forKey:@"gender"];

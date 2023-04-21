@@ -34,7 +34,7 @@
 		</data>
 		<key>Frameworks/MomagiciOSSDK.framework/MomagiciOSSDK</key>
 		<data>
-		PIgVdeQBrEfNW1rMeKkL6ut+1Q0=
+		PoxM4Bdw8Er33f+4JdP/nbUAJPQ=
 		</data>
 		<key>Frameworks/MomagiciOSSDK.framework/_CodeSignature/CodeResources</key>
 		<data>
@@ -54,7 +54,7 @@
 		</data>
 		<key>PlugIns/MoMagicNotificationServices.appex/Frameworks/Pods_ObjectiveCiOSProject_MoMagicNotificationServices.framework/Pods_ObjectiveCiOSProject_MoMagicNotificationServices</key>
 		<data>
-		hTP0WId+Sd/y1WQr1xQMpqdIdlQ=
+		BPj7FgyxJOmOtab2nUKAXr8BVAY=
 		</data>
 		<key>PlugIns/MoMagicNotificationServices.appex/Info.plist</key>
 		<data>
@@ -62,11 +62,11 @@
 		</data>
 		<key>PlugIns/MoMagicNotificationServices.appex/MoMagicNotificationServices</key>
 		<data>
-		He/4gGxzGdgrLKtfQUtIsWyYczg=
+		BcUYdWmLoZApaDufdZV3sKrU5WE=
 		</data>
 		<key>PlugIns/MoMagicNotificationServices.appex/_CodeSignature/CodeResources</key>
 		<data>
-		7YKp6xII5XYZ8HFBfKR5tlf/P5o=
+		7ipbLVttvEYKIY9fw6pSOmmKV3c=
 		</data>
 		<key>PlugIns/MoMagicNotificationServices.appex/embedded.mobileprovision</key>
 		<data>
@@ -136,7 +136,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			/FXxkKBVgSND6Mh2Yz5Uf8qzPYonocIbEXVw9qYmfsA=
+			fhNmHLhKvxPMcwU99EapMw4llXugNCWYW6p+KD+2VWQ=
 			</data>
 		</dict>
 		<key>Frameworks/MomagiciOSSDK.framework/_CodeSignature/CodeResources</key>
@@ -157,7 +157,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			J7o3LMXn96zZCu7U2Qs+YPxFFgTJu989k3lM0LU+pac=
+			RZxRjODxbOksIih39nC+jI2KdOoc6r+x0PCzwgi+IxQ=
 			</data>
 		</dict>
 		<key>PlugIns/MoMagicNotificationServices.appex/Info.plist</key>
@@ -171,14 +171,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			FSNErMAqhjnSyCRGcbm5O6qdevr1MAT8L6rqbnfV4KQ=
+			2Ovoki21Eic84D+VKLjeSGdVVJRLQKKOoCClugXh5i0=
 			</data>
 		</dict>
 		<key>PlugIns/MoMagicNotificationServices.appex/_CodeSignature/CodeResources</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			9G69yLsOxPMUfz+ol7CSx/IbThwUqgKH7a4le1hqL8E=
+			znBzUOx/MuWPZQxN5vRrz1RQUL8fLjmvAGN5V89DofY=
 			</data>
 		</dict>
 		<key>PlugIns/MoMagicNotificationServices.appex/embedded.mobileprovision</key>

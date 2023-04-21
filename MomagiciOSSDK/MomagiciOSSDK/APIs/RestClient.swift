@@ -590,7 +590,7 @@ protocol ResponseHandler  : AnyObject{
         }
         else
         {
-            sendExceptionToServer(exceptionName: "subscriberID should not be blank", className: "Rest API", methodName: "clickTrack", pid: userid, token: token , rid: "",cid : subscriberID)
+            sendExceptionToServer(exceptionName: "subscriberID should not be blank", className: "Rest API", methodName: "setSubscriberID", pid: userid, token: token , rid: "",cid : subscriberID)
             sharedUserDefault?.set(subscriberID, forKey: SharedUserDefault.Key.subscriberID)
         }
     }
@@ -617,13 +617,13 @@ protocol ResponseHandler  : AnyObject{
             request.httpBody = requestBodyComponents.query?.data(using: .utf8)
             URLSession.shared.dataTask(with: request){(data,response,error) in
                 do {
-
+                      print("Added Subscriber ID")
                 }
             }.resume()
         }
         else
         {
-            sendExceptionToServer(exceptionName: "subscriberID should not be blank", className: "Rest API", methodName: "clickTrack", pid: userid, token: token , rid: "",cid : subscriberID)
+            sendExceptionToServer(exceptionName: "subscriberID should not be blank", className: "Rest API", methodName: "setSubscriberID", pid: userid, token: token , rid: "",cid : subscriberID)
         }
     }
     
