@@ -90,6 +90,8 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 
 - (void)onNotificationOpenWithAction:(NSDictionary<NSString *,id> * _Nonnull)action {
     NSLog(@"NSString = %@", action);
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Second" message:@"Are you sure you want to delete this.  This action cannot be undone" delegate:self cancelButtonTitle:@"Delete" otherButtonTitles:@"Cancel", nil];
+                [alert show];
 
 }
 

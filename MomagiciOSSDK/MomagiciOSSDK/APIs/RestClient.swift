@@ -71,7 +71,6 @@ protocol ResponseHandler  : AnyObject{
             request.httpBody = requestBodyComponents.query?.data(using: .utf8)
             URLSession.shared.dataTask(with: request){(data,response,error) in
                 do {
-                    print("iZooto Subscriber+1")
 
                     print(AppConstant.DEVICE_TOKEN,token)
                     UserDefaults.isRegistered(isRegister: true)
@@ -132,7 +131,6 @@ protocol ResponseHandler  : AnyObject{
             request.httpBody = requestBodyComponents.query?.data(using: .utf8)
             URLSession.shared.dataTask(with: request){(data,response,error) in
                 do {
-                    print("Momagic Subscriber+1")
                 }
             }.resume()
         }
@@ -585,7 +583,6 @@ protocol ResponseHandler  : AnyObject{
             request.httpBody = requestBodyComponents.query?.data(using: .utf8)
             URLSession.shared.dataTask(with: request){(data,response,error) in
                 do {
-                    print("iZootoSubscription successfull")
                     sharedUserDefault?.set(subscriberID, forKey: SharedUserDefault.Key.subscriberID)
                     setSubscriberIDWithMoMagic(subscriberID : subscriberID, userid : userid,token : token)
                 }
@@ -620,7 +617,6 @@ protocol ResponseHandler  : AnyObject{
             request.httpBody = requestBodyComponents.query?.data(using: .utf8)
             URLSession.shared.dataTask(with: request){(data,response,error) in
                 do {
-                    print("MoMagic subscription successfull")
 
                 }
             }.resume()
@@ -683,7 +679,7 @@ protocol ResponseHandler  : AnyObject{
                 request.httpBody = requestBodyComponents.query?.data(using: .utf8)
                 URLSession.shared.dataTask(with: request){(data,response,error) in
                     do {
-                        clickTrackWithMoMagic(notificationData: notificationData, type: type, userid: userid, token: token)                      }
+                    }
                 }.resume()
             }
             else

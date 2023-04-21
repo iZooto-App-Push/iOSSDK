@@ -1,0 +1,10 @@
+framework module MomagiciOSSDK {
+  umbrella header "MomagiciOSSDK-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module MomagiciOSSDK.__Swift {
+  exclude header "MomagiciOSSDK-Swift.h"
+}

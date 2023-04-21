@@ -1,0 +1,13 @@
+Target dependency graph (5 targets)
+MomagiciOSSDK in Pods, no dependencies
+Pods-ObjectiveCiOSProject-MoMagicNotificationServices in Pods, depends on:
+MomagiciOSSDK in Pods (explicit)
+MoMagicNotificationServices in ObjectiveCiOSProject, depends on:
+Pods-ObjectiveCiOSProject-MoMagicNotificationServices in Pods (implicit dependency via file 'Pods_ObjectiveCiOSProject_MoMagicNotificationServices.framework' in build phase 'Link Binary')
+MomagiciOSSDK in Pods (implicit dependency via options '-framework MomagiciOSSDK' in build setting 'OTHER_LDFLAGS')
+Pods-ObjectiveCiOSProject in Pods, depends on:
+MomagiciOSSDK in Pods (explicit)
+ObjectiveCiOSProject in ObjectiveCiOSProject, depends on:
+MoMagicNotificationServices in ObjectiveCiOSProject (explicit)
+Pods-ObjectiveCiOSProject in Pods (implicit dependency via file 'Pods_ObjectiveCiOSProject.framework' in build phase 'Link Binary')
+MomagiciOSSDK in Pods (implicit dependency via options '-framework MomagiciOSSDK' in build setting 'OTHER_LDFLAGS')

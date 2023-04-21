@@ -2484,7 +2484,6 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
     //for rid & bids call mediation click
     
     @objc private static func ad_mediationClickCall(notiRid: String){
-        print("Called")
         
         if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()){
             if let ids = userDefaults.value(forKey: AppConstant.iZ_BIDS_SERVED_ARRAY) as? [[String : Any]]{
@@ -2524,7 +2523,6 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                     if !filterValue.isEmpty{
                         if let value1 = filterValue[0] as? NSDictionary {
                             landing = value1.value(forKey: AppConstant.iZ_LNKEY) as! String
-                            print("landing111\(landing)")
 
                             if let index = idArray.firstIndex(where: {$0[AppConstant.iZ_LNKEY] as? String  == landing }) {
                                 idArray.remove(at: index)
