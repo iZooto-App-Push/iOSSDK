@@ -220,8 +220,7 @@ protocol ResponseHandler  : AnyObject{
     public static  func getRequest(uuid: String, completionBlock: @escaping (String) -> Void) -> Void
       {
           let requestURL = URL(string: "\(ENCRPTIONURL)\(uuid).dat")
-          print(requestURL)
-        let request = URLRequest(url: requestURL!)
+          let request = URLRequest(url: requestURL!)
         let requestTask = URLSession.shared.dataTask(with: request) {
           (data: Data?, response: URLResponse?, error: Error?) in
           if(error != nil) {
@@ -617,7 +616,7 @@ protocol ResponseHandler  : AnyObject{
             request.httpBody = requestBodyComponents.query?.data(using: .utf8)
             URLSession.shared.dataTask(with: request){(data,response,error) in
                 do {
-                      print("Added Subscriber ID")
+                      //print("Added Subscriber ID")
                 }
             }.resume()
         }

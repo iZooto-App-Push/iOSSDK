@@ -1,0 +1,76 @@
+{
+  "_buildCommand2" : {
+    "command" : "prepareForIndexing",
+    "enableIndexBuildArena" : false,
+    "targets" : null
+  },
+  "buildCommand" : "build",
+  "configuredTargets" : [
+    {
+      "guid" : "556dcb6cf8e34bbd8f32baa19b792c683888d1c9cfccdd255397ec464b65d2b8"
+    },
+    {
+      "guid" : "556dcb6cf8e34bbd8f32baa19b792c680223775dc0972ffe6bb087847e233af7"
+    },
+    {
+      "guid" : "8699adb1dd336b26511df848a716bd42c1f59727355050eb543060a51520722f"
+    },
+    {
+      "guid" : "8699adb1dd336b26511df848a716bd4268652894147b439883f98a3893fc8a11"
+    },
+    {
+      "guid" : "8699adb1dd336b26511df848a716bd425bbb6a9a5fccdc6b84592e7db7359b52"
+    }
+  ],
+  "containerPath" : "/Users/amit_sdk_develoer/Documents/AndroidSDK/momagiciOSSDK/iOSSDK/ObjectiveCiOSProject/ObjectiveCiOSProject.xcworkspace",
+  "continueBuildingAfterErrors" : true,
+  "enableIndexBuildArena" : false,
+  "hideShellScriptEnvironment" : false,
+  "parameters" : {
+    "action" : "build",
+    "activeArchitecture" : "undefined_arch",
+    "activeRunDestination" : {
+      "disableOnlyActiveArch" : true,
+      "platform" : "iphoneos",
+      "sdk" : "iphoneos16.2",
+      "sdkVariant" : "iphoneos",
+      "supportedArchitectures" : [
+        "armv4t",
+        "armv5",
+        "armv6",
+        "armv7",
+        "armv7f",
+        "armv7s",
+        "armv7k",
+        "arm64",
+        "arm64e"
+      ],
+      "targetArchitecture" : "undefined_arch"
+    },
+    "arenaInfo" : {
+      "buildIntermediatesPath" : "",
+      "buildProductsPath" : "",
+      "derivedDataPath" : "/Users/amit_sdk_develoer/Library/Developer/Xcode/DerivedData",
+      "indexDataStoreFolderPath" : "/Users/amit_sdk_develoer/Library/Developer/Xcode/DerivedData/ObjectiveCiOSProject-gtbjdwinvlzaxebdapuzodafeciy/Index.noindex/DataStore",
+      "indexEnableDataStore" : true,
+      "indexPCHPath" : "/Users/amit_sdk_develoer/Library/Developer/Xcode/DerivedData/ObjectiveCiOSProject-gtbjdwinvlzaxebdapuzodafeciy/Index.noindex/PrecompiledHeaders",
+      "pchPath" : ""
+    },
+    "configurationName" : "Debug",
+    "overrides" : {
+      "synthesized" : {
+        "table" : {
+          "ENABLE_PREVIEWS" : "NO"
+        }
+      }
+    }
+  },
+  "qos" : "default",
+  "schemeCommand" : "launch",
+  "schemeCommand2" : "launch",
+  "showNonLoggedProgress" : true,
+  "useDryRun" : true,
+  "useImplicitDependencies" : true,
+  "useLegacyBuildLocations" : false,
+  "useParallelTargets" : true
+}
