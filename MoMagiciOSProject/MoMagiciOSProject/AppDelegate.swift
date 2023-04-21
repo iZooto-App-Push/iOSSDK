@@ -58,9 +58,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
      
      // @available(iOS 10.0, *)
      func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-      
-       DATB.notificationHandler(response: response) 
-       completionHandler()
+          DATB.notificationHandler(response: response)
+          completionHandler()
      }
 
   

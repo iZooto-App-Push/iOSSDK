@@ -1,8 +1,8 @@
 {
   "_buildCommand2" : {
-    "command" : "build",
-    "skipDependencies" : false,
-    "style" : "buildOnly"
+    "command" : "prepareForIndexing",
+    "enableIndexBuildArena" : false,
+    "targets" : null
   },
   "buildCommand" : "build",
   "configuredTargets" : [
@@ -11,24 +11,29 @@
     }
   ],
   "containerPath" : "/Users/amit_sdk_develoer/Documents/AndroidSDK/momagiciOSSDK/iOSSDK/MoMagiciOSProject/MoMagiciOSProject.xcworkspace",
-  "continueBuildingAfterErrors" : false,
+  "continueBuildingAfterErrors" : true,
   "enableIndexBuildArena" : false,
   "hideShellScriptEnvironment" : false,
   "parameters" : {
     "action" : "build",
-    "activeArchitecture" : "arm64",
+    "activeArchitecture" : "undefined_arch",
     "activeRunDestination" : {
-      "disableOnlyActiveArch" : false,
+      "disableOnlyActiveArch" : true,
       "platform" : "iphoneos",
       "sdk" : "iphoneos16.2",
       "sdkVariant" : "iphoneos",
       "supportedArchitectures" : [
-        "arm64e",
-        "arm64v8",
+        "armv4t",
+        "armv5",
+        "armv6",
+        "armv7",
+        "armv7f",
+        "armv7s",
+        "armv7k",
         "arm64",
-        "armv8"
+        "arm64e"
       ],
-      "targetArchitecture" : "arm64"
+      "targetArchitecture" : "undefined_arch"
     },
     "arenaInfo" : {
       "buildIntermediatesPath" : "",
@@ -43,20 +48,11 @@
     "overrides" : {
       "synthesized" : {
         "table" : {
-          "ASSETCATALOG_FILTER_FOR_DEVICE_MODEL" : "iPhone12,1",
-          "ASSETCATALOG_FILTER_FOR_DEVICE_OS_VERSION" : "16.4.1",
-          "ASSETCATALOG_FILTER_FOR_THINNING_DEVICE_CONFIGURATION" : "iPhone12,1",
-          "BUILD_ACTIVE_RESOURCES_ONLY" : "YES",
-          "ENABLE_PREVIEWS" : "NO",
-          "TARGET_DEVICE_IDENTIFIER" : "00008030-00155866219B402E",
-          "TARGET_DEVICE_MODEL" : "iPhone12,1",
-          "TARGET_DEVICE_OS_VERSION" : "16.4.1",
-          "TARGET_DEVICE_PLATFORM_NAME" : "iphoneos"
+          "ENABLE_PREVIEWS" : "NO"
         }
       }
     }
   },
-  "qos" : "default",
   "schemeCommand" : "launch",
   "schemeCommand2" : "launch",
   "showNonLoggedProgress" : true,

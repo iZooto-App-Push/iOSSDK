@@ -314,80 +314,80 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
     
     
     // Ad's Fallback Url Call
-    @available(iOS 11.0, *)
-    @objc private static func fallBackAdsApi(bundleName: String, fallCategory: String, bestAttemptContent :UNMutableNotificationContent, contentHandler:((UNNotificationContent) -> Void)?){
-        
-        let str = RestAPI.FALLBACK_URL
-        let izUrlString = (str.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
-        if let url = URL(string: izUrlString) {
-            URLSession.shared.dataTask(with: url) { data, response, error in
-                if let data = data {
-                    do {
-                        let json = try JSONSerialization.jsonObject(with: data)
-                        if let jsonDictionary = json as? [String:Any] {
-                            let notificationData = Payload(dictionary: (jsonDictionary) as NSDictionary)
-                            bestAttemptContent.title = jsonDictionary[AppConstant.iZ_T_KEY] as! String
-                            bestAttemptContent.body = jsonDictionary["m"] as! String
-                            if notificationData?.url! != "" {
-                                
-                                let groupName = "group."+bundleName+".DATB"
-                                if let userDefaults = UserDefaults(suiteName: groupName) {
-                                    userDefaults.set(notificationData?.url!, forKey: "fallBackLandingUrl")
-                                }
-                                
-                                notificationData?.url = jsonDictionary["bi"] as? String
-                                if (notificationData?.url!.contains(".webp"))!
-                                {
-                                    notificationData?.url! = (notificationData?.url?.replacingOccurrences(of: ".webp", with: ".jpeg"))!
-                                    
-                                }
-                                if (notificationData?.url!.contains("http:"))!
-                                {
-                                    notificationData?.url! = (notificationData?.url?.replacingOccurrences(of: "http:", with: "https:"))!
-                                }
-                            }
-                            if fallCategory != ""{
-                                storeCategories(notificationData: notificationData!, category: fallCategory)
-                                if notificationData!.act1name != "" && notificationData!.act1name != nil{
-                                    debugPrint("Ankey button called")
-                                    addCTAButtons()
-                                }
-                            }
-                            
-                            autoreleasepool {
-                                if let urlString = (notificationData?.url!),
-                                   let fileUrl = URL(string: urlString ) {
-                                    
-                                    guard let imageData = NSData(contentsOf: fileUrl) else {
-                                        contentHandler!(bestAttemptContent)
-                                        return
-                                    }
-                                    let string = notificationData?.url!
-                                    let url: URL? = URL(string: string!)
-                                    let urlExtension: String? = url?.pathExtension
-                                    guard let attachment = UNNotificationAttachment.saveImageToDisk(fileIdentifier: "img."+urlExtension!, data: imageData, options: nil) else {
-                                        debugPrint(AppConstant.IMAGE_ERROR)
-                                        contentHandler!(bestAttemptContent)
-                                        return
-                                    }
-                                    bestAttemptContent.attachments = [ attachment ]
-                                }
-                            }
-                            
-                        }
-                        //   if (UserDefaults.standard.bool(forKey: "Subscribe")) == true{
-                        contentHandler!(bestAttemptContent)
-                        //   }
-                        
-                    } catch let error {
-                        debugPrint("Error",error)
-                    }
-                }
-                
-            }.resume()
-        }
-    }
-    
+    // Ad's Fallback Url Call
+       @available(iOS 11.0, *)
+       @objc private static func fallBackAdsApi(bundleName: String, fallCategory: String, bestAttemptContent :UNMutableNotificationContent, contentHandler:((UNNotificationContent) -> Void)?){
+           
+           let str = RestAPI.FALLBACK_URL
+           let izUrlString = (str.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
+           if let url = URL(string: izUrlString) {
+               URLSession.shared.dataTask(with: url) { data, response, error in
+                   if let data = data {
+                       do {
+                           let json = try JSONSerialization.jsonObject(with: data)
+                           if let jsonDictionary = json as? [String:Any] {
+                               let notificationData = Payload(dictionary: (jsonDictionary) as NSDictionary)
+                               bestAttemptContent.title = jsonDictionary[AppConstant.iZ_T_KEY] as! String
+                               bestAttemptContent.body = jsonDictionary["m"] as! String
+                               if notificationData?.url! != "" {
+                                   
+                                   let groupName = "group."+bundleName+".DATB"
+                                   if let userDefaults = UserDefaults(suiteName: groupName) {
+                                       userDefaults.set(notificationData?.url!, forKey: "fallBackLandingUrl")
+                                   }
+                                   
+                                   notificationData?.url = jsonDictionary["bi"] as? String
+                                   if (notificationData?.url!.contains(".webp"))!
+                                   {
+                                       notificationData?.url! = (notificationData?.url?.replacingOccurrences(of: ".webp", with: ".jpeg"))!
+                                       
+                                   }
+                                   if (notificationData?.url!.contains("http:"))!
+                                   {
+                                       notificationData?.url! = (notificationData?.url?.replacingOccurrences(of: "http:", with: "https:"))!
+                                   }
+                               }
+                               if fallCategory != ""{
+                                   storeCategories(notificationData: notificationData!, category: fallCategory)
+                                   if notificationData!.act1name != "" && notificationData!.act1name != nil{
+                                       debugPrint("Ankey button called")
+                                       addCTAButtons()
+                                   }
+                               }
+                               
+                               autoreleasepool {
+                                   if let urlString = (notificationData?.url!),
+                                      let fileUrl = URL(string: urlString ) {
+                                       
+                                       guard let imageData = NSData(contentsOf: fileUrl) else {
+                                           contentHandler!(bestAttemptContent)
+                                           return
+                                       }
+                                       let string = notificationData?.url!
+                                       let url: URL? = URL(string: string!)
+                                       let urlExtension: String? = url?.pathExtension
+                                       guard let attachment = UNNotificationAttachment.saveImageToDisk(fileIdentifier: "img."+urlExtension!, data: imageData, options: nil) else {
+                                           debugPrint(AppConstant.IMAGE_ERROR)
+                                           contentHandler!(bestAttemptContent)
+                                           return
+                                       }
+                                       bestAttemptContent.attachments = [ attachment ]
+                                   }
+                               }
+                               
+                           }
+                           //   if (UserDefaults.standard.bool(forKey: "Subscribe")) == true{
+                           contentHandler!(bestAttemptContent)
+                           //   }
+                           
+                       } catch let error {
+                           debugPrint("Error",error)
+                       }
+                   }
+                   
+               }.resume()
+           }
+       }
     
     @objc private static func payLoadDataChange(payload: [String:Any],bundleName: String, completion: @escaping ([String:Any]) -> Void) {
         
@@ -1208,7 +1208,11 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                 session.dataTask(with: url) { data, response, error in
                     if(error != nil)
                     {
-                        fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                        if #available(iOS 11.0, *) {
+                            fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                        } else {
+                            // Fallback on earlier versions
+                        }
                         return
                     }
                     if let data = data {
@@ -1218,7 +1222,11 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                             //To Check FallBack
                             if let jsonDictionary = json as? [String:Any] {
                                 if let value = jsonDictionary["msgCode"] as? String {
-                                    fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                    if #available(iOS 11.0, *) {
+                                        fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                    } else {
+                                        // Fallback on earlier versions
+                                    }
                                     return
                                 }else{
                                     if let jsonDictionary = json as? [String:Any] {
@@ -1267,7 +1275,11 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                 
                                 if let jsonArray = json as? [[String:Any]] {
                                     if jsonArray[0]["msgCode"] is String {
-                                        fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                        if #available(iOS 11.0, *) {
+                                            fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                        } else {
+                                            // Fallback on earlier versions
+                                        }
                                         return
                                     }else{
                                         bestAttemptContent.title = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData.ankey?.titleAd)!))"
@@ -1329,13 +1341,21 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                             
                             // Need to review
                             if bestAttemptContent.title == notificationData.ankey?.titleAd{
-                                self.fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                if #available(iOS 11.0, *) {
+                                    self.fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                } else {
+                                    // Fallback on earlier versions
+                                }
                             }else{
                                 contentHandler!(bestAttemptContent)
                             }
                             
                         } catch let error {
-                            self.fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                            if #available(iOS 11.0, *) {
+                                self.fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                            } else {
+                                // Fallback on earlier versions
+                            }
                         }
                     }
                     
@@ -1358,7 +1378,11 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                 session.dataTask(with: url) { data, response, error in
                     if(error != nil)
                     {
-                        fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                        if #available(iOS 11.0, *) {
+                            fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                        } else {
+                            // Fallback on earlier versions
+                        }
                         return
                     }
                     if response == nil{
@@ -1371,7 +1395,11 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                             //To Check FallBack
                             if let jsonDictionary = json as? [String:Any] {
                                 if let value = jsonDictionary["msgCode"] as? String {
-                                    fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                    if #available(iOS 11.0, *) {
+                                        fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                    } else {
+                                        // Fallback on earlier versions
+                                    }
                                     return
                                 }else{
                                     if let jsonDictionary = json as? [String:Any] {
@@ -1404,7 +1432,11 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                 
                                 if let jsonArray = json as? [[String:Any]] {
                                     if jsonArray[0]["msgCode"] is String {
-                                        fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                        if #available(iOS 11.0, *) {
+                                            fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                        } else {
+                                            // Fallback on earlier versions
+                                        }
                                         return
                                     }else{
                                         bestAttemptContent.title = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData.alert?.title)!))"
@@ -1458,13 +1490,21 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                             }
                             
                             if bestAttemptContent.title == notificationData.ankey?.titleAd{
-                                self.fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                if #available(iOS 11.0, *) {
+                                    self.fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                } else {
+                                    // Fallback on earlier versions
+                                }
                             }else{
                                 contentHandler!(bestAttemptContent)
                             }
                             
                         } catch let error {
-                            self.fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                            if #available(iOS 11.0, *) {
+                                self.fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                            } else {
+                                // Fallback on earlier versions
+                            }
                         }
                     }
                 }.resume()
@@ -1583,7 +1623,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
     
     
     // Fallback Url Call
-    @available(iOS 10.0, *)
+    @available(iOS 11.0, *)
     @objc private static func fallBackAdsApi(bestAttemptContent :UNMutableNotificationContent, contentHandler:((UNNotificationContent) -> Void)?){
         
         let str = RestAPI.FALLBACK_URL
@@ -1981,50 +2021,51 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
     
     // handel the fallback url
     
-    @objc public static func fallbackClickHandler(){
-        
-        let str = RestAPI.FALLBACK_URL
-        let izUrlString = (str.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
-        if let url = URL(string: izUrlString) {
-            URLSession.shared.dataTask(with: url) { data, response, error in
-                if let data = data {
-                    do {
-                        let json = try JSONSerialization.jsonObject(with: data)
-                        if let jsonDictionary = json as? [String:Any] {
-                            let notificationData = Payload(dictionary: (jsonDictionary) as NSDictionary)
-                            if notificationData?.url! != "" {
-                                
-                                notificationData?.url = jsonDictionary[AppConstant.iZ_LNKEY] as? String
-                                //  debugPrint("URLFALL", notificationData?.url!)
-                                
-                                let izUrlStr = notificationData?.url!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-                                
-                                if let url = URL(string:izUrlStr!) {
-                                    if notificationData?.act1name != nil && notificationData?.act1name != ""
-                                    {
-                                        DispatchQueue.main.async {
-                                            UIApplication.shared.open(url)
-                                        }
-                                    }
-                                    else
-                                    {
-                                        DispatchQueue.main.async {
-                                            UIApplication.shared.open(url)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    } catch let error {
-                        debugPrint("Error",error)
-                    }
-                }
-            }.resume()
-        }else{
-            debugPrint("Wrong URL")
-        }
-    }
-    
+    // handel the fallback url
+       
+       @objc public static func fallbackClickHandler(){
+           
+           let str = RestAPI.FALLBACK_URL
+           let izUrlString = (str.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
+           if let url = URL(string: izUrlString) {
+               URLSession.shared.dataTask(with: url) { data, response, error in
+                   if let data = data {
+                       do {
+                           let json = try JSONSerialization.jsonObject(with: data)
+                           if let jsonDictionary = json as? [String:Any] {
+                               let notificationData = Payload(dictionary: (jsonDictionary) as NSDictionary)
+                               if notificationData?.url! != "" {
+                                   
+                                   notificationData?.url = jsonDictionary[AppConstant.iZ_LNKEY] as? String
+                                   //  debugPrint("URLFALL", notificationData?.url!)
+                                   
+                                   let izUrlStr = notificationData?.url!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+                                   
+                                   if let url = URL(string:izUrlStr!) {
+                                       if notificationData?.act1name != nil && notificationData?.act1name != ""
+                                       {
+                                           DispatchQueue.main.async {
+                                               UIApplication.shared.open(url)
+                                           }
+                                       }
+                                       else
+                                       {
+                                           DispatchQueue.main.async {
+                                               UIApplication.shared.open(url)
+                                           }
+                                       }
+                                   }
+                               }
+                           }
+                       } catch let error {
+                           debugPrint("Error",error)
+                       }
+                   }
+               }.resume()
+           }else{
+               debugPrint("Wrong URL")
+           }
+       }
     
     
     
@@ -2033,417 +2074,417 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
     {
         
         if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
-            let badgeC = userDefaults.integer(forKey:"Badge")
-            self.badgeCount = badgeC
-            userDefaults.set(badgeC - 1, forKey: "Badge")
-            RestAPI.fallBackLandingUrl = userDefaults.value(forKey: "fallBackLandingUrl") as? String ?? ""
-            userDefaults.synchronize()
-        }
-        
-        badgeNumber = (sharedUserDefault?.integer(forKey: "BADGECOUNT"))!
-        if(badgeNumber == -1)
-        {
-            UIApplication.shared.applicationIconBadgeNumber = -1 // clear the badge count // notification is not removed
-        }
-        else if(badgeNumber == 1)
-        {
-            UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count
-        }else{
-            UIApplication.shared.applicationIconBadgeNumber = self.badgeCount - 1 //set badge default value
-        }
-        
-        let userInfo = response.notification.request.content.userInfo
-        
-        var adlandingURL:String = ""
-        let indexx = 0
-        if let jsonDictionary = userInfo as? [String:Any] {
-            if let aps = jsonDictionary["aps"] as? NSDictionary{
-                if let anKey = aps.value(forKey: AppConstant.iZ_ANKEY) as? NSArray {
-                    debugPrint(anKey)
-                    var finalData = [String: Any]()
-                    let tempData = NSMutableDictionary()
-                    var alertData = [String: Any]()
-                    var gData = [String: Any]()
-                    var anData: [[String: Any]] = []
-                    
-                    if let alert = aps.value(forKey: AppConstant.iZ_ALERTKEY) {
-                        alertData = alert as! [String : Any]
-                    }
-                    if let gt = aps.value(forKey: AppConstant.iZ_G_KEY) as? NSDictionary {
-                        gData = gt as! [String : Any]
-                    }
-                    
-                    if let anKey = aps.value(forKey: AppConstant.iZ_ANKEY) as? NSArray {
-                        
-                        //To get clicked Notification landing Url
-                        adlandingURL = self.ad_mediationLandingUrlOnClick(anKey: anKey)
-                        
-                        //On click hit rc API
-                        getRcAndHitAPI(anKey: anKey)
-                        
-                        
-                        anData = [anKey[indexx] as! [String : Any]]
-                        
-                        tempData.setValue(alertData, forKey: AppConstant.iZ_ALERTKEY)
-                        tempData.setValue(anData, forKey: AppConstant.iZ_ANKEY)
-                        tempData.setValue(gData, forKey: AppConstant.iZ_G_KEY)
-                        
-                        tempData.setValue(1, forKey: "mutable-content")
-                        tempData.setValue(0, forKey: "content_available")
-                        
-                        finalData["aps"] = tempData
-                    }
-                    
-                    let notificationData = Payload(dictionary: (finalData["aps"] as? NSDictionary)!)
-                    
-                    clickTrack(notificationData: notificationData!, actionType: "0")
-                    let notiRid = notificationData?.global?.rid
-                    //for rid & bids call Ad-mediation click
-                    self.ad_mediationClickCall(notiRid: notiRid!)
-                    
-                    if notificationData?.ankey != nil{
-                        if adlandingURL != ""
-                        {
-                            if let unencodedURLString = adlandingURL.removingPercentEncoding {
-                                adlandingURL = unencodedURLString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-                            } else {
-                                adlandingURL = adlandingURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-                            }
-                            
-                            if let url = URL(string: adlandingURL) {
-                                if notificationData?.global!.act1name != nil && notificationData?.global!.act1name != ""
-                                {
-                                    DispatchQueue.main.async {
-                                        UIApplication.shared.open(url)
-                                    }
-                                }
-                                else
-                                {
-                                    DispatchQueue.main.async {
-                                        UIApplication.shared.open(url)
-                                    }
-                                }
-                            }else{
-                                print("OUTSIDE")
-                            }
-                        }
-                    }
-                }else{
-                    let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
-                    
-                    if notificationData?.fetchurl != nil && notificationData?.fetchurl != ""
-                    {
-                        clickTrack(notificationData: notificationData!, actionType: "0")
-                        
-                        let izUrlString = (notificationData?.fetchurl!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
-                        
-                        let session: URLSession = {
-                            let configuration = URLSessionConfiguration.default
-                            configuration.timeoutIntervalForRequest = 2
-                            return URLSession(configuration: configuration, delegate: nil, delegateQueue: nil)
-                        }()
-                        if let url = URL(string: izUrlString)
-                        {
-                            session.dataTask(with: url) { data, response, error in
-                                if error != nil{
-                                    self.fallbackClickHandler()
-                                }
-                                if let data = data {
-                                    do {
-                                        
-                                        let json = try JSONSerialization.jsonObject(with: data)
-                                        
-                                        //To Check FallBack
-                                        if let jsonDictionary = json as? [String:Any] {
-                                            if let value = jsonDictionary["msgCode"] as? String {
-                                                debugPrint(value)
-                                                self.fallbackClickHandler()
-                                                
-                                            }else{
-                                                if let jsonDictionary = json as? [String:Any] {
-                                                    
-                                                    if notificationData?.url != "" {
-                                                        notificationData?.url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.url)!))"
-                                                        
-                                                        var stringUrl = notificationData?.url
-                                                        
-                                                        if let unencodedURLString = stringUrl?.removingPercentEncoding {
-                                                            stringUrl = unencodedURLString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-                                                        } else {
-                                                            stringUrl = stringUrl!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-                                                        }
-                                                        
-                                                        if let url = URL(string: stringUrl!) {
-                                                            if notificationData?.act1name != nil && notificationData?.act1name != ""
-                                                            {
-                                                                DispatchQueue.main.async {
-                                                                    UIApplication.shared.open(url)
-                                                                }
-                                                            }
-                                                            else
-                                                            {
-                                                                DispatchQueue.main.async {
-                                                                    UIApplication.shared.open(url)
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    
-                                                    if notificationData?.furc != nil{
-                                                        var tempArray = [String]()
-                                                        if let rcValue = aps.value(forKey: "rc") as? NSArray {
-                                                            for value in rcValue{
-                                                                let finalRC = "\(getParseValue(jsonData: jsonDictionary , sourceString: value as! String))"
-                                                                tempArray.append(finalRC)
-                                                            }
-                                                            debugPrint("Fetcher RC ++++++++", tempArray)
-                                                            for valuee in tempArray{
-                                                                RestAPI.callRV_RC_Request(urlString: valuee)
-                                                            }
-                                                            tempArray.removeAll()
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        else
-                                        {
-                                            if let jsonArray = json as? [[String:Any]] {
-                                                if notificationData?.url != "" {
-                                                    
-                                                    notificationData?.url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.url)!))"
-                                                    let izUrlStr = notificationData?.url!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-                                                    
-                                                    if notificationData?.act1name != nil && notificationData?.act1name != ""
-                                                    {
-                                                        if let url = URL(string:izUrlStr!) {
-                                                            DispatchQueue.main.async {
-                                                                UIApplication.shared.open(url)
-                                                            }
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        if let url = URL(string:izUrlStr!) {
-                                                            DispatchQueue.main.async {
-                                                                UIApplication.shared.open(url)
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    } catch let error {
-                                        debugPrint(AppConstant.TAG,error)
-                                        
-                                        //FallBack_Click Handler method.....
-                                        self.fallbackClickHandler()
-                                        let userID = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID)) ?? 0
-                                        let token = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)) ?? "No token here"
-                                        RestAPI.sendExceptionToServer(exceptionName: error.localizedDescription, className: "DATB", methodName: "notificationHandler", pid: userID, token: token, rid: "0", cid: "0")
-                                    }
-                                }
-                            }.resume()
-                        }
-                    }
-                    else
-                    {
-                        notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
-                        
-                        if notificationData?.category != nil && notificationData?.category != ""
-                        {
-                            if response.actionIdentifier == AppConstant.FIRST_BUTTON{
-                                
-                                type = "1"
-                                clickTrack(notificationData: notificationData!, actionType: "1")
-                                
-                                if notificationData?.ap != "" && notificationData?.ap != nil
-                                {
-                                    handleClicks(response: response, actionType: "1")
-                                }
-                                else
-                                {
-                                    if notificationData?.act1link != nil && notificationData?.act1link != ""
-                                    {
-                                        let launchURl = notificationData?.act1link!
-                                        if launchURl!.contains("tel:")
-                                        {
-                                            if let url = URL(string: launchURl!)
-                                            {
-                                                UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
-                                            }
-                                            
-                                        }
-                                        else
-                                        {
-                                            if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "" && notificationData?.act1link != nil && notificationData?.act1link != "")
-                                            {
-                                                
-                                                
-                                                let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
-                                                if checkWebview!
-                                                {
-                                                    landingURLDelegate?.onHandleLandingURL(url: (notificationData?.act1link)!)
-                                                }
-                                                else
-                                                {
-                                                    ViewController.seriveURL = notificationData?.act1link
-                                                    UIApplication.shared.keyWindow!.rootViewController?.present(ViewController(), animated: true, completion: nil)
-                                                }
-                                            }
-                                            else
-                                            {
-                                                if(notificationData?.fetchurl != "" && notificationData?.fetchurl != nil)
-                                                {
-                                                    handleBroserNotification(url: (notificationData?.url)!)
-                                                    
-                                                }
-                                                else
-                                                {
-                                                    if notificationData!.act1link == nil {
-                                                        debugPrint("")
-                                                    }
-                                                    else
-                                                    {
-                                                        handleBroserNotification(url: (notificationData?.act1link)!)
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            else if response.actionIdentifier == AppConstant.SECOND_BUTTON{
-                                print("BUTTON-IDENTIFIER========", response.actionIdentifier)
-                                type = "2"
-                                clickTrack(notificationData: notificationData!, actionType: "2")
-                                if notificationData?.ap != "" && notificationData?.ap != nil
-                                {
-                                    handleClicks(response: response, actionType: "2")
-                                }
-                                else
-                                {
-                                    if notificationData?.act2link != nil && notificationData?.act2link != ""
-                                    {
-                                        let launchURl = notificationData?.act2link!
-                                        if launchURl!.contains("tel:")
-                                        {
-                                            if let url = URL(string: launchURl!)
-                                            {
-                                                UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
-                                            }
-                                        }
-                                        else
-                                        {
-                                            if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "" && notificationData?.act2link != nil && notificationData?.act2link != "")
-                                            {
-                                                
-                                                let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
-                                                if checkWebview!
-                                                {
-                                                    landingURLDelegate?.onHandleLandingURL(url: (notificationData?.act2link)!)
-                                                }
-                                                else
-                                                {
-                                                    ViewController.seriveURL = notificationData?.act2link
-                                                    UIApplication.shared.keyWindow!.rootViewController?.present(ViewController(), animated: true, completion: nil)
-                                                }
-                                                
-                                            }
-                                            else
-                                            {
-                                                
-                                                if notificationData!.act2link == nil {
-                                                    debugPrint("")
-                                                }
-                                                else
-                                                {
-                                                    handleBroserNotification(url: (notificationData?.act2link)!)
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }else{
-                                type = "0"
-                                clickTrack(notificationData: notificationData!, actionType: "0")
-                                if notificationData?.ap != "" && notificationData?.ap != nil
-                                {
-                                    handleClicks(response: response, actionType: "0")
-                                    
-                                }
-                                else{
-                                    if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "" && notificationData?.url != nil && notificationData?.url != "")
-                                    {
-                                        
-                                        let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
-                                        if checkWebview!
-                                        {
-                                            landingURLDelegate?.onHandleLandingURL(url: (notificationData?.url)!)
-                                        }
-                                        else
-                                        {
-                                            ViewController.seriveURL = notificationData?.url
-                                            UIApplication.shared.keyWindow!.rootViewController?.present(ViewController(), animated: true, completion: nil)
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if notificationData!.url == nil {
-                                            debugPrint("")
-                                        }
-                                        else
-                                        {
-                                            handleBroserNotification(url: (notificationData?.url)!)
-                                            
-                                        }
-                                    }
-                                }
-                            }
-                        }else{
-                            type = "0"
-                            clickTrack(notificationData: notificationData!, actionType: "0")
-                            if notificationData?.ap != "" && notificationData?.ap != nil
-                            {
-                                handleClicks(response: response, actionType: "0")
-                                
-                            }
-                            else{
-                                if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "" && notificationData?.url != nil && notificationData?.url != "")
-                                {
-                                    
-                                    let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
-                                    if checkWebview!
-                                    {
-                                        landingURLDelegate?.onHandleLandingURL(url: (notificationData?.url)!)
-                                    }
-                                    else
-                                    {
-                                        ViewController.seriveURL = notificationData?.url
-                                        UIApplication.shared.keyWindow!.rootViewController?.present(ViewController(), animated: true, completion: nil)
-                                    }
-                                }
-                                else
-                                {
-                                    if notificationData!.url == nil {
-                                        debugPrint("")
-                                    }
-                                    else
-                                    {
-                                        handleBroserNotification(url: (notificationData?.url)!)
-                                        
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+                   let badgeC = userDefaults.integer(forKey:"Badge")
+                   self.badgeCount = badgeC
+                   userDefaults.set(badgeC - 1, forKey: "Badge")
+                   RestAPI.fallBackLandingUrl = userDefaults.value(forKey: "fallBackLandingUrl") as? String ?? ""
+                   userDefaults.synchronize()
+               }
+               
+               badgeNumber = (sharedUserDefault?.integer(forKey: "BADGECOUNT"))!
+               if(badgeNumber == -1)
+               {
+                   UIApplication.shared.applicationIconBadgeNumber = -1 // clear the badge count // notification is not removed
+               }
+               else if(badgeNumber == 1)
+               {
+                   UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count
+               }else{
+                   UIApplication.shared.applicationIconBadgeNumber = self.badgeCount - 1 //set badge default value
+               }
+               
+               let userInfo = response.notification.request.content.userInfo
+               
+               var adlandingURL:String = ""
+               let indexx = 0
+               if let jsonDictionary = userInfo as? [String:Any] {
+                   if let aps = jsonDictionary["aps"] as? NSDictionary{
+                       if let anKey = aps.value(forKey: AppConstant.iZ_ANKEY) as? NSArray {
+                           debugPrint(anKey)
+                           var finalData = [String: Any]()
+                           let tempData = NSMutableDictionary()
+                           var alertData = [String: Any]()
+                           var gData = [String: Any]()
+                           var anData: [[String: Any]] = []
+                           
+                           if let alert = aps.value(forKey: AppConstant.iZ_ALERTKEY) {
+                               alertData = alert as! [String : Any]
+                           }
+                           if let gt = aps.value(forKey: AppConstant.iZ_G_KEY) as? NSDictionary {
+                               gData = gt as! [String : Any]
+                           }
+                           
+                           if let anKey = aps.value(forKey: AppConstant.iZ_ANKEY) as? NSArray {
+                               
+                               //To get clicked Notification landing Url
+                               adlandingURL = self.ad_mediationLandingUrlOnClick(anKey: anKey)
+                               
+                               //On click hit rc API
+                               getRcAndHitAPI(anKey: anKey)
+                               
+                               
+                               anData = [anKey[indexx] as! [String : Any]]
+                               
+                               tempData.setValue(alertData, forKey: AppConstant.iZ_ALERTKEY)
+                               tempData.setValue(anData, forKey: AppConstant.iZ_ANKEY)
+                               tempData.setValue(gData, forKey: AppConstant.iZ_G_KEY)
+                               
+                               tempData.setValue(1, forKey: "mutable-content")
+                               tempData.setValue(0, forKey: "content_available")
+                               
+                               finalData["aps"] = tempData
+                           }
+                           
+                           let notificationData = Payload(dictionary: (finalData["aps"] as? NSDictionary)!)
+                           
+                           clickTrack(notificationData: notificationData!, actionType: "0")
+                           let notiRid = notificationData?.global?.rid
+                           //for rid & bids call Ad-mediation click
+                           self.ad_mediationClickCall(notiRid: notiRid!)
+                           
+                           if notificationData?.ankey != nil{
+                               if adlandingURL != ""
+                               {
+                                   if let unencodedURLString = adlandingURL.removingPercentEncoding {
+                                       adlandingURL = unencodedURLString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+                                   } else {
+                                       adlandingURL = adlandingURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+                                   }
+                                   
+                                   if let url = URL(string: adlandingURL) {
+                                       if notificationData?.global!.act1name != nil && notificationData?.global!.act1name != ""
+                                       {
+                                           DispatchQueue.main.async {
+                                               UIApplication.shared.open(url)
+                                           }
+                                       }
+                                       else
+                                       {
+                                           DispatchQueue.main.async {
+                                               UIApplication.shared.open(url)
+                                           }
+                                       }
+                                   }else{
+                                       print("OUTSIDE")
+                                   }
+                               }
+                           }
+                       }else{
+                           let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
+                           
+                           if notificationData?.fetchurl != nil && notificationData?.fetchurl != ""
+                           {
+                               clickTrack(notificationData: notificationData!, actionType: "0")
+                               
+                               let izUrlString = (notificationData?.fetchurl!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
+                               
+                               let session: URLSession = {
+                                   let configuration = URLSessionConfiguration.default
+                                   configuration.timeoutIntervalForRequest = 2
+                                   return URLSession(configuration: configuration, delegate: nil, delegateQueue: nil)
+                               }()
+                               if let url = URL(string: izUrlString)
+                               {
+                                   session.dataTask(with: url) { data, response, error in
+                                       if error != nil{
+                                           self.fallbackClickHandler()
+                                       }
+                                       if let data = data {
+                                           do {
+                                               
+                                               let json = try JSONSerialization.jsonObject(with: data)
+                                               
+                                               //To Check FallBack
+                                               if let jsonDictionary = json as? [String:Any] {
+                                                   if let value = jsonDictionary["msgCode"] as? String {
+                                                       debugPrint(value)
+                                                       self.fallbackClickHandler()
+                                                       
+                                                   }else{
+                                                       if let jsonDictionary = json as? [String:Any] {
+                                                           
+                                                           if notificationData?.url != "" {
+                                                               notificationData?.url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.url)!))"
+                                                               
+                                                               var stringUrl = notificationData?.url
+                                                               
+                                                               if let unencodedURLString = stringUrl?.removingPercentEncoding {
+                                                                   stringUrl = unencodedURLString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+                                                               } else {
+                                                                   stringUrl = stringUrl!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+                                                               }
+                                                               
+                                                               if let url = URL(string: stringUrl!) {
+                                                                   if notificationData?.act1name != nil && notificationData?.act1name != ""
+                                                                   {
+                                                                       DispatchQueue.main.async {
+                                                                           UIApplication.shared.open(url)
+                                                                       }
+                                                                   }
+                                                                   else
+                                                                   {
+                                                                       DispatchQueue.main.async {
+                                                                           UIApplication.shared.open(url)
+                                                                       }
+                                                                   }
+                                                               }
+                                                           }
+                                                           
+                                                           if notificationData?.furc != nil{
+                                                               var tempArray = [String]()
+                                                               if let rcValue = aps.value(forKey: "rc") as? NSArray {
+                                                                   for value in rcValue{
+                                                                       let finalRC = "\(getParseValue(jsonData: jsonDictionary , sourceString: value as! String))"
+                                                                       tempArray.append(finalRC)
+                                                                   }
+                                                                   debugPrint("Fetcher RC ++++++++", tempArray)
+                                                                   for valuee in tempArray{
+                                                                       RestAPI.callRV_RC_Request(urlString: valuee)
+                                                                   }
+                                                                   tempArray.removeAll()
+                                                               }
+                                                           }
+                                                       }
+                                                   }
+                                               }
+                                               else
+                                               {
+                                                   if let jsonArray = json as? [[String:Any]] {
+                                                       if notificationData?.url != "" {
+                                                           
+                                                           notificationData?.url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.url)!))"
+                                                           let izUrlStr = notificationData?.url!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+                                                           
+                                                           if notificationData?.act1name != nil && notificationData?.act1name != ""
+                                                           {
+                                                               if let url = URL(string:izUrlStr!) {
+                                                                   DispatchQueue.main.async {
+                                                                       UIApplication.shared.open(url)
+                                                                   }
+                                                               }
+                                                           }
+                                                           else
+                                                           {
+                                                               if let url = URL(string:izUrlStr!) {
+                                                                   DispatchQueue.main.async {
+                                                                       UIApplication.shared.open(url)
+                                                                   }
+                                                               }
+                                                           }
+                                                       }
+                                                   }
+                                               }
+                                           } catch let error {
+                                               debugPrint(AppConstant.TAG,error)
+                                               
+                                               //FallBack_Click Handler method.....
+                                               self.fallbackClickHandler()
+                                               let userID = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID)) ?? 0
+                                               let token = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)) ?? "No token here"
+                                               RestAPI.sendExceptionToServer(exceptionName: error.localizedDescription, className: "DATB", methodName: "notificationHandler", pid: userID, token: token, rid: "0", cid: "0")
+                                           }
+                                       }
+                                   }.resume()
+                               }
+                           }
+                           else
+                           {
+                               notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
+                               
+                               if notificationData?.category != nil && notificationData?.category != ""
+                               {
+                                   if response.actionIdentifier == AppConstant.FIRST_BUTTON{
+                                       
+                                       type = "1"
+                                       clickTrack(notificationData: notificationData!, actionType: "1")
+                                       
+                                       if notificationData?.ap != "" && notificationData?.ap != nil
+                                       {
+                                           handleClicks(response: response, actionType: "1")
+                                       }
+                                       else
+                                       {
+                                           if notificationData?.act1link != nil && notificationData?.act1link != ""
+                                           {
+                                               let launchURl = notificationData?.act1link!
+                                               if launchURl!.contains("tel:")
+                                               {
+                                                   if let url = URL(string: launchURl!)
+                                                   {
+                                                       UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
+                                                   }
+                                                   
+                                               }
+                                               else
+                                               {
+                                                   if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "" && notificationData?.act1link != nil && notificationData?.act1link != "")
+                                                   {
+                                                       
+                                                       
+                                                       let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
+                                                       if checkWebview!
+                                                       {
+                                                           landingURLDelegate?.onHandleLandingURL(url: (notificationData?.act1link)!)
+                                                       }
+                                                       else
+                                                       {
+                                                           ViewController.seriveURL = notificationData?.act1link
+                                                           UIApplication.shared.keyWindow!.rootViewController?.present(ViewController(), animated: true, completion: nil)
+                                                       }
+                                                   }
+                                                   else
+                                                   {
+                                                       if(notificationData?.fetchurl != "" && notificationData?.fetchurl != nil)
+                                                       {
+                                                           handleBroserNotification(url: (notificationData?.url)!)
+                                                           
+                                                       }
+                                                       else
+                                                       {
+                                                           if notificationData!.act1link == nil {
+                                                               debugPrint("")
+                                                           }
+                                                           else
+                                                           {
+                                                               handleBroserNotification(url: (notificationData?.act1link)!)
+                                                           }
+                                                       }
+                                                   }
+                                               }
+                                           }
+                                       }
+                                   }
+                                   else if response.actionIdentifier == AppConstant.SECOND_BUTTON{
+                                       type = "2"
+                                       clickTrack(notificationData: notificationData!, actionType: "2")
+                                       if notificationData?.ap != "" && notificationData?.ap != nil
+                                       {
+                                           handleClicks(response: response, actionType: "2")
+                                       }
+                                       else
+                                       {
+                                           if notificationData?.act2link != nil && notificationData?.act2link != ""
+                                           {
+                                               let launchURl = notificationData?.act2link!
+                                               if launchURl!.contains("tel:")
+                                               {
+                                                   if let url = URL(string: launchURl!)
+                                                   {
+                                                       UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
+                                                   }
+                                               }
+                                               else
+                                               {
+                                                   if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "" && notificationData?.act2link != nil && notificationData?.act2link != "")
+                                                   {
+                                                       
+                                                       let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
+                                                       if checkWebview!
+                                                       {
+                                                           landingURLDelegate?.onHandleLandingURL(url: (notificationData?.act2link)!)
+                                                       }
+                                                       else
+                                                       {
+                                                           ViewController.seriveURL = notificationData?.act2link
+                                                           UIApplication.shared.keyWindow!.rootViewController?.present(ViewController(), animated: true, completion: nil)
+                                                       }
+                                                       
+                                                   }
+                                                   else
+                                                   {
+                                                       
+                                                       if notificationData!.act2link == nil {
+                                                           debugPrint("")
+                                                       }
+                                                       else
+                                                       {
+                                                           handleBroserNotification(url: (notificationData?.act2link)!)
+                                                       }
+                                                   }
+                                               }
+                                           }
+                                       }
+                                   }else{
+                                       type = "0"
+                                       clickTrack(notificationData: notificationData!, actionType: "0")
+                                       if notificationData?.ap != "" && notificationData?.ap != nil
+                                       {
+                                           handleClicks(response: response, actionType: "0")
+                                           
+                                       }
+                                       else{
+                                           if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "" && notificationData?.url != nil && notificationData?.url != "")
+                                           {
+                                               
+                                               let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
+                                               if checkWebview!
+                                               {
+                                                   landingURLDelegate?.onHandleLandingURL(url: (notificationData?.url)!)
+                                               }
+                                               else
+                                               {
+                                                   ViewController.seriveURL = notificationData?.url
+                                                   UIApplication.shared.keyWindow!.rootViewController?.present(ViewController(), animated: true, completion: nil)
+                                               }
+                                           }
+                                           else
+                                           {
+                                               if notificationData!.url == nil {
+                                                   debugPrint("")
+                                               }
+                                               else
+                                               {
+                                                   handleBroserNotification(url: (notificationData?.url)!)
+                                                   
+                                               }
+                                           }
+                                       }
+                                   }
+                               }else{
+                                   type = "0"
+                                   clickTrack(notificationData: notificationData!, actionType: "0")
+                                   if notificationData?.ap != "" && notificationData?.ap != nil
+                                   {
+                                       handleClicks(response: response, actionType: "0")
+                                       
+                                   }
+                                   else{
+                                       if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "" && notificationData?.url != nil && notificationData?.url != "")
+                                       {
+                                           
+                                           let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
+                                           if checkWebview!
+                                           {
+                                               landingURLDelegate?.onHandleLandingURL(url: (notificationData?.url)!)
+                                           }
+                                           else
+                                           {
+                                               ViewController.seriveURL = notificationData?.url
+                                               UIApplication.shared.keyWindow!.rootViewController?.present(ViewController(), animated: true, completion: nil)
+                                           }
+                                       }
+                                       else
+                                       {
+                                           if notificationData!.url == nil {
+                                               debugPrint("")
+                                           }
+                                           else
+                                           {
+                                               handleBroserNotification(url: (notificationData?.url)!)
+                                               
+                                           }
+                                       }
+                                   }
+                               }
+                           }
+                       }
+                   }
+               }
     }
     //for rid & bids call mediation click
     
     @objc private static func ad_mediationClickCall(notiRid: String){
+        print("Called")
         
         if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()){
             if let ids = userDefaults.value(forKey: AppConstant.iZ_BIDS_SERVED_ARRAY) as? [[String : Any]]{
@@ -2483,6 +2524,8 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                     if !filterValue.isEmpty{
                         if let value1 = filterValue[0] as? NSDictionary {
                             landing = value1.value(forKey: AppConstant.iZ_LNKEY) as! String
+                            print("landing111\(landing)")
+
                             if let index = idArray.firstIndex(where: {$0[AppConstant.iZ_LNKEY] as? String  == landing }) {
                                 idArray.remove(at: index)
                             }
@@ -2641,19 +2684,6 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
             }
         }
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     // Fetching the Advertisement ID
@@ -3025,7 +3055,6 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                 
                                 if convertBinaryToDecimal != 0{
                                     let url = "https://lci"+"\(convertBinaryToDecimal)"+".izooto.com/lci"+"\(convertBinaryToDecimal)"
-                                    print("URL",url)
                                     RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: url )
                                 }
                                 else
@@ -3136,6 +3165,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
     
     @objc private static func handleBroserNotification(url : String)
     {
+       print("Data")
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             let izUrlString = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
             if let izUrl = URL(string: izUrlString!) {

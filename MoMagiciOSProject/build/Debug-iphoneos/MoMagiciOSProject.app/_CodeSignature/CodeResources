@@ -34,7 +34,7 @@
 		</data>
 		<key>Frameworks/MomagiciOSSDK.framework/MomagiciOSSDK</key>
 		<data>
-		D9wo76hpDbxuY/eTHeNy+B9I3vw=
+		KZ1PKN0EbdYbaskMypA974XwdMw=
 		</data>
 		<key>Frameworks/MomagiciOSSDK.framework/_CodeSignature/CodeResources</key>
 		<data>
@@ -54,19 +54,19 @@
 		</data>
 		<key>PlugIns/MoMagicExtesnionServices.appex/MoMagicExtesnionServices</key>
 		<data>
-		1uaRDs/b9FmtUbCnoF+/Gd+Dn/Y=
+		i77833Iew9Vlg4NM4N8M+Jt5pAQ=
 		</data>
 		<key>PlugIns/MoMagicExtesnionServices.appex/_CodeSignature/CodeResources</key>
 		<data>
-		socb3FHiQq9awWEmVIJaSnmIEsE=
+		GQJHEJXAPKXA8ehIwOIDZkQKI64=
 		</data>
 		<key>PlugIns/MoMagicExtesnionServices.appex/embedded.mobileprovision</key>
 		<data>
-		ZzT3l1TCfnzs7Z7gT8wlxHINel0=
+		AAnl6cVDytSyDJiU7sFxFOtBUiU=
 		</data>
 		<key>embedded.mobileprovision</key>
 		<data>
-		xpSUONMoiEumDeIHR4BMNEJzIdk=
+		AqrVRC1hjHNTSiFguocPpVWDRAE=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -124,7 +124,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			d0+y97nxnPH04dib/bsre0EcsM0kqvj/RxwGaYqik2I=
+			r0LE5jH5vA3Z/LDVgnGb3ItYHNZVqIQD8IjseEoWiXI=
 			</data>
 		</dict>
 		<key>Frameworks/MomagiciOSSDK.framework/_CodeSignature/CodeResources</key>
@@ -145,28 +145,28 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			yvK1eeFUrDM0Uojdwrfji+wXuTuYdux8pxRGKVnuNuo=
+			reejjvMWv8j6wltssY4hEhqHRIAwYyf3UXLY4Ur5jHs=
 			</data>
 		</dict>
 		<key>PlugIns/MoMagicExtesnionServices.appex/_CodeSignature/CodeResources</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			pPhoXTpFdymC+TVz0bYOWWFqbt1AC/hB9ZwtM7x2Uzw=
+			h+46PNTvc/zj/TuAcaMUgc160RoEa54ReXR1B4yT4Xk=
 			</data>
 		</dict>
 		<key>PlugIns/MoMagicExtesnionServices.appex/embedded.mobileprovision</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			AyHnoj/XYm/BeoFeQuTvvUNwfq1pGcwIi2vwMdIB3mE=
+			BmbwFgoVF80nYxgyAZVmD+j1WryNdwmT/tL2b+NQKDA=
 			</data>
 		</dict>
 		<key>embedded.mobileprovision</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			v2GXutsHzTi+lDdyOh/lqm6Uz17wfgVnf6GnO4/+rpM=
+			l57lCCDS41xlXl8xn9rU9d4Og2hwSvCFVNnzHP5eOhI=
 			</data>
 		</dict>
 	</dict>

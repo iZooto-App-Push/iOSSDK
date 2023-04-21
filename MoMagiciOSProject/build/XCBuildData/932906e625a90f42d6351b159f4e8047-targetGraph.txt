@@ -1,0 +1,13 @@
+Target dependency graph (5 targets)
+MomagiciOSSDK in Pods, no dependencies
+Pods-MoMagiciOSProject-MoMagicExtesnionServices in Pods, depends on:
+MomagiciOSSDK in Pods (explicit)
+MoMagicExtesnionServices in MoMagiciOSProject, depends on:
+Pods-MoMagiciOSProject-MoMagicExtesnionServices in Pods (implicit dependency via file 'Pods_MoMagiciOSProject_MoMagicExtesnionServices.framework' in build phase 'Link Binary')
+MomagiciOSSDK in Pods (implicit dependency via options '-framework MomagiciOSSDK' in build setting 'OTHER_LDFLAGS')
+Pods-MoMagiciOSProject in Pods, depends on:
+MomagiciOSSDK in Pods (explicit)
+MoMagiciOSProject in MoMagiciOSProject, depends on:
+MoMagicExtesnionServices in MoMagiciOSProject (explicit)
+Pods-MoMagiciOSProject in Pods (implicit dependency via file 'Pods_MoMagiciOSProject.framework' in build phase 'Link Binary')
+MomagiciOSSDK in Pods (implicit dependency via options '-framework MomagiciOSSDK' in build setting 'OTHER_LDFLAGS')

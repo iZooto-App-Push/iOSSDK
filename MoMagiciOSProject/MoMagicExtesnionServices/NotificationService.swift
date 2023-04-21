@@ -22,7 +22,7 @@ class NotificationService: UNNotificationServiceExtension {
           if let bestAttemptContent = bestAttemptContent {
 //              DATB.didReceiveNotificationExtensionRequest(bundleName:"" , soundName: "com.momagic.MoMagiciOSProject", request: "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
               
-              DATB.didReceiveNotificationExtensionRequest(bundleName: "String", soundName: "String", request: receivedRequest, bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+              DATB.didReceiveNotificationExtensionRequest(bundleName: "com.momagic.MoMagiciOSProject", soundName: "String", request: receivedRequest, bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
          
           
            

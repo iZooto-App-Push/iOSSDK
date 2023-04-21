@@ -23,13 +23,13 @@
     self.bestAttemptContent = [request.content mutableCopy];
     if (self.bestAttemptContent != nil)
     {
-        [DATB didReceiveNotificationExtensionRequestWithRequest:self.receivedRequest bundleName:@"com.momagic.ObjectiveCiOSProject" soundName:@"pikac.mp3" bestAttemptContent:self.bestAttemptContent contentHandler:self.contentHandler];
+        [DATB didReceiveNotificationExtensionRequestWithBundleName:@"com.momagic.ObjectiveCiOSProject" soundName:@"" request:self.receivedRequest bestAttemptContent:self.bestAttemptContent contentHandler: self.contentHandler];
     }
 }
 
 - (void)serviceExtensionTimeWillExpire {
    
-    [DATB didReceiveNotificationExtensionRequestWithRequest:self.receivedRequest bundleName:@"com.momagic.ObjectiveCiOSProject" soundName:@"pikac.mp3" bestAttemptContent:self.bestAttemptContent contentHandler:self.contentHandler];
+    [DATB didReceiveNotificationExtensionRequestWithBundleName:@"com.momagic.ObjectiveCiOSProject" soundName:@"" request:self.receivedRequest bestAttemptContent:self.bestAttemptContent contentHandler: self.contentHandler];
 }
 
 @end

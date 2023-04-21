@@ -1,10 +1,10 @@
 version: "Apple Swift version 5.7.2 (swiftlang-5.7.2.135.5 clang-1400.0.29.51)"
 options: "a28285a5ebdf08e018c23d1c6e748c7e2024d5dfd87be1a312c4fcfaab12f733"
-build_start_time: [1681730088, 750067949]
-build_end_time: [1681730092, 619305133]
+build_start_time: [1681798135, 870922088]
+build_end_time: [1681798139, 236445903]
 inputs:
   "/Users/amit_sdk_develoer/Documents/AndroidSDK/momagiciOSSDK/iOSSDK/MomagiciOSSDK/MomagiciOSSDK/APIs/RestClient.swift": [1681729627, 304543256]
-  "/Users/amit_sdk_develoer/Documents/AndroidSDK/momagiciOSSDK/iOSSDK/MomagiciOSSDK/MomagiciOSSDK/DATB.swift": [1681729879, 860441684]
+  "/Users/amit_sdk_develoer/Documents/AndroidSDK/momagiciOSSDK/iOSSDK/MomagiciOSSDK/MomagiciOSSDK/DATB.swift": [1681798076, 976097583]
   "/Users/amit_sdk_develoer/Documents/AndroidSDK/momagiciOSSDK/iOSSDK/MomagiciOSSDK/MomagiciOSSDK/Payload/Payload.swift": [1681716288, 8300781]
   "/Users/amit_sdk_develoer/Documents/AndroidSDK/momagiciOSSDK/iOSSDK/MomagiciOSSDK/MomagiciOSSDK/Utils.swift": [1660905940, 48278570]
   "/Users/amit_sdk_develoer/Documents/AndroidSDK/momagiciOSSDK/iOSSDK/MomagiciOSSDK/MomagiciOSSDK/ViewController.swift": [1660717394, 885628938]
