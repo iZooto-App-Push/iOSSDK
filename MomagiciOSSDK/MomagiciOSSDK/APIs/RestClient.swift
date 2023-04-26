@@ -34,7 +34,7 @@ protocol ResponseHandler  : AnyObject{
          static let UNSUBSCRITPION_SUBSCRIPTION = "https://usub.izooto.com/sunsub"
     //fallback url
         static var fallBackLandingUrl = ""
-        static let  SDKVERSION = "2.1.0"
+        static let  SDKVERSION = "2.1.1"
     //Fallback
         static let FALLBACK_URL = "https://flbk.izooto.com/default.json"
      // MOMAGIC URL
@@ -754,14 +754,14 @@ protocol ResponseHandler  : AnyObject{
                 URLSession.shared.dataTask(with: request){(data,response,error) in
                     
                     do {
-                        print("l","v")
+                       // print("l","v")
                     }
                 }.resume()
             }
         }
         else
         {
-            sendExceptionToServer(exceptionName: "Token or pid or missing", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastImpression", pid: userid, token: token , rid: "",cid :"")
+            sendExceptionToServer(exceptionName: "Token or pid or missing", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastVisit", pid: userid, token: token , rid: "",cid :"")
         }
         
     }
@@ -787,7 +787,7 @@ protocol ResponseHandler  : AnyObject{
             URLSession.shared.dataTask(with: request){(data,response,error) in
                 
                 do {
-                    print("l","i")
+                   // print("l","i")
                 }
             }.resume()
         }
@@ -821,7 +821,7 @@ protocol ResponseHandler  : AnyObject{
             URLSession.shared.dataTask(with: request){(data,response,error) in
                 
                 do {
-                    print("l","c")
+                   // print("l","c")
                 }
             }.resume()
         }
@@ -963,7 +963,7 @@ protocol ResponseHandler  : AnyObject{
                URLSession.shared.dataTask(with: request){(data,response,error) in
                    
                    do {
-                       print("l","i")
+                      // print("l","i")
                        
                    }
                }.resume()
@@ -1001,7 +1001,7 @@ protocol ResponseHandler  : AnyObject{
                URLSession.shared.dataTask(with: request){(data,response,error) in
                    
                    do {
-                        print("l","c")
+                       // print("l","c")
                        
                    }
                }.resume()

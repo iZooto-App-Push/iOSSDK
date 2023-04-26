@@ -355,6 +355,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                    }
                                }
                                
+                               sleep(1)
                                autoreleasepool {
                                    if let urlString = (notificationData?.url!),
                                       let fileUrl = URL(string: urlString ) {
@@ -1136,6 +1137,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                     
                                 }
                                 
+                                sleep(1)
                                 autoreleasepool {
                                     if let urlString = (notificationData?.alert?.attachment_url),
                                        let fileUrl = URL(string: urlString ) {
@@ -1317,6 +1319,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                 }
                             }
                             
+                            sleep(1)
                             autoreleasepool {
                                 if let urlString = (notificationData.ankey?.bannerImageAd),
                                    let fileUrl = URL(string: urlString ) {
@@ -1464,7 +1467,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                     addCTAButtons()
                                 }
                             }
-                            
+                            sleep(1)
                             autoreleasepool {
                                 if let urlString = (notificationData.alert?.attachment_url),
                                    let fileUrl = URL(string: urlString ) {

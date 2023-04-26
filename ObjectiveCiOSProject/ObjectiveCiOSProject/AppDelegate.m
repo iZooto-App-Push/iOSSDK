@@ -17,24 +17,7 @@
     [UNUserNotificationCenter currentNotificationCenter].delegate = self;
 
 
-    if (launchOptions != nil)
-        {
-//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Second" message:@"Are you sure you want to delete this.  This action cannot be undone" delegate:self cancelButtonTitle:@"Delete" otherButtonTitles:@"Cancel", nil];
-//            [alert show];
-            [UNUserNotificationCenter currentNotificationCenter].delegate = self;
-
-            NSMutableDictionary *momagicInitSetting = [[NSMutableDictionary alloc]init];
-            [momagicInitSetting setObject:@YES forKey:@"auto_prompt"];
-            [momagicInitSetting setObject:@NO forKey:@"nativeWebview"];
-            [momagicInitSetting setObject:@NO forKey:@"provisionalAuthorization"];
-        // initalise the MoMagic SDK
-        [DATB initialisationWithMomagic_app_id: @"299adcc1794992daee9e54ace947459946735792" application:application MoMagicInitSettings:momagicInitSetting];
-        }
-    else{
-        
-//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"First" message:@"Are you sure you want to delete this.  This action cannot be undone" delegate:self cancelButtonTitle:@"Delete" otherButtonTitles:@"Cancel", nil];
-//        [alert show];
-        dispatch_async(dispatch_get_main_queue(), ^{
+     dispatch_async(dispatch_get_main_queue(), ^{
             
             [UNUserNotificationCenter currentNotificationCenter].delegate = self;
             
@@ -50,18 +33,13 @@
         
         DATB.notificationReceivedDelegate = self;
         DATB.landingURLDelegate = self;
-        [DATB setSubscriberIDWithSubscriberID:@"12345678"];
         DATB.notificationOpenDelegate = self;
-        NSMutableDictionary *userPropertiesdata = [[NSMutableDictionary alloc] init];
-        [userPropertiesdata setObject:@"male" forKey:@"gender"];
-    }
-    // [DATB addEventWithEventName:@"Clicks" data:userPropertiesdata];
+    
     return YES;
 }
 
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    //Get Token from When enbale prompt allow
     [DATB getTokenWithDeviceToken:deviceToken];
 }
 
@@ -90,9 +68,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 }
 
 - (void)onNotificationOpenWithAction:(NSDictionary<NSString *,id> * _Nonnull)action {
-    NSLog(@"NSString = %@", action);
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Second" message:@"Are you sure you want to delete this.  This action cannot be undone" delegate:self cancelButtonTitle:@"Delete" otherButtonTitles:@"Cancel", nil];
-                [alert show];
+   
 
 }
 
