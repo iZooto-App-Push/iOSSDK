@@ -29,12 +29,12 @@ protocol ResponseHandler  : AnyObject{
          static let LASTVISITURL="https://lvi.izooto.com/lvi";
          static var  EXCEPTION_URL="https://aerr.izooto.com/aerr";
          static var SUBSCRIBER_URL="https://pp.izooto.com/idsyn";
-         static let MEDIATION_IMPRESSION_URL = "https://med.izooto.com/medi";
-         static let MEDIATION_CLICK_URL = "https://med.izooto.com/medc"
+         static let MEDIATION_IMPRESSION_URL = "https://med.dtblt.com/medi";
+         static let MEDIATION_CLICK_URL = "https://med.dtblt.com/medc"
          static let UNSUBSCRITPION_SUBSCRIPTION = "https://usub.izooto.com/sunsub"
     //fallback url
         static var fallBackLandingUrl = ""
-        static let  SDKVERSION = "2.1.1"
+        static let  SDKVERSION = "2.1.2"
     //Fallback
         static let FALLBACK_URL = "https://flbk.izooto.com/default.json"
      // MOMAGIC URL
