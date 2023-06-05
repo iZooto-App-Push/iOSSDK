@@ -105,6 +105,8 @@ class AppConstant
        static let iZ_ALERTKEY = "alert"
        static let iZ_G_KEY = "g"
        static let iZ_rcArray = "rcArray"
+       static let iZ_TITLE_KEY = "ti"
+
        
        //CT
        static let iZ_catId = "catId"

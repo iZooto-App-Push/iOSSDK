@@ -314,82 +314,137 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
     
     
     // Ad's Fallback Url Call
-    // Ad's Fallback Url Call
-       @available(iOS 11.0, *)
-       @objc private static func fallBackAdsApi(bundleName: String, fallCategory: String, bestAttemptContent :UNMutableNotificationContent, contentHandler:((UNNotificationContent) -> Void)?){
-           
-           let str = RestAPI.FALLBACK_URL
-           let izUrlString = (str.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
-           if let url = URL(string: izUrlString) {
-               URLSession.shared.dataTask(with: url) { data, response, error in
-                   if let data = data {
-                       do {
-                           let json = try JSONSerialization.jsonObject(with: data)
-                           if let jsonDictionary = json as? [String:Any] {
-                               let notificationData = Payload(dictionary: (jsonDictionary) as NSDictionary)
-                               bestAttemptContent.title = jsonDictionary[AppConstant.iZ_T_KEY] as! String
-                               bestAttemptContent.body = jsonDictionary["m"] as! String
-                               if notificationData?.url! != "" {
-                                   
-                                   let groupName = "group."+bundleName+".DATB"
-                                   if let userDefaults = UserDefaults(suiteName: groupName) {
-                                       userDefaults.set(notificationData?.url!, forKey: "fallBackLandingUrl")
-                                   }
-                                   
-                                   notificationData?.url = jsonDictionary["bi"] as? String
-                                   if (notificationData?.url!.contains(".webp"))!
-                                   {
-                                       notificationData?.url! = (notificationData?.url?.replacingOccurrences(of: ".webp", with: ".jpeg"))!
-                                       
-                                   }
-                                   if (notificationData?.url!.contains("http:"))!
-                                   {
-                                       notificationData?.url! = (notificationData?.url?.replacingOccurrences(of: "http:", with: "https:"))!
-                                   }
-                               }
-                               if fallCategory != ""{
-                                   storeCategories(notificationData: notificationData!, category: fallCategory)
-                                   if notificationData!.act1name != "" && notificationData!.act1name != nil{
-                                       debugPrint("Ankey button called")
-                                       addCTAButtons()
-                                   }
-                               }
-                               
-                               sleep(1)
-                               autoreleasepool {
-                                   if let urlString = (notificationData?.url!),
-                                      let fileUrl = URL(string: urlString ) {
-                                       
-                                       guard let imageData = NSData(contentsOf: fileUrl) else {
-                                           contentHandler!(bestAttemptContent)
-                                           return
-                                       }
-                                       let string = notificationData?.url!
-                                       let url: URL? = URL(string: string!)
-                                       let urlExtension: String? = url?.pathExtension
-                                       guard let attachment = UNNotificationAttachment.saveImageToDisk(fileIdentifier: "img."+urlExtension!, data: imageData, options: nil) else {
-                                           debugPrint(AppConstant.IMAGE_ERROR)
-                                           contentHandler!(bestAttemptContent)
-                                           return
-                                       }
-                                       bestAttemptContent.attachments = [ attachment ]
-                                   }
-                               }
-                               
-                           }
-                           //   if (UserDefaults.standard.bool(forKey: "Subscribe")) == true{
-                           contentHandler!(bestAttemptContent)
-                           //   }
-                           
-                       } catch let error {
-                           debugPrint("Error",error)
-                       }
-                   }
-                   
-               }.resume()
-           }
-       }
+    @available(iOS 11.0, *)
+    @objc private static func fallBackAdsApi(bundleName: String, fallCategory: String, notiRid: String, bestAttemptContent :UNMutableNotificationContent, contentHandler:((UNNotificationContent) -> Void)?){
+        
+        let str = RestAPI.FALLBACK_URL
+        let izUrlString = (str.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
+        if let url = URL(string: izUrlString) {
+            URLSession.shared.dataTask(with: url) { data, response, error in
+                if let data = data {
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data)
+                        if let jsonDictionary = json as? [String:Any] {
+                            let notificationData = Payload(dictionary: (jsonDictionary) as NSDictionary)
+                            bestAttemptContent.title = jsonDictionary[AppConstant.iZ_T_KEY] as! String
+                            bestAttemptContent.body = jsonDictionary["m"] as! String
+                            if notificationData?.url! != "" {
+                                
+                                let groupName = "group."+bundleName+".DATB"
+                                if let userDefaults = UserDefaults(suiteName: groupName) {
+                                    userDefaults.set(notificationData?.url!, forKey: "fallBackLandingUrl")
+                                    userDefaults.set(bestAttemptContent.title, forKey: "fallBackTitle")
+                                }
+                                
+                                notificationData?.url = jsonDictionary["bi"] as? String
+                                if (notificationData?.url!.contains(".webp"))!
+                                {
+                                    notificationData?.url! = (notificationData?.url?.replacingOccurrences(of: ".webp", with: ".jpeg"))!
+                                    
+                                }
+                                if (notificationData?.url!.contains("http:"))!
+                                {
+                                    notificationData?.url! = (notificationData?.url?.replacingOccurrences(of: "http:", with: "https:"))!
+                                }
+                            }
+                            if fallCategory != ""{
+                                storeCategories(notificationData: notificationData!, category: fallCategory)
+                                if notificationData!.act1name != "" && notificationData!.act1name != nil{
+                                    debugPrint("Ankey button called")
+                                    addCTAButtons()
+                                }
+                            }
+                            
+                            //call impression
+                            self.ad_mediationImpressionCall(notiRid: notiRid, adTitle: bestAttemptContent.title, adLn: (notificationData?.url!)!, bundleName: bundleName)
+                            
+                            sleep(1)
+                            autoreleasepool {
+                                if let urlString = (notificationData?.url!),
+                                   let fileUrl = URL(string: urlString ) {
+                                    
+                                    guard let imageData = NSData(contentsOf: fileUrl) else {
+                                        contentHandler!(bestAttemptContent)
+                                        return
+                                    }
+                                    let string = notificationData?.url!
+                                    let url: URL? = URL(string: string!)
+                                    let urlExtension: String? = url?.pathExtension
+                                    guard let attachment = UNNotificationAttachment.saveImageToDisk(fileIdentifier: "img."+urlExtension!, data: imageData, options: nil) else {
+                                        debugPrint(AppConstant.IMAGE_ERROR)
+                                        contentHandler!(bestAttemptContent)
+                                        return
+                                    }
+                                    bestAttemptContent.attachments = [ attachment ]
+                                }
+                            }
+                        }
+                        contentHandler!(bestAttemptContent)
+                        
+                    } catch let error {
+                        debugPrint("Error",error)
+                    }
+                }
+                
+            }.resume()
+        }
+    }
     
+    
+    //To call Mediation-impression
+    @objc private static func ad_mediationImpressionCall(notiRid: String, adTitle: String, adLn: String, bundleName: String){
+        let groupName = "group."+bundleName+".DATB"
+        if let userDefaults = UserDefaults(suiteName: groupName){
+            if let ids = userDefaults.value(forKey: AppConstant.iZ_BIDS_SERVED_ARRAY) as? [[String : Any]]{
+                var tempIdArray = ids
+                for data in ids {
+                    if let dataDict = data as? NSDictionary {
+                        if (dataDict.value(forKey: "rid") as! String) == notiRid {
+                            let finalData = dataDict.mutableCopy() as? NSDictionary
+                            let served = finalData!.value(forKey: "served") as? NSDictionary
+                            let finalServed = served!.mutableCopy() as? NSDictionary
+                            finalServed?.setValue(adTitle, forKey: "ti")
+                            finalServed!.setValue(adLn, forKey: "ln")
+                            finalData!.setValue(finalServed, forKey: "served")
+                            RestAPI.callAdMediationImpressionApi(finalDict: finalData!)
+                            userDefaults.setValue(tempIdArray, forKey: AppConstant.iZ_BIDS_SERVED_ARRAY)
+                            userDefaults.synchronize()
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    //for rid & bids call mediation click
+    @objc private static func ad_mediationClickCall(notiRid: String, adTitle: String, adLn: String){
+        
+        if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()){
+            if let ids = userDefaults.value(forKey: AppConstant.iZ_BIDS_SERVED_ARRAY) as? [[String : Any]]{
+                var tempIdArray = ids
+                for (index,data) in ids.enumerated() {
+                    if let dataDict = data as? NSDictionary {
+                        if (dataDict.value(forKey: "rid") as! String) == notiRid {
+                            let finalData = dataDict.mutableCopy() as? NSDictionary
+                            let served = finalData!.value(forKey: "served") as? NSDictionary
+                            let finalServed = served!.mutableCopy() as? NSDictionary
+                            finalServed?.setValue(adTitle, forKey: "ti")
+                            finalServed!.setValue(adLn, forKey: "ln")
+                            finalData!.setValue(finalServed, forKey: "served")
+                            RestAPI.callAdMediationClickApi(finalDict: finalData!)
+                            if index <= tempIdArray.count - 1{
+                                tempIdArray.remove(at: index)
+                            }
+                            userDefaults.setValue(tempIdArray, forKey: AppConstant.iZ_BIDS_SERVED_ARRAY)
+                            userDefaults.synchronize()
+                        }
+                    }
+                }
+            }
+        }
+    }
+    //////
+    ///
     @objc private static func payLoadDataChange(payload: [String:Any],bundleName: String, completion: @escaping ([String:Any]) -> Void) {
         
         if let jsonDictionary = payload as? [String:Any] {
@@ -408,7 +463,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                     gData = gt as! [String : Any]
                     tempData.setValue(gData, forKey: AppConstant.iZ_G_KEY)
                     
-                    let groupName = "group."+bundleName+".DATB"
+                    let groupName = "group."+bundleName+".iZooto"
                     if let userDefaults = UserDefaults(suiteName: groupName) {
                         if let pid = userDefaults.string(forKey: "PID"){
                             finalDataValue.setValue(pid, forKey: "pid")
@@ -455,9 +510,9 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                         session.dataTask(with: url) { data, response, error in
                                             if(error != nil)
                                             {
-                                                let t = Date().timeIntervalSince(startDate)
-                                                servedData = [AppConstant.iZ_A_KEY: 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t] as NSMutableDictionary
-                                                bidsData.append(servedData)
+                                                let t = Int(Date().timeIntervalSince(startDate) * 1000)
+                                                servedData = [AppConstant.iZ_A_KEY: 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t,AppConstant.iZ_RETURN_BIDS:0.00] as NSMutableDictionary
+                                                bidsData.append(servedData) // bidding data
                                                 
                                                 anData = [anKey[0] as! [String : Any]]
                                                 tempData.setValue(anData, forKey: AppConstant.iZ_ANKEY)
@@ -479,8 +534,8 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                                     //To Check FallBack
                                                     if let jsonDictionary = json as? [String:Any] {
                                                         if let value = jsonDictionary["msgCode"] as? String {
-                                                            let t = Date().timeIntervalSince(startDate)
-                                                            bidsData.append([AppConstant.iZ_A_KEY: 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t])
+                                                            let t = Int(Date().timeIntervalSince(startDate) * 1000)
+                                                            bidsData.append([AppConstant.iZ_A_KEY: 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t,AppConstant.iZ_RETURN_BIDS:0.00])
                                                         }else{
                                                             if let jsonDictionary = json as? [String:Any] {
                                                                 if cpmValue != ""{
@@ -491,8 +546,8 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                                                     finalCPCValue = "\(getParseValue(jsonData: jsonDictionary, sourceString: cpcFinalValue ))"
                                                                 }
                                                                 
-                                                                let t = Date().timeIntervalSince(startDate)
-                                                                servedData = [AppConstant.iZ_A_KEY: 1, AppConstant.iZ_B_KEY: Double(finalCPCValue)!, AppConstant.iZ_T_KEY:t]
+                                                                let t = Int(Date().timeIntervalSince(startDate) * 1000)
+                                                                servedData = [AppConstant.iZ_A_KEY: 1, AppConstant.iZ_B_KEY: Double(finalCPCValue)!, AppConstant.iZ_T_KEY:t, AppConstant.iZ_RETURN_BIDS:Double(finalCPCValue)!]
                                                                 finalDataValue.setValue("1", forKey: "result")
                                                                 bidsData.append(servedData)
                                                             }
@@ -501,8 +556,8 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                                         if let jsonArray = json as? [[String:Any]] {
                                                             if jsonArray[0]["msgCode"] is String{
                                                                 anData = [anKey[0] as! [String : Any]]
-                                                                let t = Date().timeIntervalSince(startDate)
-                                                                bidsData.append([AppConstant.iZ_A_KEY: 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t])
+                                                                let t = Int(Date().timeIntervalSince(startDate) * 1000)
+                                                                bidsData.append([AppConstant.iZ_A_KEY: 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t,AppConstant.iZ_RETURN_BIDS:0.00])
                                                             }else{
                                                                 
                                                                 if cpmValue != ""{
@@ -514,8 +569,8 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                                                 }
                                                                 
                                                                 finalDataValue.setValue("1", forKey: "result")
-                                                                let t = Date().timeIntervalSince(startDate)
-                                                                servedData = [AppConstant.iZ_A_KEY: 1, AppConstant.iZ_B_KEY: Double(finalCPCValue)!, AppConstant.iZ_T_KEY:t]
+                                                                let t = Int(Date().timeIntervalSince(startDate) * 1000)
+                                                                servedData = [AppConstant.iZ_A_KEY: 1, AppConstant.iZ_B_KEY: Double(finalCPCValue)!, AppConstant.iZ_T_KEY:t,AppConstant.iZ_RETURN_BIDS:Double(finalCPCValue)!]
                                                                 bidsData.append(servedData)
                                                             }
                                                         }
@@ -524,7 +579,8 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                                     tempData.setValue(anData, forKey: AppConstant.iZ_ANKEY)
                                                     finalData["aps"] = tempData
                                                     //Bids & Served
-                                                    let ta = Date().timeIntervalSince(startDate)
+                                                    
+                                                    let ta = Int(Date().timeIntervalSince(startDate) * 1000)
                                                     finalDataValue.setValue(ta, forKey: "ta")
                                                     finalDataValue.setValue(servedData, forKey: AppConstant.iZ_SERVEDKEY)
                                                     finalDataValue.setValue(bidsData, forKey: AppConstant.iZ_BIDSKEY)
@@ -534,8 +590,8 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                                     completion(finalData)
                                                     
                                                 } catch let error {
-                                                    let t = Date().timeIntervalSince(startDate)
-                                                    servedData = [AppConstant.iZ_A_KEY: 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t] as NSMutableDictionary
+                                                    let t = Int(Date().timeIntervalSince(startDate) * 1000)
+                                                    servedData = [AppConstant.iZ_A_KEY: 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t,AppConstant.iZ_RETURN_BIDS:0.00] as NSMutableDictionary
                                                     bidsData.append(servedData)
                                                     
                                                     anData = [anKey[0] as! [String : Any]]
@@ -564,7 +620,6 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                     else if (gt.value(forKey: AppConstant.iZ_TPKEY))! as! String == "5" {
                         if let anKey = aps.value(forKey: AppConstant.iZ_ANKEY) as? NSArray {
                             self.succ = "false"
-                            
                             bidsData.removeAll()
                             var fuDataArray = [String]()
                             for (index,valueDict) in anKey.enumerated()   {
@@ -629,8 +684,8 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                                 if(error != nil)
                                                 {
                                                     anData = [anKey[index] as! [String : Any]]
-                                                    let t = Date().timeIntervalSince(startDate)
-                                                    bidsData.append([AppConstant.iZ_A_KEY: index + 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t])
+                                                    let t = Int(Date().timeIntervalSince(startDate) * 1000)
+                                                    bidsData.append([AppConstant.iZ_A_KEY: index + 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t,AppConstant.iZ_RETURN_BIDS:0.00])
                                                     //debugPrint("TOP ERROR")
                                                     dict.updateValue(("0.00"), forKey: "cpcc")
                                                     finalArray.append(dict)
@@ -642,9 +697,8 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                                         if let jsonDictionary = json as? [String:Any] {
                                                             if let value = jsonDictionary["msgCode"] as? String {
                                                                 debugPrint(value)
-                                                                let t = Date().timeIntervalSince(startDate)
-                                                                bidsData.append([AppConstant.iZ_A_KEY: index + 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t])
-                                                                // debugPrint("jsonDictionary Error", value)
+                                                                let t = Int(Date().timeIntervalSince(startDate) * 1000)
+                                                                bidsData.append([AppConstant.iZ_A_KEY: index + 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t,AppConstant.iZ_RETURN_BIDS:0.00])
                                                             }else{
                                                                 if let jsonDictionary = json as? [String:Any] {
                                                                     
@@ -656,10 +710,9 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                                                         finalCPCValue = "\(getParseValue(jsonData: jsonDictionary, sourceString: cpcFinalValue ))"
                                                                     }
                                                                     
-                                                                    //debugPrint("DictCPC",finalCPCValue)
                                                                     finalDataValue.setValue("\(index + 1)", forKey: "result")
-                                                                    let t = Date().timeIntervalSince(startDate)
-                                                                    servedData = [AppConstant.iZ_A_KEY: index + 1, AppConstant.iZ_B_KEY: finalCPCValue, AppConstant.iZ_T_KEY:t]
+                                                                    let t = Int(Date().timeIntervalSince(startDate) * 1000)
+                                                                    servedData = [AppConstant.iZ_A_KEY: index + 1, AppConstant.iZ_B_KEY: Double(finalCPCValue)!, AppConstant.iZ_T_KEY:t, AppConstant.iZ_RETURN_BIDS:Double(finalCPCValue)!]
                                                                     servedArray.append(servedData as! [String : Any])
                                                                     bidsData.append(servedData)
                                                                 }
@@ -668,9 +721,8 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                                             if let jsonArray = json as? [[String:Any]] {
                                                                 
                                                                 if jsonArray[0]["msgCode"] is String{
-                                                                    let t = Date().timeIntervalSince(startDate)
-                                                                    bidsData.append([AppConstant.iZ_A_KEY: index + 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t])
-                                                                    // debugPrint("Array error")
+                                                                    let t = Int(Date().timeIntervalSince(startDate) * 1000)
+                                                                    bidsData.append([AppConstant.iZ_A_KEY: index + 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t,AppConstant.iZ_RETURN_BIDS:0.00])
                                                                 }else{
                                                                     
                                                                     if cpmValue != ""{
@@ -682,11 +734,9 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                                                         finalCPCValue = "\(getParseArrayValue(jsonData: jsonArray, sourceString: cpcFinalValue ))"
                                                                     }
                                                                     
-                                                                    
-                                                                    // debugPrint("ArrayCPC",finalCPCValue)
                                                                     finalDataValue.setValue("\(index + 1)", forKey: "result")
-                                                                    let t = Date().timeIntervalSince(startDate)
-                                                                    servedData = [AppConstant.iZ_A_KEY: index + 1, AppConstant.iZ_B_KEY: finalCPCValue, AppConstant.iZ_T_KEY:t]
+                                                                    let t = Int(Date().timeIntervalSince(startDate) * 1000)
+                                                                    servedData = [AppConstant.iZ_A_KEY: index + 1, AppConstant.iZ_B_KEY: Double(finalCPCValue)!, AppConstant.iZ_T_KEY:t,AppConstant.iZ_RETURN_BIDS:Double(finalCPCValue)!]
                                                                     servedArray.append(servedData as! [String : Any])
                                                                     bidsData.append(servedData)
                                                                 }
@@ -696,8 +746,8 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                                         finalArray.append(dict)
                                                     } catch let error {
                                                         debugPrint(" Error",error)
-                                                        let t = Date().timeIntervalSince(startDate)
-                                                        bidsData.append([AppConstant.iZ_A_KEY: index + 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t])
+                                                        let t = Int(Date().timeIntervalSince(startDate) * 1000)
+                                                        bidsData.append([AppConstant.iZ_A_KEY: index + 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t,AppConstant.iZ_RETURN_BIDS:0.00])
                                                         dict.updateValue(("0.00"), forKey: "cpcc")
                                                         finalArray.append(dict)
                                                     }
@@ -707,7 +757,6 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                                     let sortedArray = finalArray.sorted { $0["cpcc"] as! String > $1["cpcc"] as! String}
                                                     
                                                     let cpccSortedDict = sortedArray.first! as? NSDictionary
-                                                    // debugPrint("Sorted: \(cpccSortedDict!.value(forKey: "cpcc") as! String)")
                                                     
                                                     anData = [sortedArray.first!] as! [[String: Any]]
                                                     
@@ -721,31 +770,33 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                                     finalData["aps"] = tempData
                                                     
                                                     //Bids & Served
-                                                    let ta = Date().timeIntervalSince(startDate)
+                                                    let ta = Int(Date().timeIntervalSince(startDate) * 1000)
                                                     finalDataValue.setValue(ta, forKey: "ta")
-                                                    
                                                     // To save final served as per cpc
                                                     if servedArray.count != 0{
                                                         for data in servedArray{
                                                             let dict = data as NSDictionary
-                                                            let cpc = dict.value(forKey: AppConstant.iZ_B_KEY) as? String
+                                                            let cpc = dict.value(forKey: AppConstant.iZ_B_KEY) as? Double
+                                                            let fCpc = cpc!.string
+                                                            let fCPCC = cpccSortedDict!.value(forKey: "cpcc") as? String
+                                                            let finalcpc = fCPCC!.toDouble()
+                                                            let fff = finalcpc?.string
                                                             let result = dict.value(forKey: AppConstant.iZ_A_KEY) as? Int
-                                                            if cpc == cpccSortedDict!.value(forKey: "cpcc") as? String{
+                                                            if fCpc == fff{
                                                                 finalDataValue.setValue(dict, forKey: AppConstant.iZ_SERVEDKEY)
                                                                 finalDataValue.setValue(result, forKey: "result")
                                                             }
                                                         }
                                                     }else{
-                                                        let dict = [AppConstant.iZ_A_KEY: 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY: "0.137836933135"]
+                                                        let dict = [AppConstant.iZ_A_KEY: 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY: 435,AppConstant.iZ_RETURN_BIDS:0.00]
+                                                        // bidsData.append(dict as NSDictionary)
                                                         finalDataValue.setValue(dict, forKey: AppConstant.iZ_SERVEDKEY)
                                                         finalDataValue.setValue("0", forKey: "result")
                                                     }
-                                                    //        finalDataValue.setValue(servedData, forKey: AppConstant.iZ_SERVEDKEY)
                                                     
                                                     finalDataValue.setValue(bidsData, forKey: AppConstant.iZ_BIDSKEY)
-                                                    // debugPrint("Type 6", finalDataValue)
+                                                    //debugPrint("Type66", finalDataValue)
                                                     storeBids(bundleName: bundleName, finalData: finalDataValue)
-                                                    
                                                     completion(finalData)
                                                 }
                                             }.resume()
@@ -765,6 +816,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
             }
         }
     }
+    
     
     @objc private static func callFetchUrlForTp5(fuArray: [String], urlString: String, anKey: NSArray, bundleName: String, completion: @escaping ([String : Any]) -> Void){
         
@@ -792,8 +844,8 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                 
                 if(error != nil)
                 {
-                    let t = Date().timeIntervalSince(startDate)
-                    bidsData.append([AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t])
+                    let t = Int(Date().timeIntervalSince(startDate) * 1000)
+                    bidsData.append([AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t, AppConstant.iZ_RETURN_BIDS: 0.00])
                     
                     if succ != "done"{
                         fuCount += 1
@@ -807,7 +859,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                         tempData.setValue(anData, forKey: AppConstant.iZ_ANKEY)
                         finalData["aps"] = tempData
                         
-                        servedData = [AppConstant.iZ_A_KEY: fuCount, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t]
+                        servedData = [AppConstant.iZ_A_KEY: fuCount, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t, AppConstant.iZ_RETURN_BIDS: 0.00]
                         finalDataValue.setValue(t, forKey: "ta")
                         finalDataValue.setValue(servedData, forKey: AppConstant.iZ_SERVEDKEY)
                         finalDataValue.setValue(bidsData, forKey: AppConstant.iZ_BIDSKEY)
@@ -822,11 +874,11 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                         if let jsonDictionary = json as? [String:Any] {
                             if let value = jsonDictionary["msgCode"] as? String {
                                 
-                                let t = Date().timeIntervalSince(startDate)
-                                bidsData.append([AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t])
+                                let t = Int(Date().timeIntervalSince(startDate) * 1000)
+                                bidsData.append([AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t, AppConstant.iZ_RETURN_BIDS:0.00])
                                 
                                 if fuCount == anKey.count{
-                                    servedData = [AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t]
+                                    servedData = [AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t, AppConstant.iZ_RETURN_BIDS: 0.00]
                                     anData = [anKey[fuCount - 1] as! [String : Any]]
                                     tempData.setValue(anData, forKey: AppConstant.iZ_ANKEY)
                                     finalData["aps"] = tempData
@@ -844,8 +896,8 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                         finalCPCValue = "\(getParseValue(jsonData: jsonDictionary, sourceString: cpcFinalValue ))"
                                     }
                                     
-                                    let t = Date().timeIntervalSince(startDate)
-                                    bidsData.append([AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY:finalCPCValue, AppConstant.iZ_T_KEY:t])
+                                    let t = Int(Date().timeIntervalSince(startDate) * 1000)
+                                    bidsData.append([AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY: Double(finalCPCValue)!, AppConstant.iZ_T_KEY:t, AppConstant.iZ_RETURN_BIDS: Double(finalCPCValue)!])
                                     
                                     anData = [anKey[fuCount] as! [String : Any]]
                                     tempData.setValue(anData, forKey: AppConstant.iZ_ANKEY)
@@ -853,7 +905,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                     
                                     if succ != "done"{
                                         succ = "true"
-                                        servedData = [AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY: finalCPCValue, AppConstant.iZ_T_KEY:t]
+                                        servedData = [AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY: Double(finalCPCValue)!, AppConstant.iZ_T_KEY:t, AppConstant.iZ_RETURN_BIDS: Double(finalCPCValue)!]
                                         finalDataValue.setValue("\(fuCount + 1)", forKey: "result")
                                     }
                                 }
@@ -861,11 +913,11 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                         }else{
                             if let jsonArray = json as? [[String:Any]] {
                                 if jsonArray[0]["msgCode"] is String{
-                                    let t = Date().timeIntervalSince(startDate)
-                                    bidsData.append([AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t])
+                                    let t = Int(Date().timeIntervalSince(startDate) * 1000)
+                                    bidsData.append([AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t, AppConstant.iZ_RETURN_BIDS: 0.00])
                                     
                                     if fuCount == anKey.count{
-                                        servedData = [AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t]
+                                        servedData = [AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t, AppConstant.iZ_RETURN_BIDS: 0.00]
                                         anData = [anKey[fuCount - 1] as! [String : Any]]
                                         tempData.setValue(anData, forKey: AppConstant.iZ_ANKEY)
                                         finalData["aps"] = tempData
@@ -879,16 +931,15 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                     }else{
                                         finalCPCValue = "\(getParseArrayValue(jsonData: jsonArray, sourceString: cpcFinalValue ))"
                                     }
-                                    
-                                    let t = Date().timeIntervalSince(startDate)
-                                    bidsData.append([AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY: Double(finalCPCValue)!, AppConstant.iZ_T_KEY:t])
+                                    let t = Int(Date().timeIntervalSince(startDate) * 1000)
+                                    bidsData.append([AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY: Double(finalCPCValue)!, AppConstant.iZ_T_KEY:t, AppConstant.iZ_RETURN_BIDS:Double(finalCPCValue)!])
                                     
                                     anData = [anKey[fuCount] as! [String : Any]]
                                     tempData.setValue(anData, forKey: AppConstant.iZ_ANKEY)
                                     finalData["aps"] = tempData
                                     if succ != "done"{
                                         succ = "true"
-                                        servedData = [AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY: Double(finalCPCValue)!, AppConstant.iZ_T_KEY:t]
+                                        servedData = [AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY: Double(finalCPCValue)!, AppConstant.iZ_T_KEY:t, AppConstant.iZ_RETURN_BIDS: Double(finalCPCValue)!]
                                         finalDataValue.setValue("\(fuCount + 1)", forKey: "result")
                                     }
                                 }
@@ -896,8 +947,8 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                         }
                     } catch let error {
                         if !error.localizedDescription.isEmpty{
-                            let t = Date().timeIntervalSince(startDate)
-                            bidsData.append([AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t])
+                            let t = Int(Date().timeIntervalSince(startDate) * 1000)
+                            bidsData.append([AppConstant.iZ_A_KEY: fuCount + 1, AppConstant.iZ_B_KEY: 0.00, AppConstant.iZ_T_KEY:t, AppConstant.iZ_RETURN_BIDS: 0.00])
                             if succ != "done"{
                                 fuCount += 1
                                 if fuArray.count > fuCount {
@@ -918,11 +969,11 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                     if succ == "true"{
                         succ = "done"
                         //Bids & Served
-                        let ta = Date().timeIntervalSince(startDate)
+                        let ta = Int(Date().timeIntervalSince(startDate) * 1000)
                         finalDataValue.setValue(ta, forKey: "ta")
                         finalDataValue.setValue(servedData, forKey: AppConstant.iZ_SERVEDKEY)
                         finalDataValue.setValue(bidsData, forKey: AppConstant.iZ_BIDSKEY)
-                        //  debugPrint("Type 5", finalDataValue)
+                        debugPrint("Type 5", finalDataValue)
                         
                         storeBids(bundleName: bundleName, finalData: finalDataValue)
                         
@@ -1197,7 +1248,8 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
         if notificationData.ankey != nil {
             var adId = ""
             var adLn = ""
-            //
+            var adTitle = ""
+            
             let izUrlString = (notificationData.ankey?.fetchUrlAd!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
             
             let session: URLSession = {
@@ -1211,7 +1263,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                     if(error != nil)
                     {
                         if #available(iOS 11.0, *) {
-                            fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                            fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", notiRid: (notificationData.global?.rid)!, bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
                         } else {
                             // Fallback on earlier versions
                         }
@@ -1225,7 +1277,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                             if let jsonDictionary = json as? [String:Any] {
                                 if let value = jsonDictionary["msgCode"] as? String {
                                     if #available(iOS 11.0, *) {
-                                        fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                        fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", notiRid: (notificationData.global?.rid)!, bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
                                     } else {
                                         // Fallback on earlier versions
                                     }
@@ -1235,15 +1287,15 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                         bestAttemptContent.title = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData.ankey?.titleAd)!))"
                                         bestAttemptContent.body = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData.ankey?.messageAd)!))"
                                         if var landUrl = (notificationData.ankey?.landingUrlAd)  {
-                                            
                                             landUrl = "\(getParseValue(jsonData: jsonDictionary, sourceString: landUrl))"
                                             adLn = landUrl
                                             if let adIds = notificationData.ankey?.idAd{
                                                 adId = adIds
                                             }
+                                            adTitle = bestAttemptContent.title
                                             
                                             myIdLnArray.removeAll()
-                                            let dict  = [AppConstant.iZ_IDKEY: adId, AppConstant.iZ_LNKEY: adLn]
+                                            let dict  = [AppConstant.iZ_IDKEY: adId, AppConstant.iZ_LNKEY: adLn, AppConstant.iZ_TITLE_KEY: adTitle]
                                             myIdLnArray.append(dict)
                                         }
                                         if notificationData.ankey?.bannerImageAd != "" {
@@ -1278,7 +1330,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                 if let jsonArray = json as? [[String:Any]] {
                                     if jsonArray[0]["msgCode"] is String {
                                         if #available(iOS 11.0, *) {
-                                            fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                            fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", notiRid: (notificationData.global?.rid)!, bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
                                         } else {
                                             // Fallback on earlier versions
                                         }
@@ -1294,9 +1346,9 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                             if let adIds = notificationData.ankey?.idAd{
                                                 adId = adIds
                                             }
-                                            
+                                            adTitle = bestAttemptContent.title
                                             myIdLnArray.removeAll()
-                                            let dict  = [AppConstant.iZ_IDKEY: adId, AppConstant.iZ_LNKEY: adLn]
+                                            let dict  = [AppConstant.iZ_IDKEY: adId, AppConstant.iZ_LNKEY: adLn, AppConstant.iZ_TITLE_KEY: adTitle]
                                             myIdLnArray.append(dict)
                                         }
                                         if notificationData.ankey?.bannerImageAd != "" {
@@ -1342,10 +1394,13 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                             
                             storeNotiUrl_ln(bundleName: bundleName)
                             
+                            //call impression
+                            self.ad_mediationImpressionCall(notiRid: (notificationData.global?.rid)!, adTitle: adTitle, adLn: adLn, bundleName: bundleName)
+                            
                             // Need to review
                             if bestAttemptContent.title == notificationData.ankey?.titleAd{
                                 if #available(iOS 11.0, *) {
-                                    self.fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                    self.fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "",notiRid: (notificationData.global?.rid)!, bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
                                 } else {
                                     // Fallback on earlier versions
                                 }
@@ -1355,7 +1410,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                             
                         } catch let error {
                             if #available(iOS 11.0, *) {
-                                self.fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                self.fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "",notiRid: (notificationData.global?.rid)!, bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
                             } else {
                                 // Fallback on earlier versions
                             }
@@ -1382,7 +1437,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                     if(error != nil)
                     {
                         if #available(iOS 11.0, *) {
-                            fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                            fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", notiRid: "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
                         } else {
                             // Fallback on earlier versions
                         }
@@ -1399,7 +1454,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                             if let jsonDictionary = json as? [String:Any] {
                                 if let value = jsonDictionary["msgCode"] as? String {
                                     if #available(iOS 11.0, *) {
-                                        fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                        fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", notiRid: "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
                                     } else {
                                         // Fallback on earlier versions
                                     }
@@ -1436,7 +1491,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                 if let jsonArray = json as? [[String:Any]] {
                                     if jsonArray[0]["msgCode"] is String {
                                         if #available(iOS 11.0, *) {
-                                            fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                            fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", notiRid: "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
                                         } else {
                                             // Fallback on earlier versions
                                         }
@@ -1463,10 +1518,10 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                             {
                                 storeCategories(notificationData: notificationData, category: "")
                                 if notificationData.act1name != "" && notificationData.act1name != nil{
-                                    // debugPrint("Fetch single button called")
                                     addCTAButtons()
                                 }
                             }
+                            
                             sleep(1)
                             autoreleasepool {
                                 if let urlString = (notificationData.alert?.attachment_url),
@@ -1494,7 +1549,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                             
                             if bestAttemptContent.title == notificationData.ankey?.titleAd{
                                 if #available(iOS 11.0, *) {
-                                    self.fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                    self.fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", notiRid: "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
                                 } else {
                                     // Fallback on earlier versions
                                 }
@@ -1504,7 +1559,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                             
                         } catch let error {
                             if #available(iOS 11.0, *) {
-                                self.fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+                                self.fallBackAdsApi(bundleName: bundleName, fallCategory: notificationData.category ?? "",notiRid: "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
                             } else {
                                 // Fallback on earlier versions
                             }
@@ -1870,7 +1925,35 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
         return sourceString
     }
     
-    
+    //to hit the Title On click Noti
+    @objc private static func ad_mediationTitleOnClick(anKey: NSArray) -> String{
+        var idArray: [[String:Any]] = []
+        var title = ""
+        if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()){
+            if let ids = userDefaults.value(forKey: AppConstant.iZ_LN_ID_ARRAY) as? [[String : Any]]{
+                idArray = ids
+            }
+            //for Ln & Id
+            for dataaa in anKey {
+                if let dict = dataaa as? NSDictionary {
+                    let id = dict.value(forKey: AppConstant.iZ_IDKEY) as? String
+                    let filterValue = idArray.filter {$0[AppConstant.iZ_IDKEY] as? String == id}
+                    
+                    if !filterValue.isEmpty{
+                        if let value1 = filterValue[0] as? NSDictionary {
+                            title = value1.value(forKey: AppConstant.iZ_TITLE_KEY) as! String
+                            userDefaults.synchronize()
+                        }
+                    }
+                }
+            }
+            
+        }
+        if title == ""{
+            title = RestAPI.fallBackTitle
+        }
+        return title
+    }
     
     // Parsing the jsonObject
     @objc  private static func convertToDictionary(text: String) -> [String: Any]? {
@@ -1922,101 +2005,101 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
             alert.addAction(UIAlertAction(title: AppConstant.iZ_KEY_ALERT_DISMISS, style: .default, handler: nil))
             UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
         }
-       else
+        else
         {
-           
-               let userInfo = notification.request.content.userInfo
-               
-           if let jsonDictionary = userInfo as? [String:Any] {
-               if let aps = jsonDictionary["aps"] as? NSDictionary{
-                   if let anKey = aps.value(forKey: AppConstant.iZ_ANKEY) {
-                       debugPrint(anKey)
-                       
-                       let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
-                       
-                       if notificationData?.ankey != nil {
-                           if(notificationData?.ankey?.fetchUrlAd != "" && notificationData?.ankey?.fetchUrlAd != nil)
-                           {
-                               if(notificationData?.global?.inApp != nil)
-                               {
-                                   
-                                   if (notificationData?.global?.cfg != nil)
-                                   {
-                                       impressionTrack(notificationData: notificationData!)
-                                       
-                                   }
-                               }
-                               
-                               completionHandler([.badge, .alert, .sound])
-                               
-                           }
-                           else
-                           {
-                               if(notificationData?.global?.inApp != nil)
-                               {
-                                   
-                                   if (notificationData?.global?.cfg != nil)
-                                   {
-                                       impressionTrack(notificationData: notificationData!)
-                                       
-                                   }
-                                   completionHandler([.badge, .alert, .sound])
-                                   
-                               }
-                               else
-                               {
-                                   debugPrint(AppConstant.IZ_TAG,AppConstant.iZ_KEY_OTHER_PAYLOD)
-                                   
-                                   RestAPI.sendExceptionToServer(exceptionName: "MoMagic Payload is not exits\(userInfo)", className:AppConstant.iZ_REST_API_CLASS_NAME, methodName: "handleForeGroundNotification", pid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!, token: (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!, rid: "",cid : "")
-                                   
-                               }
-                           }
-                       }
-                       //    }
-                   }else{
-                       let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
-                       
-                       if(notificationData?.fetchurl != "" && notificationData?.fetchurl != nil)
-                       {
-                           
-                           
-                           if (notificationData?.cfg != nil)
-                           {
-                               
-                               impressionTrack(notificationData: notificationData!)
-                               
-                           }
-                           
-                           completionHandler([.badge, .alert, .sound])
-                           
-                           
-                       }
-                       else
-                       {
-                           if(notificationData?.inApp != nil)
-                           {
-                               notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
-                               if (notificationData?.cfg != nil)
-                               {
-                                   
-                                   
-                                   impressionTrack(notificationData: notificationData!)
-                                   
-                                   
-                               }
-                               completionHandler([.badge, .alert, .sound])
-                               
-                           }
-                           else
-                           {
-                               debugPrint(AppConstant.IZ_TAG,AppConstant.iZ_KEY_OTHER_PAYLOD)
-                               
-                               RestAPI.sendExceptionToServer(exceptionName: "MoMagic Payload is not exits\(userInfo)", className:AppConstant.iZ_REST_API_CLASS_NAME, methodName: "handleForeGroundNotification", pid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!, token: (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!, rid: "",cid : "")
-                           }
-                       }
-                   }
-               }
-           }
+            
+            let userInfo = notification.request.content.userInfo
+            
+            if let jsonDictionary = userInfo as? [String:Any] {
+                if let aps = jsonDictionary["aps"] as? NSDictionary{
+                    if let anKey = aps.value(forKey: AppConstant.iZ_ANKEY) {
+                        debugPrint(anKey)
+                        
+                        let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
+                        
+                        if notificationData?.ankey != nil {
+                            if(notificationData?.ankey?.fetchUrlAd != "" && notificationData?.ankey?.fetchUrlAd != nil)
+                            {
+                                if(notificationData?.global?.inApp != nil)
+                                {
+                                    
+                                    if (notificationData?.global?.cfg != nil)
+                                    {
+                                        impressionTrack(notificationData: notificationData!)
+                                        
+                                    }
+                                }
+                                
+                                completionHandler([.badge, .alert, .sound])
+                                
+                            }
+                            else
+                            {
+                                if(notificationData?.global?.inApp != nil)
+                                {
+                                    
+                                    if (notificationData?.global?.cfg != nil)
+                                    {
+                                        impressionTrack(notificationData: notificationData!)
+                                        
+                                    }
+                                    completionHandler([.badge, .alert, .sound])
+                                    
+                                }
+                                else
+                                {
+                                    debugPrint(AppConstant.IZ_TAG,AppConstant.iZ_KEY_OTHER_PAYLOD)
+                                    
+                                    RestAPI.sendExceptionToServer(exceptionName: "MoMagic Payload is not exits\(userInfo)", className:AppConstant.iZ_REST_API_CLASS_NAME, methodName: "handleForeGroundNotification", pid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!, token: (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!, rid: "",cid : "")
+                                    
+                                }
+                            }
+                        }
+                        //    }
+                    }else{
+                        let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
+                        
+                        if(notificationData?.fetchurl != "" && notificationData?.fetchurl != nil)
+                        {
+                            
+                            
+                            if (notificationData?.cfg != nil)
+                            {
+                                
+                                impressionTrack(notificationData: notificationData!)
+                                
+                            }
+                            
+                            completionHandler([.badge, .alert, .sound])
+                            
+                            
+                        }
+                        else
+                        {
+                            if(notificationData?.inApp != nil)
+                            {
+                                notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
+                                if (notificationData?.cfg != nil)
+                                {
+                                    
+                                    
+                                    impressionTrack(notificationData: notificationData!)
+                                    
+                                    
+                                }
+                                completionHandler([.badge, .alert, .sound])
+                                
+                            }
+                            else
+                            {
+                                debugPrint(AppConstant.IZ_TAG,AppConstant.iZ_KEY_OTHER_PAYLOD)
+                                
+                                RestAPI.sendExceptionToServer(exceptionName: "MoMagic Payload is not exits\(userInfo)", className:AppConstant.iZ_REST_API_CLASS_NAME, methodName: "handleForeGroundNotification", pid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!, token: (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!, rid: "",cid : "")
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
     
@@ -2025,465 +2108,467 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
     // handel the fallback url
     
     // handel the fallback url
-       
-       @objc public static func fallbackClickHandler(){
-           
-           let str = RestAPI.FALLBACK_URL
-           let izUrlString = (str.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
-           if let url = URL(string: izUrlString) {
-               URLSession.shared.dataTask(with: url) { data, response, error in
-                   if let data = data {
-                       do {
-                           let json = try JSONSerialization.jsonObject(with: data)
-                           if let jsonDictionary = json as? [String:Any] {
-                               let notificationData = Payload(dictionary: (jsonDictionary) as NSDictionary)
-                               if notificationData?.url! != "" {
-                                   
-                                   notificationData?.url = jsonDictionary[AppConstant.iZ_LNKEY] as? String
-                                   //  debugPrint("URLFALL", notificationData?.url!)
-                                   
-                                   let izUrlStr = notificationData?.url!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-                                   
-                                   if let url = URL(string:izUrlStr!) {
-                                       if notificationData?.act1name != nil && notificationData?.act1name != ""
-                                       {
-                                           DispatchQueue.main.async {
-                                               UIApplication.shared.open(url)
-                                           }
-                                       }
-                                       else
-                                       {
-                                           DispatchQueue.main.async {
-                                               UIApplication.shared.open(url)
-                                           }
-                                       }
-                                   }
-                               }
-                           }
-                       } catch let error {
-                           debugPrint("Error",error)
-                       }
-                   }
-               }.resume()
-           }else{
-               debugPrint("Wrong URL")
-           }
-       }
+    
+    @objc public static func fallbackClickHandler(){
+        
+        let str = RestAPI.FALLBACK_URL
+        let izUrlString = (str.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
+        if let url = URL(string: izUrlString) {
+            URLSession.shared.dataTask(with: url) { data, response, error in
+                if let data = data {
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data)
+                        if let jsonDictionary = json as? [String:Any] {
+                            let notificationData = Payload(dictionary: (jsonDictionary) as NSDictionary)
+                            if notificationData?.url! != "" {
+                                
+                                notificationData?.url = jsonDictionary[AppConstant.iZ_LNKEY] as? String
+                                //  debugPrint("URLFALL", notificationData?.url!)
+                                
+                                let izUrlStr = notificationData?.url!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+                                
+                                if let url = URL(string:izUrlStr!) {
+                                    if notificationData?.act1name != nil && notificationData?.act1name != ""
+                                    {
+                                        DispatchQueue.main.async {
+                                            UIApplication.shared.open(url)
+                                        }
+                                    }
+                                    else
+                                    {
+                                        DispatchQueue.main.async {
+                                            UIApplication.shared.open(url)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } catch let error {
+                        debugPrint("Error",error)
+                    }
+                }
+            }.resume()
+        }else{
+            debugPrint("Wrong URL")
+        }
+    }
     
     
     
     // Handle the clicks the notification from Banner,Button
+    
     @objc public static func notificationHandler(response : UNNotificationResponse)
     {
         
         if let userDefaults = UserDefaults(suiteName: Utils.getBundleName()) {
-                   let badgeC = userDefaults.integer(forKey:"Badge")
-                   self.badgeCount = badgeC
-                   userDefaults.set(badgeC - 1, forKey: "Badge")
-                   RestAPI.fallBackLandingUrl = userDefaults.value(forKey: "fallBackLandingUrl") as? String ?? ""
-                   userDefaults.synchronize()
-               }
-               
-               badgeNumber = (sharedUserDefault?.integer(forKey: "BADGECOUNT"))!
-               if(badgeNumber == -1)
-               {
-                   UIApplication.shared.applicationIconBadgeNumber = -1 // clear the badge count // notification is not removed
-               }
-               else if(badgeNumber == 1)
-               {
-                   UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count
-               }else{
-                   UIApplication.shared.applicationIconBadgeNumber = self.badgeCount - 1 //set badge default value
-               }
-               
-               let userInfo = response.notification.request.content.userInfo
-               
-               var adlandingURL:String = ""
-               let indexx = 0
-               if let jsonDictionary = userInfo as? [String:Any] {
-                   if let aps = jsonDictionary["aps"] as? NSDictionary{
-                       if let anKey = aps.value(forKey: AppConstant.iZ_ANKEY) as? NSArray {
-                           debugPrint(anKey)
-                           var finalData = [String: Any]()
-                           let tempData = NSMutableDictionary()
-                           var alertData = [String: Any]()
-                           var gData = [String: Any]()
-                           var anData: [[String: Any]] = []
-                           
-                           if let alert = aps.value(forKey: AppConstant.iZ_ALERTKEY) {
-                               alertData = alert as! [String : Any]
-                           }
-                           if let gt = aps.value(forKey: AppConstant.iZ_G_KEY) as? NSDictionary {
-                               gData = gt as! [String : Any]
-                           }
-                           
-                           if let anKey = aps.value(forKey: AppConstant.iZ_ANKEY) as? NSArray {
-                               
-                               //To get clicked Notification landing Url
-                               adlandingURL = self.ad_mediationLandingUrlOnClick(anKey: anKey)
-                               
-                               //On click hit rc API
-                               getRcAndHitAPI(anKey: anKey)
-                               
-                               
-                               anData = [anKey[indexx] as! [String : Any]]
-                               
-                               tempData.setValue(alertData, forKey: AppConstant.iZ_ALERTKEY)
-                               tempData.setValue(anData, forKey: AppConstant.iZ_ANKEY)
-                               tempData.setValue(gData, forKey: AppConstant.iZ_G_KEY)
-                               
-                               tempData.setValue(1, forKey: "mutable-content")
-                               tempData.setValue(0, forKey: "content_available")
-                               
-                               finalData["aps"] = tempData
-                           }
-                           
-                           let notificationData = Payload(dictionary: (finalData["aps"] as? NSDictionary)!)
-                           
-                           clickTrack(notificationData: notificationData!, actionType: "0")
-                           let notiRid = notificationData?.global?.rid
-                           //for rid & bids call Ad-mediation click
-                           self.ad_mediationClickCall(notiRid: notiRid!)
-                           
-                           if notificationData?.ankey != nil{
-                               if adlandingURL != ""
-                               {
-                                   if let unencodedURLString = adlandingURL.removingPercentEncoding {
-                                       adlandingURL = unencodedURLString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-                                   } else {
-                                       adlandingURL = adlandingURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-                                   }
-                                   
-                                   if let url = URL(string: adlandingURL) {
-                                       if notificationData?.global!.act1name != nil && notificationData?.global!.act1name != ""
-                                       {
-                                           DispatchQueue.main.async {
-                                               UIApplication.shared.open(url)
-                                           }
-                                       }
-                                       else
-                                       {
-                                           DispatchQueue.main.async {
-                                               UIApplication.shared.open(url)
-                                           }
-                                       }
-                                   }else{
-                                       print("OUTSIDE")
-                                   }
-                               }
-                           }
-                       }else{
-                           let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
-                           
-                           if notificationData?.fetchurl != nil && notificationData?.fetchurl != ""
-                           {
-                               clickTrack(notificationData: notificationData!, actionType: "0")
-                               
-                               let izUrlString = (notificationData?.fetchurl!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
-                               
-                               let session: URLSession = {
-                                   let configuration = URLSessionConfiguration.default
-                                   configuration.timeoutIntervalForRequest = 2
-                                   return URLSession(configuration: configuration, delegate: nil, delegateQueue: nil)
-                               }()
-                               if let url = URL(string: izUrlString)
-                               {
-                                   session.dataTask(with: url) { data, response, error in
-                                       if error != nil{
-                                           self.fallbackClickHandler()
-                                       }
-                                       if let data = data {
-                                           do {
-                                               
-                                               let json = try JSONSerialization.jsonObject(with: data)
-                                               
-                                               //To Check FallBack
-                                               if let jsonDictionary = json as? [String:Any] {
-                                                   if let value = jsonDictionary["msgCode"] as? String {
-                                                       debugPrint(value)
-                                                       self.fallbackClickHandler()
-                                                       
-                                                   }else{
-                                                       if let jsonDictionary = json as? [String:Any] {
-                                                           
-                                                           if notificationData?.url != "" {
-                                                               notificationData?.url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.url)!))"
-                                                               
-                                                               var stringUrl = notificationData?.url
-                                                               
-                                                               if let unencodedURLString = stringUrl?.removingPercentEncoding {
-                                                                   stringUrl = unencodedURLString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-                                                               } else {
-                                                                   stringUrl = stringUrl!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-                                                               }
-                                                               
-                                                               if let url = URL(string: stringUrl!) {
-                                                                   if notificationData?.act1name != nil && notificationData?.act1name != ""
-                                                                   {
-                                                                       DispatchQueue.main.async {
-                                                                           UIApplication.shared.open(url)
-                                                                       }
-                                                                   }
-                                                                   else
-                                                                   {
-                                                                       DispatchQueue.main.async {
-                                                                           UIApplication.shared.open(url)
-                                                                       }
-                                                                   }
-                                                               }
-                                                           }
-                                                           
-                                                           if notificationData?.furc != nil{
-                                                               var tempArray = [String]()
-                                                               if let rcValue = aps.value(forKey: "rc") as? NSArray {
-                                                                   for value in rcValue{
-                                                                       let finalRC = "\(getParseValue(jsonData: jsonDictionary , sourceString: value as! String))"
-                                                                       tempArray.append(finalRC)
-                                                                   }
-                                                                   debugPrint("Fetcher RC ++++++++", tempArray)
-                                                                   for valuee in tempArray{
-                                                                       RestAPI.callRV_RC_Request(urlString: valuee)
-                                                                   }
-                                                                   tempArray.removeAll()
-                                                               }
-                                                           }
-                                                       }
-                                                   }
-                                               }
-                                               else
-                                               {
-                                                   if let jsonArray = json as? [[String:Any]] {
-                                                       if notificationData?.url != "" {
-                                                           
-                                                           notificationData?.url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.url)!))"
-                                                           let izUrlStr = notificationData?.url!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-                                                           
-                                                           if notificationData?.act1name != nil && notificationData?.act1name != ""
-                                                           {
-                                                               if let url = URL(string:izUrlStr!) {
-                                                                   DispatchQueue.main.async {
-                                                                       UIApplication.shared.open(url)
-                                                                   }
-                                                               }
-                                                           }
-                                                           else
-                                                           {
-                                                               if let url = URL(string:izUrlStr!) {
-                                                                   DispatchQueue.main.async {
-                                                                       UIApplication.shared.open(url)
-                                                                   }
-                                                               }
-                                                           }
-                                                       }
-                                                   }
-                                               }
-                                           } catch let error {
-                                               debugPrint(AppConstant.TAG,error)
-                                               
-                                               //FallBack_Click Handler method.....
-                                               self.fallbackClickHandler()
-                                               let userID = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID)) ?? 0
-                                               let token = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)) ?? "No token here"
-                                               RestAPI.sendExceptionToServer(exceptionName: error.localizedDescription, className: "DATB", methodName: "notificationHandler", pid: userID, token: token, rid: "0", cid: "0")
-                                           }
-                                       }
-                                   }.resume()
-                               }
-                           }
-                           else
-                           {
-                               notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
-                               
-                               if notificationData?.category != nil && notificationData?.category != ""
-                               {
-                                   if response.actionIdentifier == AppConstant.FIRST_BUTTON{
-                                       
-                                       type = "1"
-                                       clickTrack(notificationData: notificationData!, actionType: "1")
-                                       
-                                       if notificationData?.ap != "" && notificationData?.ap != nil
-                                       {
-                                           handleClicks(response: response, actionType: "1")
-                                       }
-                                       else
-                                       {
-                                           if notificationData?.act1link != nil && notificationData?.act1link != ""
-                                           {
-                                               let launchURl = notificationData?.act1link!
-                                               if launchURl!.contains("tel:")
-                                               {
-                                                   if let url = URL(string: launchURl!)
-                                                   {
-                                                       UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
-                                                   }
-                                                   
-                                               }
-                                               else
-                                               {
-                                                   if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "" && notificationData?.act1link != nil && notificationData?.act1link != "")
-                                                   {
-                                                       
-                                                       
-                                                       let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
-                                                       if checkWebview!
-                                                       {
-                                                           landingURLDelegate?.onHandleLandingURL(url: (notificationData?.act1link)!)
-                                                       }
-                                                       else
-                                                       {
-                                                           ViewController.seriveURL = notificationData?.act1link
-                                                           UIApplication.shared.keyWindow!.rootViewController?.present(ViewController(), animated: true, completion: nil)
-                                                       }
-                                                   }
-                                                   else
-                                                   {
-                                                       if(notificationData?.fetchurl != "" && notificationData?.fetchurl != nil)
-                                                       {
-                                                           handleBroserNotification(url: (notificationData?.url)!)
-                                                           
-                                                       }
-                                                       else
-                                                       {
-                                                           if notificationData!.act1link == nil {
-                                                               debugPrint("")
-                                                           }
-                                                           else
-                                                           {
-                                                               handleBroserNotification(url: (notificationData?.act1link)!)
-                                                           }
-                                                       }
-                                                   }
-                                               }
-                                           }
-                                       }
-                                   }
-                                   else if response.actionIdentifier == AppConstant.SECOND_BUTTON{
-                                       type = "2"
-                                       clickTrack(notificationData: notificationData!, actionType: "2")
-                                       if notificationData?.ap != "" && notificationData?.ap != nil
-                                       {
-                                           handleClicks(response: response, actionType: "2")
-                                       }
-                                       else
-                                       {
-                                           if notificationData?.act2link != nil && notificationData?.act2link != ""
-                                           {
-                                               let launchURl = notificationData?.act2link!
-                                               if launchURl!.contains("tel:")
-                                               {
-                                                   if let url = URL(string: launchURl!)
-                                                   {
-                                                       UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
-                                                   }
-                                               }
-                                               else
-                                               {
-                                                   if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "" && notificationData?.act2link != nil && notificationData?.act2link != "")
-                                                   {
-                                                       
-                                                       let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
-                                                       if checkWebview!
-                                                       {
-                                                           landingURLDelegate?.onHandleLandingURL(url: (notificationData?.act2link)!)
-                                                       }
-                                                       else
-                                                       {
-                                                           ViewController.seriveURL = notificationData?.act2link
-                                                           UIApplication.shared.keyWindow!.rootViewController?.present(ViewController(), animated: true, completion: nil)
-                                                       }
-                                                       
-                                                   }
-                                                   else
-                                                   {
-                                                       
-                                                       if notificationData!.act2link == nil {
-                                                           debugPrint("")
-                                                       }
-                                                       else
-                                                       {
-                                                           handleBroserNotification(url: (notificationData?.act2link)!)
-                                                       }
-                                                   }
-                                               }
-                                           }
-                                       }
-                                   }else{
-                                       type = "0"
-                                       clickTrack(notificationData: notificationData!, actionType: "0")
-                                       if notificationData?.ap != "" && notificationData?.ap != nil
-                                       {
-                                           handleClicks(response: response, actionType: "0")
-                                           
-                                       }
-                                       else{
-                                           if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "" && notificationData?.url != nil && notificationData?.url != "")
-                                           {
-                                               
-                                               let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
-                                               if checkWebview!
-                                               {
-                                                   landingURLDelegate?.onHandleLandingURL(url: (notificationData?.url)!)
-                                               }
-                                               else
-                                               {
-                                                   ViewController.seriveURL = notificationData?.url
-                                                   UIApplication.shared.keyWindow!.rootViewController?.present(ViewController(), animated: true, completion: nil)
-                                               }
-                                           }
-                                           else
-                                           {
-                                               if notificationData!.url == nil {
-                                                   debugPrint("")
-                                               }
-                                               else
-                                               {
-                                                   handleBroserNotification(url: (notificationData?.url)!)
-                                                   
-                                               }
-                                           }
-                                       }
-                                   }
-                               }else{
-                                   type = "0"
-                                   clickTrack(notificationData: notificationData!, actionType: "0")
-                                   if notificationData?.ap != "" && notificationData?.ap != nil
-                                   {
-                                       handleClicks(response: response, actionType: "0")
-                                       
-                                   }
-                                   else{
-                                       if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "" && notificationData?.url != nil && notificationData?.url != "")
-                                       {
-                                           
-                                           let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
-                                           if checkWebview!
-                                           {
-                                               landingURLDelegate?.onHandleLandingURL(url: (notificationData?.url)!)
-                                           }
-                                           else
-                                           {
-                                               ViewController.seriveURL = notificationData?.url
-                                               UIApplication.shared.keyWindow!.rootViewController?.present(ViewController(), animated: true, completion: nil)
-                                           }
-                                       }
-                                       else
-                                       {
-                                           if notificationData!.url == nil {
-                                               debugPrint("")
-                                           }
-                                           else
-                                           {
-                                               handleBroserNotification(url: (notificationData?.url)!)
-                                               
-                                           }
-                                       }
-                                   }
-                               }
-                           }
-                       }
-                   }
-               }
+            let badgeC = userDefaults.integer(forKey:"Badge")
+            self.badgeCount = badgeC
+            userDefaults.set(badgeC - 1, forKey: "Badge")
+            RestAPI.fallBackLandingUrl = userDefaults.value(forKey: "fallBackLandingUrl") as? String ?? ""
+            RestAPI.fallBackTitle = userDefaults.value(forKey: "fallBackTitle") as? String ?? ""
+            userDefaults.synchronize()
+        }
+        
+        badgeNumber = (sharedUserDefault?.integer(forKey: "BADGECOUNT"))!
+        if(badgeNumber == -1)
+        {
+            UIApplication.shared.applicationIconBadgeNumber = -1 // clear the badge count // notification is not removed
+        }
+        else if(badgeNumber == 1)
+        {
+            UIApplication.shared.applicationIconBadgeNumber = 0 // clear the badge count
+        }else{
+            UIApplication.shared.applicationIconBadgeNumber = self.badgeCount - 1 //set badge default value
+        }
+        
+        let userInfo = response.notification.request.content.userInfo
+        
+        var adlandingURL:String = ""
+        var adTitle:String = ""
+        let indexx = 0
+        if let jsonDictionary = userInfo as? [String:Any] {
+            if let aps = jsonDictionary["aps"] as? NSDictionary{
+                if let anKey = aps.value(forKey: AppConstant.iZ_ANKEY) as? NSArray {
+                    var finalData = [String: Any]()
+                    let tempData = NSMutableDictionary()
+                    var alertData = [String: Any]()
+                    var gData = [String: Any]()
+                    var anData: [[String: Any]] = []
+                    
+                    if let alert = aps.value(forKey: AppConstant.iZ_ALERTKEY) {
+                        alertData = alert as! [String : Any]
+                    }
+                    if let gt = aps.value(forKey: AppConstant.iZ_G_KEY) as? NSDictionary {
+                        gData = gt as! [String : Any]
+                    }
+                    
+                    if let anKey = aps.value(forKey: AppConstant.iZ_ANKEY) as? NSArray {
+                        
+                        //To get clicked Notification landing Url
+                        adTitle = self.ad_mediationTitleOnClick(anKey: anKey)
+                        adlandingURL = self.ad_mediationLandingUrlOnClick(anKey: anKey)
+                        
+                        
+                        //On click hit rc API
+                        getRcAndHitAPI(anKey: anKey)
+                        
+                        anData = [anKey[indexx] as! [String : Any]]
+                        
+                        tempData.setValue(alertData, forKey: AppConstant.iZ_ALERTKEY)
+                        tempData.setValue(anData, forKey: AppConstant.iZ_ANKEY)
+                        tempData.setValue(gData, forKey: AppConstant.iZ_G_KEY)
+                        
+                        tempData.setValue(1, forKey: "mutable-content")
+                        tempData.setValue(0, forKey: "content_available")
+                        
+                        finalData["aps"] = tempData
+                    }
+                    
+                    let notificationData = Payload(dictionary: (finalData["aps"] as? NSDictionary)!)
+                    
+                    clickTrack(notificationData: notificationData!, actionType: "0")
+                    let notiRid = notificationData?.global?.rid
+                    //for rid & bids call Ad-mediation click
+                    self.ad_mediationClickCall(notiRid: notiRid!, adTitle: adTitle, adLn: adlandingURL)
+                    
+                    if notificationData?.ankey != nil{
+                        if adlandingURL != ""
+                        {
+                            if let unencodedURLString = adlandingURL.removingPercentEncoding {
+                                adlandingURL = unencodedURLString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+                            } else {
+                                adlandingURL = adlandingURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+                            }
+                            
+                            if let url = URL(string: adlandingURL) {
+                                if notificationData?.global!.act1name != nil && notificationData?.global!.act1name != ""
+                                {
+                                    DispatchQueue.main.async {
+                                        UIApplication.shared.open(url)
+                                    }
+                                }
+                                else
+                                {
+                                    DispatchQueue.main.async {
+                                        UIApplication.shared.open(url)
+                                    }
+                                }
+                            }else{
+                                print("OUTSIDE")
+                            }
+                        }
+                    }
+                }else{
+                    let notificationData = Payload(dictionary: (userInfo["aps"] as? NSDictionary)!)
+                    
+                    if notificationData?.fetchurl != nil && notificationData?.fetchurl != ""
+                    {
+                        clickTrack(notificationData: notificationData!, actionType: "0")
+                        
+                        let izUrlString = (notificationData?.fetchurl!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
+                        
+                        let session: URLSession = {
+                            let configuration = URLSessionConfiguration.default
+                            configuration.timeoutIntervalForRequest = 2
+                            return URLSession(configuration: configuration, delegate: nil, delegateQueue: nil)
+                        }()
+                        if let url = URL(string: izUrlString)
+                        {
+                            session.dataTask(with: url) { data, response, error in
+                                if error != nil{
+                                    self.fallbackClickHandler()
+                                }
+                                if let data = data {
+                                    do {
+                                        
+                                        let json = try JSONSerialization.jsonObject(with: data)
+                                        
+                                        //To Check FallBack
+                                        if let jsonDictionary = json as? [String:Any] {
+                                            if let value = jsonDictionary["msgCode"] as? String {
+                                                self.fallbackClickHandler()
+                                                
+                                            }else{
+                                                if let jsonDictionary = json as? [String:Any] {
+                                                    
+                                                    if notificationData?.url != "" {
+                                                        notificationData?.url = "\(getParseValue(jsonData: jsonDictionary, sourceString: (notificationData?.url)!))"
+                                                        
+                                                        var stringUrl = notificationData?.url
+                                                        
+                                                        if let unencodedURLString = stringUrl?.removingPercentEncoding {
+                                                            stringUrl = unencodedURLString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+                                                        } else {
+                                                            stringUrl = stringUrl!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+                                                        }
+                                                        
+                                                        if let url = URL(string: stringUrl!) {
+                                                            if notificationData?.act1name != nil && notificationData?.act1name != ""
+                                                            {
+                                                                DispatchQueue.main.async {
+                                                                    UIApplication.shared.open(url)
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                DispatchQueue.main.async {
+                                                                    UIApplication.shared.open(url)
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    
+                                                    if notificationData?.furc != nil{
+                                                        var tempArray = [String]()
+                                                        if let rcValue = aps.value(forKey: "rc") as? NSArray {
+                                                            for value in rcValue{
+                                                                let finalRC = "\(getParseValue(jsonData: jsonDictionary , sourceString: value as! String))"
+                                                                tempArray.append(finalRC)
+                                                            }
+                                                            for valuee in tempArray{
+                                                                RestAPI.callRV_RC_Request(urlString: valuee)
+                                                            }
+                                                            tempArray.removeAll()
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if let jsonArray = json as? [[String:Any]] {
+                                                if notificationData?.url != "" {
+                                                    
+                                                    notificationData?.url = "\(getParseArrayValue(jsonData: jsonArray, sourceString: (notificationData?.url)!))"
+                                                    let izUrlStr = notificationData?.url!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+                                                    
+                                                    if notificationData?.act1name != nil && notificationData?.act1name != ""
+                                                    {
+                                                        if let url = URL(string:izUrlStr!) {
+                                                            DispatchQueue.main.async {
+                                                                UIApplication.shared.open(url)
+                                                            }
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        if let url = URL(string:izUrlStr!) {
+                                                            DispatchQueue.main.async {
+                                                                UIApplication.shared.open(url)
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } catch let error {
+                                        debugPrint(AppConstant.TAG,error)
+                                        
+                                        //FallBack_Click Handler method.....
+                                        self.fallbackClickHandler()
+                                        let userID = (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID)) ?? 0
+                                        let token = (sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)) ?? "No token here"
+                                        RestAPI.sendExceptionToServer(exceptionName: error.localizedDescription, className: "iZooto", methodName: "notificationHandler", pid: userID, token: token, rid: "0", cid: "0")
+                                    }
+                                }
+                            }.resume()
+                        }
+                    }
+                    else
+                    {
+                        notificationReceivedDelegate?.onNotificationReceived(payload: notificationData!)
+                        
+                        if notificationData?.category != nil && notificationData?.category != ""
+                        {
+                            if response.actionIdentifier == AppConstant.FIRST_BUTTON{
+                                
+                                type = "1"
+                                clickTrack(notificationData: notificationData!, actionType: "1")
+                                
+                                if notificationData?.ap != "" && notificationData?.ap != nil
+                                {
+                                    handleClicks(response: response, actionType: "1")
+                                }
+                                else
+                                {
+                                    if notificationData?.act1link != nil && notificationData?.act1link != ""
+                                    {
+                                        let launchURl = notificationData?.act1link!
+                                        if launchURl!.contains("tel:")
+                                        {
+                                            if let url = URL(string: launchURl!)
+                                            {
+                                                UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
+                                            }
+                                            
+                                        }
+                                        else
+                                        {
+                                            if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "" && notificationData?.act1link != nil && notificationData?.act1link != "")
+                                            {
+                                                
+                                                
+                                                let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
+                                                if checkWebview!
+                                                {
+                                                    landingURLDelegate?.onHandleLandingURL(url: (notificationData?.act1link)!)
+                                                }
+                                                else
+                                                {
+                                                    ViewController.seriveURL = notificationData?.act1link
+                                                    UIApplication.shared.keyWindow!.rootViewController?.present(ViewController(), animated: true, completion: nil)
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if(notificationData?.fetchurl != "" && notificationData?.fetchurl != nil)
+                                                {
+                                                    handleBroserNotification(url: (notificationData?.url)!)
+                                                    
+                                                }
+                                                else
+                                                {
+                                                    if notificationData!.act1link == nil {
+                                                        debugPrint("")
+                                                    }
+                                                    else
+                                                    {
+                                                        handleBroserNotification(url: (notificationData?.act1link)!)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            else if response.actionIdentifier == AppConstant.SECOND_BUTTON{
+                                type = "2"
+                                clickTrack(notificationData: notificationData!, actionType: "2")
+                                if notificationData?.ap != "" && notificationData?.ap != nil
+                                {
+                                    handleClicks(response: response, actionType: "2")
+                                }
+                                else
+                                {
+                                    if notificationData?.act2link != nil && notificationData?.act2link != ""
+                                    {
+                                        let launchURl = notificationData?.act2link!
+                                        if launchURl!.contains("tel:")
+                                        {
+                                            if let url = URL(string: launchURl!)
+                                            {
+                                                UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]) as [String : Any], completionHandler: nil)
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "" && notificationData?.act2link != nil && notificationData?.act2link != "")
+                                            {
+                                                
+                                                let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
+                                                if checkWebview!
+                                                {
+                                                    landingURLDelegate?.onHandleLandingURL(url: (notificationData?.act2link)!)
+                                                }
+                                                else
+                                                {
+                                                    ViewController.seriveURL = notificationData?.act2link
+                                                    UIApplication.shared.keyWindow!.rootViewController?.present(ViewController(), animated: true, completion: nil)
+                                                }
+                                                
+                                            }
+                                            else
+                                            {
+                                                
+                                                if notificationData!.act2link == nil {
+                                                    debugPrint("")
+                                                }
+                                                else
+                                                {
+                                                    handleBroserNotification(url: (notificationData?.act2link)!)
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }else{
+                                type = "0"
+                                clickTrack(notificationData: notificationData!, actionType: "0")
+                                if notificationData?.ap != "" && notificationData?.ap != nil
+                                {
+                                    handleClicks(response: response, actionType: "0")
+                                    
+                                }
+                                else{
+                                    if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "" && notificationData?.url != nil && notificationData?.url != "")
+                                    {
+                                        
+                                        let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
+                                        if checkWebview!
+                                        {
+                                            landingURLDelegate?.onHandleLandingURL(url: (notificationData?.url)!)
+                                        }
+                                        else
+                                        {
+                                            ViewController.seriveURL = notificationData?.url
+                                            UIApplication.shared.keyWindow!.rootViewController?.present(ViewController(), animated: true, completion: nil)
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if notificationData!.url == nil {
+                                            debugPrint("")
+                                        }
+                                        else
+                                        {
+                                            handleBroserNotification(url: (notificationData?.url)!)
+                                            
+                                        }
+                                    }
+                                }
+                            }
+                        }else{
+                            type = "0"
+                            clickTrack(notificationData: notificationData!, actionType: "0")
+                            if notificationData?.ap != "" && notificationData?.ap != nil
+                            {
+                                handleClicks(response: response, actionType: "0")
+                                
+                            }
+                            else{
+                                if ((notificationData?.inApp?.contains("1"))! && notificationData?.inApp != "" && notificationData?.url != nil && notificationData?.url != "")
+                                {
+                                    
+                                    let checkWebview = (sharedUserDefault?.bool(forKey: AppConstant.ISWEBVIEW))
+                                    if checkWebview!
+                                    {
+                                        landingURLDelegate?.onHandleLandingURL(url: (notificationData?.url)!)
+                                    }
+                                    else
+                                    {
+                                        ViewController.seriveURL = notificationData?.url
+                                        UIApplication.shared.keyWindow!.rootViewController?.present(ViewController(), animated: true, completion: nil)
+                                    }
+                                }
+                                else
+                                {
+                                    if notificationData!.url == nil {
+                                        debugPrint("")
+                                    }
+                                    else
+                                    {
+                                        handleBroserNotification(url: (notificationData?.url)!)
+                                        
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
+    
     //for rid & bids call mediation click
     
     @objc private static func ad_mediationClickCall(notiRid: String){
@@ -2526,7 +2611,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                     if !filterValue.isEmpty{
                         if let value1 = filterValue[0] as? NSDictionary {
                             landing = value1.value(forKey: AppConstant.iZ_LNKEY) as! String
-
+                            
                             if let index = idArray.firstIndex(where: {$0[AppConstant.iZ_LNKEY] as? String  == landing }) {
                                 idArray.remove(at: index)
                             }
@@ -2769,7 +2854,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
         {
             if(notificationData.cfg != nil)
             {
-               
+                
                 let number = Int(notificationData.cfg ?? "0")
                 let binaryString = String(number!, radix: 2)
                 let firstDigit = Double(binaryString)?.getDigit(digit: 1.0) ?? 0
@@ -2785,7 +2870,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                 let eleventhDigit = Double(binaryString)?.getDigit(digit: 11.0) ?? 0
                 let domainURL =  String(sixthDigit) + String(fourthDigit) + String(fifthDigit)
                 let convertBinaryToDecimal = Int(domainURL, radix: 2)!
-               
+                
                 if(firstDigit == 1 && eleventhDigit == 1)
                 {
                     RestAPI.callMoMagicImpression(notificationData: notificationData,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!)
@@ -2810,7 +2895,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                         if(formattedDate != sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_VIEW))
                         {
                             sharedUserDefault?.set(formattedDate, forKey: AppConstant.IZ_LAST_VIEW)
-                           
+                            
                             if convertBinaryToDecimal != 0{
                                 
                                 let url = "https://lim"+"\(convertBinaryToDecimal)"+".izooto.com/lim"+"\(convertBinaryToDecimal)"
@@ -2822,7 +2907,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                                 
                                 RestAPI.lastImpression(notificationData: notificationData,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: RestAPI.LASTNOTIFICATIONVIEWURL)
                             }
-                          
+                            
                         }
                         
                     }
@@ -2924,7 +3009,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
         else
         {
             print(" No CFG Key defined ")
-
+            
         }
         
     }
@@ -2936,162 +3021,162 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
     
     @objc static func clickTrack(notificationData : Payload,actionType : String)
     {
-       
-            if(notificationData.cfg != nil || notificationData.global?.cfg != nil)
-            {
-                if(notificationData.cfg != nil){
-                    let number = Int(notificationData.cfg ?? "0")
-                    let binaryString = String(number!, radix: 2)
-                   // let firstDigit = Double(binaryString)?.getDigit(digit: 1.0) ?? 0
-                    let secondDigit = Double(binaryString)?.getDigit(digit: 2.0) ?? 0
-                   // let thirdDigit = Double(binaryString)?.getDigit(digit: 3.0) ?? 0
-                    let fourthDigit = Double(binaryString)?.getDigit(digit: 4.0) ?? 0
-                    let fifthDigit = Double(binaryString)?.getDigit(digit: 5.0) ?? 0
-                    let sixthDigit = Double(binaryString)?.getDigit(digit: 6.0) ?? 0
-                   // let seventhDigit = Double(binaryString)?.getDigit(digit: 7.0) ?? 0
-                    let eighthDigit = Double(binaryString)?.getDigit(digit: 8.0) ?? 0
-                   // let ninthDigit = Double(binaryString)?.getDigit(digit: 9.0) ?? 0
-                    let tenthDigit = Double(binaryString)?.getDigit(digit: 10.0) ?? 0
-                    
-                    let domainURL =  String(sixthDigit) + String(fourthDigit) + String(fifthDigit)
-                    let convertBinaryToDecimal = Int(domainURL, radix: 2)!
-
-                   
-                    
-                    if(secondDigit == 1)
-                    {
-                        RestAPI.clickTrack(notificationData: notificationData, type: actionType,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
-                    }
-                    if eighthDigit == 1
-                    {
-                        let date = Date()
-                        let format = DateFormatter()
-                        format.dateFormat = AppConstant.iZ_KEY_DATE_FORMAT
-                        let formattedDate = format.string(from: date)
-                        if(tenthDigit == 1 && eighthDigit == 1){
-                            let date = Date()
-                            let format = DateFormatter()
-                            format.dateFormat = AppConstant.iZ_KEY_DATE_FORMAT
-                            let formattedDate = format.string(from: date)
-                            if(formattedDate != sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_CLICK))
-                            {
-                                sharedUserDefault?.set(formattedDate, forKey: AppConstant.IZ_LAST_CLICK)
-                               
-                                if convertBinaryToDecimal != 0{
-                                    let url = "https://lci"+"\(convertBinaryToDecimal)"+".izooto.com/lci"+"\(convertBinaryToDecimal)"
-                                    print("URL",url)
-                                    RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: url )
-                                }
-                                else
-                                {
-                                    
-                                    RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: RestAPI.LASTNOTIFICATIONCLICKURL )
-                                }
-                                
-                                
-                                
-                                
-                              
-                            }
-                        }
-                       if(tenthDigit == 0 && eighthDigit == 1)
-                        {
-                           if(formattedDate != sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_CLICK_WEEKLY) && Date().dayOfWeek() == sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_CLICK_WEEKDAYS)){
-                               sharedUserDefault?.set(formattedDate, forKey: AppConstant.IZ_LAST_CLICK_WEEKLY)
-                               sharedUserDefault?.set(Date().dayOfWeek(), forKey: AppConstant.IZ_LAST_CLICK_WEEKDAYS)
-                               if convertBinaryToDecimal != 0{
-                                   let url = "https://lci"+"\(convertBinaryToDecimal)"+".izooto.com/lci"+"\(convertBinaryToDecimal)"
-                                   RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: url )
-                               }
-                               else
-                               {
-                                   
-                                   RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: RestAPI.LASTNOTIFICATIONCLICKURL )
-                               }
-                               
-                               
-                           }
-                        }
-                    }
+        
+        if(notificationData.cfg != nil || notificationData.global?.cfg != nil)
+        {
+            if(notificationData.cfg != nil){
+                let number = Int(notificationData.cfg ?? "0")
+                let binaryString = String(number!, radix: 2)
+                // let firstDigit = Double(binaryString)?.getDigit(digit: 1.0) ?? 0
+                let secondDigit = Double(binaryString)?.getDigit(digit: 2.0) ?? 0
+                // let thirdDigit = Double(binaryString)?.getDigit(digit: 3.0) ?? 0
+                let fourthDigit = Double(binaryString)?.getDigit(digit: 4.0) ?? 0
+                let fifthDigit = Double(binaryString)?.getDigit(digit: 5.0) ?? 0
+                let sixthDigit = Double(binaryString)?.getDigit(digit: 6.0) ?? 0
+                // let seventhDigit = Double(binaryString)?.getDigit(digit: 7.0) ?? 0
+                let eighthDigit = Double(binaryString)?.getDigit(digit: 8.0) ?? 0
+                // let ninthDigit = Double(binaryString)?.getDigit(digit: 9.0) ?? 0
+                let tenthDigit = Double(binaryString)?.getDigit(digit: 10.0) ?? 0
+                
+                let domainURL =  String(sixthDigit) + String(fourthDigit) + String(fifthDigit)
+                let convertBinaryToDecimal = Int(domainURL, radix: 2)!
+                
+                
+                
+                if(secondDigit == 1)
+                {
+                    RestAPI.clickTrack(notificationData: notificationData, type: actionType,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
                 }
-                if(notificationData.global?.cfg != nil ){
-                    
-                    let number = Int(notificationData.global?.cfg ?? "0")
-                    
-                    let binaryString = String(number!, radix: 2)
-                    // let firstDigit = Double(binaryString)?.getDigit(digit: 1.0) ?? 0
-                    let secondDigit = Double(binaryString)?.getDigit(digit: 2.0) ?? 0
-                    // let thirdDigit = Double(binaryString)?.getDigit(digit: 3.0) ?? 0
-                    let fourthDigit = Double(binaryString)?.getDigit(digit: 4.0) ?? 0
-                    let fifthDigit = Double(binaryString)?.getDigit(digit: 5.0) ?? 0
-                    let sixthDigit = Double(binaryString)?.getDigit(digit: 6.0) ?? 0
-                    // let seventhDigit = Double(binaryString)?.getDigit(digit: 7.0) ?? 0
-                    let eighthDigit = Double(binaryString)?.getDigit(digit: 8.0) ?? 0
-                    // let ninthDigit = Double(binaryString)?.getDigit(digit: 9.0) ?? 0
-                    let tenthDigit = Double(binaryString)?.getDigit(digit: 10.0) ?? 0
-                    
-                    let domainURL =  String(sixthDigit) + String(fourthDigit) + String(fifthDigit)
-                    let convertBinaryToDecimal = Int(domainURL, radix: 2)!
-                    
-                    
-                    
-                    if(secondDigit == 1)
-                    {
-                        RestAPI.clickTrack(notificationData: notificationData, type: actionType,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
-                    }
-                    if eighthDigit == 1
-                    {
+                if eighthDigit == 1
+                {
+                    let date = Date()
+                    let format = DateFormatter()
+                    format.dateFormat = AppConstant.iZ_KEY_DATE_FORMAT
+                    let formattedDate = format.string(from: date)
+                    if(tenthDigit == 1 && eighthDigit == 1){
                         let date = Date()
                         let format = DateFormatter()
                         format.dateFormat = AppConstant.iZ_KEY_DATE_FORMAT
                         let formattedDate = format.string(from: date)
-                        if(tenthDigit == 1 && eighthDigit == 1){
-                            let date = Date()
-                            let format = DateFormatter()
-                            format.dateFormat = AppConstant.iZ_KEY_DATE_FORMAT
-                            let formattedDate = format.string(from: date)
-                            if(formattedDate != sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_CLICK))
-                            {
-                                sharedUserDefault?.set(formattedDate, forKey: AppConstant.IZ_LAST_CLICK)
-                                
-                                if convertBinaryToDecimal != 0{
-                                    let url = "https://lci"+"\(convertBinaryToDecimal)"+".izooto.com/lci"+"\(convertBinaryToDecimal)"
-                                    RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: url )
-                                }
-                                else
-                                {
-                                    
-                                    RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: RestAPI.LASTNOTIFICATIONCLICKURL )
-                                }
-                                
-                                
-                                
-                                
-                                
-                            }
-                        }
-                        if(tenthDigit == 0 && eighthDigit == 1)
+                        if(formattedDate != sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_CLICK))
                         {
-                            if(formattedDate != sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_CLICK_WEEKLY) && Date().dayOfWeek() == sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_CLICK_WEEKDAYS)){
-                                sharedUserDefault?.set(formattedDate, forKey: AppConstant.IZ_LAST_CLICK_WEEKLY)
-                                sharedUserDefault?.set(Date().dayOfWeek(), forKey: AppConstant.IZ_LAST_CLICK_WEEKDAYS)
-                                if convertBinaryToDecimal != 0{
-                                    let url = "https://lci"+"\(convertBinaryToDecimal)"+".izooto.com/lci"+"\(convertBinaryToDecimal)"
-                                    print("URL",url)
-                                    RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: url )
-                                }
-                                else
-                                {
-                                    
-                                    RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: RestAPI.LASTNOTIFICATIONCLICKURL )
-                                }
-                                
-                                
+                            sharedUserDefault?.set(formattedDate, forKey: AppConstant.IZ_LAST_CLICK)
+                            
+                            if convertBinaryToDecimal != 0{
+                                let url = "https://lci"+"\(convertBinaryToDecimal)"+".izooto.com/lci"+"\(convertBinaryToDecimal)"
+                                print("URL",url)
+                                RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: url )
                             }
+                            else
+                            {
+                                
+                                RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: RestAPI.LASTNOTIFICATIONCLICKURL )
+                            }
+                            
+                            
+                            
+                            
+                            
+                        }
+                    }
+                    if(tenthDigit == 0 && eighthDigit == 1)
+                    {
+                        if(formattedDate != sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_CLICK_WEEKLY) && Date().dayOfWeek() == sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_CLICK_WEEKDAYS)){
+                            sharedUserDefault?.set(formattedDate, forKey: AppConstant.IZ_LAST_CLICK_WEEKLY)
+                            sharedUserDefault?.set(Date().dayOfWeek(), forKey: AppConstant.IZ_LAST_CLICK_WEEKDAYS)
+                            if convertBinaryToDecimal != 0{
+                                let url = "https://lci"+"\(convertBinaryToDecimal)"+".izooto.com/lci"+"\(convertBinaryToDecimal)"
+                                RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: url )
+                            }
+                            else
+                            {
+                                
+                                RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: RestAPI.LASTNOTIFICATIONCLICKURL )
+                            }
+                            
+                            
                         }
                     }
                 }
             }
+            if(notificationData.global?.cfg != nil ){
+                
+                let number = Int(notificationData.global?.cfg ?? "0")
+                
+                let binaryString = String(number!, radix: 2)
+                // let firstDigit = Double(binaryString)?.getDigit(digit: 1.0) ?? 0
+                let secondDigit = Double(binaryString)?.getDigit(digit: 2.0) ?? 0
+                // let thirdDigit = Double(binaryString)?.getDigit(digit: 3.0) ?? 0
+                let fourthDigit = Double(binaryString)?.getDigit(digit: 4.0) ?? 0
+                let fifthDigit = Double(binaryString)?.getDigit(digit: 5.0) ?? 0
+                let sixthDigit = Double(binaryString)?.getDigit(digit: 6.0) ?? 0
+                // let seventhDigit = Double(binaryString)?.getDigit(digit: 7.0) ?? 0
+                let eighthDigit = Double(binaryString)?.getDigit(digit: 8.0) ?? 0
+                // let ninthDigit = Double(binaryString)?.getDigit(digit: 9.0) ?? 0
+                let tenthDigit = Double(binaryString)?.getDigit(digit: 10.0) ?? 0
+                
+                let domainURL =  String(sixthDigit) + String(fourthDigit) + String(fifthDigit)
+                let convertBinaryToDecimal = Int(domainURL, radix: 2)!
+                
+                
+                
+                if(secondDigit == 1)
+                {
+                    RestAPI.clickTrack(notificationData: notificationData, type: actionType,userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)! )
+                }
+                if eighthDigit == 1
+                {
+                    let date = Date()
+                    let format = DateFormatter()
+                    format.dateFormat = AppConstant.iZ_KEY_DATE_FORMAT
+                    let formattedDate = format.string(from: date)
+                    if(tenthDigit == 1 && eighthDigit == 1){
+                        let date = Date()
+                        let format = DateFormatter()
+                        format.dateFormat = AppConstant.iZ_KEY_DATE_FORMAT
+                        let formattedDate = format.string(from: date)
+                        if(formattedDate != sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_CLICK))
+                        {
+                            sharedUserDefault?.set(formattedDate, forKey: AppConstant.IZ_LAST_CLICK)
+                            
+                            if convertBinaryToDecimal != 0{
+                                let url = "https://lci"+"\(convertBinaryToDecimal)"+".izooto.com/lci"+"\(convertBinaryToDecimal)"
+                                RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: url )
+                            }
+                            else
+                            {
+                                
+                                RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: RestAPI.LASTNOTIFICATIONCLICKURL )
+                            }
+                            
+                            
+                            
+                            
+                            
+                        }
+                    }
+                    if(tenthDigit == 0 && eighthDigit == 1)
+                    {
+                        if(formattedDate != sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_CLICK_WEEKLY) && Date().dayOfWeek() == sharedUserDefault?.string(forKey: AppConstant.IZ_LAST_CLICK_WEEKDAYS)){
+                            sharedUserDefault?.set(formattedDate, forKey: AppConstant.IZ_LAST_CLICK_WEEKLY)
+                            sharedUserDefault?.set(Date().dayOfWeek(), forKey: AppConstant.IZ_LAST_CLICK_WEEKDAYS)
+                            if convertBinaryToDecimal != 0{
+                                let url = "https://lci"+"\(convertBinaryToDecimal)"+".izooto.com/lci"+"\(convertBinaryToDecimal)"
+                                print("URL",url)
+                                RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: url )
+                            }
+                            else
+                            {
+                                
+                                RestAPI.lastClick(notificationData: notificationData, userid: (sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID))!,token:(sharedUserDefault?.string(forKey: SharedUserDefault.Key.token)!)!,url: RestAPI.LASTNOTIFICATIONCLICKURL )
+                            }
+                            
+                            
+                        }
+                    }
+                }
+            }
+        }
         else
         {
             print(" No CFG defined")
@@ -3270,6 +3355,11 @@ extension Double {
         return (Int(self) / power) % 10
     }
 }
+extension String {
+    func toDouble() -> Double? {
+        return NumberFormatter().number(from: self)?.doubleValue
+    }
+}
 extension Date {
     func dayOfWeek() -> String? {
         let dateFormatter = DateFormatter()
@@ -3278,6 +3368,18 @@ extension Date {
         // or use capitalized(with: locale) if you want
     }
 }
+extension LosslessStringConvertible {
+    var string: String { .init(self) }
+}
+
+extension Double {
+    func toString() -> String {
+        return String(format: "%.1f",self)
+    }
+}
+
+
+
 
 
 

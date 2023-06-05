@@ -30,15 +30,15 @@
 		</data>
 		<key>Frameworks/MomagiciOSSDK.framework/Info.plist</key>
 		<data>
-		bJ7X1RwRdIvNAOnPo47fuSNBRV8=
+		LaKQneOW9xBUuO5qiJS4VWOeoYw=
 		</data>
 		<key>Frameworks/MomagiciOSSDK.framework/MomagiciOSSDK</key>
 		<data>
-		9ejHHCIPw4Ya4bgF0t+fdq0yud4=
+		8HBTGHFD4sfFytVrZe6LET3BZ8c=
 		</data>
 		<key>Frameworks/MomagiciOSSDK.framework/_CodeSignature/CodeResources</key>
 		<data>
-		06OJ/A5ByVt4bpA3RCCFIn9Bpww=
+		MlTAZIklqUrO1QBXVdJzqmPBH+w=
 		</data>
 		<key>Frameworks/libswiftAVFoundation.dylib</key>
 		<data>
@@ -106,7 +106,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		vOQ3yG8dhUjpYvStfbyLuHm8UKk=
+		2Qco7hGt22Yz594ntJSB5TOhdIs=
 		</data>
 		<key>PkgInfo</key>
 		<data>
@@ -114,7 +114,7 @@
 		</data>
 		<key>PlugIns/MoMagicNotificationServices.appex/Frameworks/Pods_ObjectiveCiOSProject_MoMagicNotificationServices.framework/Info.plist</key>
 		<data>
-		lsVhvzGZjQosyAT7nS7TnfbLisk=
+		QO7poZeHnagv4/t4nZv4KsF18Pk=
 		</data>
 		<key>PlugIns/MoMagicNotificationServices.appex/Frameworks/Pods_ObjectiveCiOSProject_MoMagicNotificationServices.framework/Pods_ObjectiveCiOSProject_MoMagicNotificationServices</key>
 		<data>
@@ -122,15 +122,15 @@
 		</data>
 		<key>PlugIns/MoMagicNotificationServices.appex/Info.plist</key>
 		<data>
-		2SIDdoGiAjzZUiaxE2CkYKY6vnw=
+		7T5T/lgBqUoglu4TztJPZTSJvIs=
 		</data>
 		<key>PlugIns/MoMagicNotificationServices.appex/MoMagicNotificationServices</key>
 		<data>
-		ek9KOy8LPIHQcsdC8EPaIeZgQ1I=
+		MP82Ue72qVmiL7UUWd/bYn7vwnI=
 		</data>
 		<key>PlugIns/MoMagicNotificationServices.appex/_CodeSignature/CodeResources</key>
 		<data>
-		7ipbLVttvEYKIY9fw6pSOmmKV3c=
+		nS0Q/hkcbpWjR8xDe2EAlbWgm20=
 		</data>
 		<key>PlugIns/MoMagicNotificationServices.appex/embedded.mobileprovision</key>
 		<data>
@@ -193,21 +193,21 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			M9eg/4Tm51gq6DXAmxkF2zlbmN6OkYzVyoYY1EhsPso=
+			6QfaW6RgqwObgdHKP4E+pA4x89JfFSw14fHZH8Sb9U4=
 			</data>
 		</dict>
 		<key>Frameworks/MomagiciOSSDK.framework/MomagiciOSSDK</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			mC86aAh1IlZ3HbKtulqylNCiEe6Ggy3beYgne04N2tY=
+			6OF4JR0jk1ylZjrPhOnwu9sbIc0Wu7LhgMC6W8jGghw=
 			</data>
 		</dict>
 		<key>Frameworks/MomagiciOSSDK.framework/_CodeSignature/CodeResources</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			JzLEG3tEKq4I6VtpQhX8f80FMNxSDzuJs9IIr936zhE=
+			oHrTDcSGcJX0++ZticX6I1ctdHwbeKBw0GGmT/GXLzY=
 			</data>
 		</dict>
 		<key>Frameworks/libswiftAVFoundation.dylib</key>
@@ -326,7 +326,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			rPUiLdLLzYB1yf8A7v0kKb5IYItf+YRplttZkyWXXfc=
+			UNh97asQfjAbF2X6YqMuOaHgr7Q8BpSI98dOiS6LSLI=
 			</data>
 		</dict>
 		<key>PlugIns/MoMagicNotificationServices.appex/Frameworks/Pods_ObjectiveCiOSProject_MoMagicNotificationServices.framework/Pods_ObjectiveCiOSProject_MoMagicNotificationServices</key>
@@ -340,21 +340,21 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			+SYxxH3ovrrQ3ZcDIfPpiKp5mR8XLD/VZnkFbFvVXNQ=
+			RA4Yc5E1oeQRoqdKXS7q7oAmo8gBCYhbYyXjlXkxbhg=
 			</data>
 		</dict>
 		<key>PlugIns/MoMagicNotificationServices.appex/MoMagicNotificationServices</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			eQUhh2FFwABvFNV61ilOfK38a17GXr5btsbnRIZipKQ=
+			YTpmfHtFH7Kp3zSm4asq20wf8T8TF8GAjFvBnWKu9Yw=
 			</data>
 		</dict>
 		<key>PlugIns/MoMagicNotificationServices.appex/_CodeSignature/CodeResources</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			znBzUOx/MuWPZQxN5vRrz1RQUL8fLjmvAGN5V89DofY=
+			BLrV8NHnLvJRFNnwT1L/Pxmm6UdMHyWh1Qg8/sdiQZU=
 			</data>
 		</dict>
 		<key>PlugIns/MoMagicNotificationServices.appex/embedded.mobileprovision</key>

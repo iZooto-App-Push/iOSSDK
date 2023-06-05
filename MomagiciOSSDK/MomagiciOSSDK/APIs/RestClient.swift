@@ -33,15 +33,16 @@ protocol ResponseHandler  : AnyObject{
          static let MEDIATION_CLICK_URL = "https://med.dtblt.com/medc"
          static let UNSUBSCRITPION_SUBSCRIPTION = "https://usub.izooto.com/sunsub"
     //fallback url
-        static var fallBackLandingUrl = ""
-        static let  SDKVERSION = "2.1.2"
+         static var fallBackLandingUrl = ""
+         static var fallBackTitle = ""
+         static let  SDKVERSION = "2.1.2"
     //Fallback
         static let FALLBACK_URL = "https://flbk.izooto.com/default.json"
      // MOMAGIC URL
-     static var MOMAGIC_SUBSCRIPTION_URL="https://irctc.truenotify.in/momagicflow/appenp";
-     static var MOMAGIC_USER_PROPERTY="https://irctc.truenotify.in/momagicflow/appup";
-     static var MOMAGIC_CLICK="https://irctc.truenotify.in/momagicflow/appclk";
-     static var MOMAGIC_IMPRESSION = "https://irctc.truenotify.in/momagicflow/appimpr"
+        static var MOMAGIC_SUBSCRIPTION_URL="https://irctc.truenotify.in/momagicflow/appenp";
+        static var MOMAGIC_USER_PROPERTY="https://irctc.truenotify.in/momagicflow/appup";
+        static var MOMAGIC_CLICK="https://irctc.truenotify.in/momagicflow/appclk";
+        static var MOMAGIC_IMPRESSION = "https://irctc.truenotify.in/momagicflow/appimpr"
     
     // register the token on our panel
     @objc static func registerToken(token : String, MoMagic_id : Int)
