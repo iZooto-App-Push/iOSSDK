@@ -27,7 +27,13 @@ public class Utils
         return ""
     }
     
-
+    public static func getUserDeviceToken() -> String? {
+          return sharedUserDefault?.string(forKey: SharedUserDefault.Key.token) ?? ""
+      }
+      
+      public static func getUserPID() -> Int? {
+          return sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID) ?? 0
+      }
     public static func saveAccessToken(access_token: String){
         let preferences = UserDefaults.standard
         preferences.set(access_token, forKey: TOKEN)
