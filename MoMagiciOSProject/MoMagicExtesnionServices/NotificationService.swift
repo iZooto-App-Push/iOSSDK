@@ -20,9 +20,9 @@ class NotificationService: UNNotificationServiceExtension {
           self.contentHandler = contentHandler
           bestAttemptContent = (request.content.mutableCopy() as? UNMutableNotificationContent)
           if let bestAttemptContent = bestAttemptContent {
-//              DATB.didReceiveNotificationExtensionRequest(bundleName:"" , soundName: "com.momagic.MoMagiciOSProject", request: "", bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+
               
-              DATB.didReceiveNotificationExtensionRequest(bundleName: "com.momagic.MoMagiciOSProject", soundName: "String", request: receivedRequest, bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+              DATB.didReceiveNotificationExtensionRequest(bundleName: "com.momagic.MoMagiciOSProject", soundName: "String", isBadge: false, request: receivedRequest, bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
          
           
            
@@ -30,7 +30,7 @@ class NotificationService: UNNotificationServiceExtension {
         }
         override func serviceExtensionTimeWillExpire() {
           if let contentHandler = contentHandler, let bestAttemptContent = bestAttemptContent {
-              DATB.didReceiveNotificationExtensionRequest(bundleName: "String", soundName: "String", request: receivedRequest, bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
+              DATB.didReceiveNotificationExtensionRequest(bundleName: "String", soundName: "String", isBadge: false, request: receivedRequest, bestAttemptContent: bestAttemptContent, contentHandler: contentHandler)
               
           }
         }

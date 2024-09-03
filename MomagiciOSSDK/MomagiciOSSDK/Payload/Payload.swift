@@ -11,7 +11,6 @@ public class Payload  : NSObject{
     public var alert : Alert?
     public var ankey : AnKey?
     public var global : Global?
-    
     public var key : Int?
     public var id : String? // int
     public var sound : String?
@@ -40,28 +39,31 @@ public class Payload  : NSObject{
     public var furv : String?
     public var furc : String?
     
-    
     public class func modelsFromDictionaryArray(array:NSArray) -> [Payload]
     {
         var models:[Payload] = []
-        for item in array
-        {
-            models.append(Payload(dictionary: item as! NSDictionary)!)
+        for item in array {
+            if let dictionary = item as? NSDictionary {
+                if let payload = Payload(dictionary: dictionary) {
+                    models.append(payload)
+                }
+            }
         }
         return models
     }
     
     required public init?(dictionary: NSDictionary) {
         
-        if let dicti = dictionary["an"] as? NSArray{
-            if dicti.count > 0 {
-                let dictt = dicti[0] as! NSDictionary
-                if (dictt != nil) { ankey = AnKey(dictionary: dictt) }
-            }
+        if let dicti = dictionary["an"] as? NSArray, dicti.count > 0, let dictt = dicti[0] as? NSDictionary {
+            ankey = AnKey(dictionary: dictt)
         }
         
-        if (dictionary["alert"] != nil) { alert = Alert(dictionary: dictionary["alert"] as! NSDictionary) }
-        if (dictionary["g"] != nil) { global = Global(dictionary: dictionary["g"] as! NSDictionary) }
+        if let dictionary = dictionary["alert"] as? NSDictionary {
+            alert = Alert(dictionary: dictionary)
+        }
+        if let gData = dictionary["g"] as? NSDictionary {
+            global = Global(dictionary: gData)
+        }
         
         key = dictionary["k"] as? Int    // key
         id = dictionary["id"] as? String   // id
@@ -91,14 +93,14 @@ public class Payload  : NSObject{
         
         if let rcDict = dictionary["rc"] as? NSArray{
             if rcDict.count > 0 {
-                let dictt = rcDict[0] as! String
+                let dictt = rcDict[0] as? String
                 if (dictt != "") { furc = dictt }
             }
         }
         
         if let rvDict = dictionary["rv"] as? NSArray{
             if rvDict.count > 0 {
-                let dictt = rvDict[0] as! String
+                let dictt = rvDict[0] as? String
                 if (dictt != "") {furv = dictt}
             }
         }
@@ -122,7 +124,6 @@ public class Payload  : NSObject{
         dictionary.setValue(self.reqInt, forKey: "ri")
         dictionary.setValue(self.mutablecontent, forKey: "mutable-content")
         dictionary.setValue(self.url, forKey: "ln")
-        //   dictionary.setValue(self.icon, forKey: "icon")
         dictionary.setValue(self.act1name, forKey: "b1")
         dictionary.setValue(self.act1link, forKey: "l1")
         dictionary.setValue(self.act2name, forKey: "b2")
@@ -135,14 +136,12 @@ public class Payload  : NSObject{
         dictionary.setValue(self.act2id, forKey: "d2")
         dictionary.setValue(self.relevence_score, forKey:"rs")
         dictionary.setValue(self.interrutipn_level, forKey: "il")
-        
         dictionary.setValue(self.furc, forKey: "rc")
         dictionary.setValue(self.furv, forKey: "rv")
         
         return dictionary
     }
 }
-
 
 public class Alert {
     public var title : String?
@@ -155,7 +154,11 @@ public class Alert {
         var models:[Alert] = []
         for item in array
         {
-            models.append(Alert(dictionary: item as! NSDictionary)!)
+            if let dictionary = item as? NSDictionary {
+                if let alert = Alert(dictionary: dictionary) {
+                    models.append(alert)
+                }
+            }
         }
         return models
     }
@@ -174,9 +177,7 @@ public class Alert {
         dictionary.setValue(self.attachment_url, forKey: "attachment_url") // attachment_url
         return dictionary
     }
-    
 }
-
 
 public class AnKey {
     public var bannerImageAd : String?
@@ -186,7 +187,6 @@ public class AnKey {
     public var landingUrlAd : String?
     public var messageAd : String?
     public var titleAd : String?
-   
     public var adrv : String?
     public var adrc : String?
     
@@ -195,7 +195,11 @@ public class AnKey {
         var models:[AnKey] = []
         for item in array
         {
-            models.append(AnKey(dictionary: item as! NSDictionary)!)
+            if let dictionary = item as? NSDictionary {
+                if let anKey = AnKey(dictionary: dictionary) {
+                    models.append(anKey)
+                }
+            }
         }
         return models
     }
@@ -211,14 +215,14 @@ public class AnKey {
         
         if let rcDict = dictionary["rc"] as? NSArray{
             if rcDict.count > 0 {
-                let dictt = rcDict[0] as! String
+                let dictt = rcDict[0] as? String
                 if (dictt != "") { adrc = dictt }
             }
         }
         
         if let rvDict = dictionary["rv"] as? NSArray{
             if rvDict.count > 0 {
-                let dictt = rvDict[0] as! String
+                let dictt = rvDict[0] as? String
                 if (dictt != "") {
                     adrv = dictt
                 }
@@ -264,7 +268,11 @@ public class Global {
         var models:[Global] = []
         for item in array
         {
-            models.append(Global(dictionary: item as! NSDictionary)!)
+            if let dictionary = item as? NSDictionary{
+                if let global = Global(dictionary: dictionary){
+                    models.append(global)
+                }
+            }
         }
         return models
     }
@@ -313,13 +321,21 @@ public class iZootoBase {
         var models:[iZootoBase] = []
         for item in array
         {
-            models.append(iZootoBase(dictionary: item as! NSDictionary)!)
+            if let dictionary = item as? NSDictionary{
+                if let izootoBase = iZootoBase(dictionary: dictionary) {
+                    models.append(izootoBase)
+                }
+            }
         }
         return models
     }
     required public init?(dictionary: NSDictionary) {
         
-        if (dictionary["aps"] != nil) { aps = Payload(dictionary: dictionary["aps"] as! NSDictionary) }
+        if (dictionary["aps"] != nil) {
+            if let dictionary = dictionary["aps"] as? NSDictionary {
+                aps = Payload(dictionary: dictionary)
+            }
+        }
     }
     public func dictionaryRepresentation() -> NSDictionary {
         

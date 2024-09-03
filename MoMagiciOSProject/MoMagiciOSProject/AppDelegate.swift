@@ -30,17 +30,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     var window: UIWindow?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
                 let momagicInitSettings = ["auto_prompt": true,"nativeWebview": false, "provisionalAuthorization":false]
-//        DispatchQueue.main.async {
-//           // DATB.initialisation(momagic_app_id: "05e3574fafb1c149ca6e89ac4010e22fd0402215", application: application, MoMagicInitSettings:momagicInitSettings)
-//            //18f94b90dccebaeb457b7584d59636b89cb0456e
-//           
-//            
-//        }
-        DATB.initialisation(momagic_app_id: "18f94b90dccebaeb457b7584d59636b89cb0456e", application: application, MoMagicInitSettings:momagicInitSettings)
-           UNUserNotificationCenter.current().delegate = self
-       // [DATB .setSubscriberID(subscriberID: "12345")];
-        // DATB.registerForPushNotifications()
 
+           DATB.initialisation(momagic_app_id: "18f94b90dccebaeb457b7584d59636b89cb0456e", application: application, initSetting:momagicInitSettings)
+           UNUserNotificationCenter.current().delegate = self
            DATB.notificationOpenDelegate = self
            DATB.notificationReceivedDelegate = self
            DATB.landingURLDelegate = self
