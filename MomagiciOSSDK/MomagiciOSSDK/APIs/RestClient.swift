@@ -42,7 +42,7 @@ enum DataError: Error {
     //fallback url
          static var fallBackLandingUrl = ""
          static var fallBackTitle = ""
-         static let SDKVERSION = "3.0.0"
+         static let SDKVERSION = "3.0.1"
     //Fallback
         static let FALLBACK_URL = "https://flbk.izooto.com/default.json"
      // MOMAGIC URL
@@ -63,109 +63,165 @@ enum DataError: Error {
        static var lessData = 0
        
 
+   
     // register the token on our panel
-    @objc static func registerToken(token : String, pid : String)
+    @objc static func registerToken(bundleName: String,token : String, pid : String)
+       {
+           if(token != "" && pid != "")
+           {
+               let defaults = UserDefaults.standard
+               defaults.setValue(pid, forKey: AppConstant.REGISTERED_ID)
+               defaults.setValue(token, forKey: "token")
+               let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
+               var requestBodyComponents = URLComponents()
+               let queryParameters: [(String, String?)] = [
+                   (AppConstant.iZ_KEY_PID, "\(pid)"),
+                   (AppConstant.iZ_KEY_BTYPE, "8"),
+                   (AppConstant.iZ_KEY_DTYPE, "3"),
+                   (AppConstant.iZ_KEY_TIME_ZONE, "\(Utils.currentTimeInMilliSeconds())"),
+                   (AppConstant.iZ_KEY_SDK_VERSION, "\(Utils.getAppVersion())"),
+                   (AppConstant.iZ_KEY_OS, "5"),
+                   (AppConstant.iZ_KEY_DEVICE_TOKEN, token),
+                   (AppConstant.iZ_KEY_APP_SDK_VERSION, SDKVERSION),
+                   (AppConstant.iZ_KEY_ADID, identifierForAdvertising()),
+                   (AppConstant.iZ_DEVICE_OS_VERSION, "\(Utils.getVersion())"),
+                   (AppConstant.iZ_DEVICE_NAME, "\(Utils.getDeviceName())"),
+                   (AppConstant.iZ_KEY_CHECK_VERSION, "\(Utils.getAppVersion())")
+                  
+               ]
+
+               requestBodyComponents.queryItems = queryParameters.map { URLQueryItem(name: $0.0, value: $0.1) }
+               
+               guard let url = URL(string: RestAPI.BASEURL) else {
+                   // Handle the case where the URL is nil
+                   print("Error: Invalid URL")
+                   return
+               }
+               var request = URLRequest(url: url)
+               request.httpMethod = AppConstant.iZ_POST_REQUEST
+               request.setValue(Bundle.main.bundleIdentifier, forHTTPHeaderField: "referrer")
+               request.allHTTPHeaderFields = requestHeaders
+               request.httpBody = requestBodyComponents.query?.data(using: .utf8)
+               let config = URLSessionConfiguration.default
+               if #available(iOS 11.0, *) {
+                   config.waitsForConnectivity = true
+               } else {
+                   // Fallback on earlier versions
+               }
+               URLSession(configuration: config).dataTask(with: request) {(data,response,error) in
+                   
+                   do {
+                       if let error = error {
+                           throw error
+                       }
+                       // Check the HTTP response status code
+                       if let httpResponse = response as? HTTPURLResponse {
+                           if httpResponse.statusCode == 200 {
+                               print(AppConstant.DEVICE_TOKEN,token)
+                               UserDefaults.isRegistered(isRegister: true)
+                               print(AppConstant.SUCESSFULLY)
+                               
+                               let currentUnixTimestamp: TimeInterval = TimeInterval(Int(Date().timeIntervalSince1970 * 1000))
+                               if let userDefaults = UserDefaults(suiteName: Utils.getBundleName(bundleName: bundleName)){//used in addMacros
+                                   userDefaults.setValue(currentUnixTimestamp, forKey: "unixTS")
+                               }
+                               let date = Date()
+                               let format = DateFormatter()
+                               format.dateFormat = AppConstant.iZ_KEY_DATE_FORMAT
+                               let formattedDate = format.string(from: date)
+                               if(formattedDate != (sharedUserDefault?.string(forKey: AppConstant.iZ_KEY_LAST_VISIT)))
+                               {
+                                   RestAPI.lastVisit(bundleName: bundleName, pid: pid, token:token)
+                                   sharedUserDefault?.set(formattedDate, forKey: AppConstant.iZ_KEY_LAST_VISIT)
+                                   let dicData = sharedUserDefault?.dictionary(forKey:AppConstant.iZ_USERPROPERTIES_KEY)
+                                   if(dicData != nil)
+                                   {
+                                       DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                                           DATB.addUserProperties(data: dicData!)
+                                       }
+                                   }
+                               }
+                               
+                           }
+                       }
+                   } catch {
+                       Utils.handleOnceException(bundleName : bundleName ,exceptionName: "\(error.localizedDescription)", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD, rid: nil, cid: nil, userInfo: nil)
+                   }
+               }.resume()
+           }
+           else
+           {
+               print("pid or token is empty or invalid")
+           }
+       }
+    // register the token on our panel
+    @objc static func registerTokenWithMomagic(bundleName: String,token : String, pid : String)
     {
         if(token != "" && pid != "")
         {
+            let defaults = UserDefaults.standard
+            defaults.setValue(pid, forKey: AppConstant.REGISTERED_ID)
+            defaults.setValue(token, forKey: "token")
             let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
             var requestBodyComponents = URLComponents()
-            requestBodyComponents.queryItems =
-            [
-                URLQueryItem(name: AppConstant.iZ_KEY_PID, value: pid),
-                URLQueryItem(name: AppConstant.iZ_KEY_BTYPE, value: "8"),
-                URLQueryItem(name: AppConstant.iZ_KEY_DTYPE, value: "3"),
-                URLQueryItem(name: AppConstant.iZ_KEY_TIME_ZONE, value:"\(currentTimeInMilliSeconds())"),
-                URLQueryItem(name: AppConstant.iZ_KEY_SDK_VERSION, value:"\(getAppVersion())"),
-                URLQueryItem(name: AppConstant.iZ_KEY_OS, value: "5"),
-                URLQueryItem(name:AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
-                URLQueryItem(name: AppConstant.iZ_KEY_APP_SDK_VERSION, value: SDKVERSION),
-                URLQueryItem(name: AppConstant.iZ_KEY_ADID, value: identifierForAdvertising()!),
-                URLQueryItem(name: AppConstant.iZ_DEVICE_OS_VERSION, value: "\(getVersion())"),
-                URLQueryItem(name: AppConstant.iZ_DEVICE_NAME, value: "\(getDeviceName())"),
-                URLQueryItem(name: AppConstant.iZ_KEY_CHECK_VERSION, value: "\(getAppVersion())")
+            let queryParameters: [(String, String?)] = [
+                (AppConstant.iZ_KEY_PID, "\(pid)"),
+                (AppConstant.iZ_KEY_BTYPE, "8"),
+                (AppConstant.iZ_KEY_DTYPE, "3"),
+                (AppConstant.iZ_KEY_TIME_ZONE, "\(Utils.currentTimeInMilliSeconds())"),
+                (AppConstant.iZ_KEY_SDK_VERSION, "\(Utils.getAppVersion())"),
+                (AppConstant.iZ_KEY_OS, "5"),
+                (AppConstant.iZ_KEY_DEVICE_TOKEN, token),
+                (AppConstant.iZ_KEY_APP_SDK_VERSION, SDKVERSION),
+                (AppConstant.iZ_KEY_ADID, identifierForAdvertising()),
+                (AppConstant.iZ_DEVICE_OS_VERSION, "\(Utils.getVersion())"),
+                (AppConstant.iZ_DEVICE_NAME, "\(Utils.getDeviceName())"),
+                (AppConstant.iZ_KEY_CHECK_VERSION, "\(Utils.getAppVersion())")
+               
             ]
-            var request = URLRequest(url: URL(string: RestAPI.BASEURL)!)
+
+            requestBodyComponents.queryItems = queryParameters.map { URLQueryItem(name: $0.0, value: $0.1) }
+            
+            guard let url = URL(string: RestAPI.MOMAGIC_SUBSCRIPTION_URL) else {
+                // Handle the case where the URL is nil
+                print("Error: Invalid URL")
+                return
+            }
+            var request = URLRequest(url: url)
             request.httpMethod = AppConstant.iZ_POST_REQUEST
+            request.setValue(Bundle.main.bundleIdentifier, forHTTPHeaderField: "referrer")
             request.allHTTPHeaderFields = requestHeaders
             request.httpBody = requestBodyComponents.query?.data(using: .utf8)
-            URLSession.shared.dataTask(with: request){(data,response,error) in
+            let config = URLSessionConfiguration.default
+            if #available(iOS 11.0, *) {
+                config.waitsForConnectivity = true
+            } else {
+                // Fallback on earlier versions
+            }
+            URLSession(configuration: config).dataTask(with: request) {(data,response,error) in
+                
                 do {
-
-                    print(AppConstant.DEVICE_TOKEN,token)
-                    UserDefaults.isRegistered(isRegister: true)
-                    print(AppConstant.SUCESSFULLY)
-                    let date = Date()
-                    let format = DateFormatter()
-                    format.dateFormat = AppConstant.iZ_KEY_DATE_FORMAT
-                    let formattedDate = format.string(from: date)
-                    if(formattedDate != (sharedUserDefault?.string(forKey: AppConstant.iZ_KEY_LAST_VISIT)))
-                    {
-                        RestAPI.lastVisit(pid: pid, token:token)
-                        sharedUserDefault?.set(formattedDate, forKey: AppConstant.iZ_KEY_LAST_VISIT)
-                        let dicData = sharedUserDefault?.dictionary(forKey:AppConstant.iZ_USERPROPERTIES_KEY)
-                        if(dicData != nil)
-                        {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-                                DATB.addUserProperties(data: dicData!)
-                            }
+                    if let error = error {
+                        throw error
+                    }
+                    // Check the HTTP response status code
+                    if let httpResponse = response as? HTTPURLResponse {
+                        if httpResponse.statusCode == 200 {
+                            
                         }
                     }
+                } catch {
+                    Utils.handleOnceException(bundleName: bundleName, exceptionName: "\(error.localizedDescription)", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD, rid: nil, cid: nil, userInfo: nil)
                 }
             }.resume()
         }
-        else
-        {
-            Utils.handleOnceException(exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "registerToken",  rid: "", cid: "")
-                sharedUserDefault?.set(false,forKey: AppConstant.iZ_KEY_ADVERTISEMENT_ID)
-            
-        }
-        
-    }
-    
-    // register the token on our panel
-    @objc static func registerTokenWithMomagic(token : String, pid : String)
-    {
-        if(token != "" && pid != "")
-        {
-            let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
-            var requestBodyComponents = URLComponents()
-            requestBodyComponents.queryItems =
-            [
-                URLQueryItem(name: AppConstant.iZ_KEY_PID, value: pid),
-                URLQueryItem(name: AppConstant.iZ_KEY_BTYPE, value: "8"),
-                URLQueryItem(name: AppConstant.iZ_KEY_DTYPE, value: "3"),
-                URLQueryItem(name: AppConstant.iZ_KEY_TIME_ZONE, value:"\(currentTimeInMilliSeconds())"),
-                URLQueryItem(name: AppConstant.iZ_KEY_SDK_VERSION, value:"\(getAppVersion())"),
-                URLQueryItem(name: AppConstant.iZ_KEY_OS, value: "5"),
-                URLQueryItem(name:AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
-                URLQueryItem(name: AppConstant.iZ_KEY_APP_SDK_VERSION, value: SDKVERSION),
-                URLQueryItem(name: AppConstant.iZ_KEY_ADID, value: identifierForAdvertising()!),
-                URLQueryItem(name: AppConstant.iZ_DEVICE_OS_VERSION, value: "\(getVersion())"),
-                URLQueryItem(name: AppConstant.iZ_DEVICE_NAME, value: "\(getDeviceName())"),
-                URLQueryItem(name: AppConstant.iZ_KEY_CHECK_VERSION, value: "\(getAppVersion())")
-            ]
-            var request = URLRequest(url: URL(string: RestAPI.MOMAGIC_SUBSCRIPTION_URL)!)
-            request.httpMethod = AppConstant.iZ_POST_REQUEST
-            request.allHTTPHeaderFields = requestHeaders
-            request.httpBody = requestBodyComponents.query?.data(using: .utf8)
-            URLSession.shared.dataTask(with: request){(data,response,error) in
-                do {
-                }
-            }.resume()
-        }
-        else
-        {
        
-              Utils.handleOnceException(exceptionName: AppConstant.iZ_KEY_DEVICE_TOKEN_ERROR,className:AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD,  rid: "", cid: "")
-            
-        }
         
     }
     
     
     // send the token with adID
-    @objc static func registerToken(token : String, pid : String ,adid : NSString)
+    @objc static func registerToken(bundleName: String,token : String, pid : String ,adid : NSString)
     {
         if(token != "" && pid != "")
         {
@@ -191,6 +247,7 @@ enum DataError: Error {
             if let url = URL(string: RestAPI.BASEURL) {
                 var request = URLRequest(url: url)
                 request.httpMethod = AppConstant.iZ_POST_REQUEST
+                request.setValue(Bundle.main.bundleIdentifier, forHTTPHeaderField: "referrer")
                 request.allHTTPHeaderFields = requestHeaders
                 request.httpBody = requestBodyComponents.query?.data(using: .utf8)
                 URLSession.shared.dataTask(with: request){(data,response,error) in
@@ -203,76 +260,71 @@ enum DataError: Error {
             else
             {
                 sharedUserDefault?.set(false,forKey: AppConstant.iZ_KEY_ADVERTISEMENT_ID)
-                
-                Utils.handleOnceException(exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD,  rid: "", cid: "")
+              
             }
-        } else
-        {
-            Utils.handleOnceException(exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD,  rid: "", cid: "")
-
         }
             
     }
 
     
-    public static func getRequest(uuid: String, completionBlock: @escaping (String) -> Void) -> Void
-        {
-            if uuid != "" {
-                if let requestURL = URL(string: "\(ENCRPTIONURL)\(uuid).dat"){
-                    var request = URLRequest(url: requestURL)
-                    request.cachePolicy = NSURLRequest.CachePolicy.reloadIgnoringLocalCacheData
-                    let config = URLSessionConfiguration.default
-                    if #available(iOS 11.0, *) {
-                        config.waitsForConnectivity = true
-                    } else {
-                        // Fallback on earlier versions
-                    }
-                    URLSession(configuration: config).dataTask(with: request) {(data,response,error) in
-                        
-                        if(error != nil) {
-                            Utils.handleOnceException(exceptionName: error?.localizedDescription ?? "no found", className: tag_name, methodName: "getRequest", rid: "", cid: "")
-                            print(AppConstant.IZ_TAG,AppConstant.APP_ID_ERROR)
-                            
-                        }else
-                        {
-                            if let httpResponse = response as? HTTPURLResponse {
-                                if httpResponse.statusCode == 200{
-                                    
-                                    do {
-                                        if let data = data {
-                                            guard let outputStr = String(data: data, encoding: .utf8) else {
-                                                throw DataConversionError.encodingFailed
-                                            }
-                                            completionBlock(outputStr)
-                                        } else {
-                                            throw DataError.noData
-                                        }
-                                    } catch DataConversionError.encodingFailed {
-                                        print("Failed to encode data to a string.")
-                                        // Handle encoding error here
-                                        completionBlock("Encoding error occurred.")
-                                    } catch DataError.noData {
-                                        print("No data received.")
-                                        // Handle no data error here
-                                        completionBlock("No data error occurred.")
-                                    } catch {
-                                        print("An unexpected error occurred: \(error.localizedDescription)")
-                                        // Handle any other unexpected errors here
-                                        completionBlock("Unexpected error occurred.")
-                                    }
-                                }
-                                else
-                                {
-                                    Utils.handleOnceException(exceptionName: "response error generated\(uuid)", className: tag_name, methodName: "getRequest", rid: "", cid: "")
-                                }
-                            }
-                        }
-                    }.resume()
-                }
-            }else{
-                Utils.handleOnceException(exceptionName: "Momagic  app id is blank or null", className: tag_name, methodName: "getRequest", rid: "", cid: "")
-            }
-        }
+    public static func getRequest(bundleName : String, uuid: String, completionBlock: @escaping (String) -> Void) -> Void
+          {
+              if uuid != "" {
+                  if let requestURL = URL(string: "\(ENCRPTIONURL)\(uuid).dat"){
+                      var request = URLRequest(url: requestURL)
+                      request.cachePolicy = NSURLRequest.CachePolicy.reloadIgnoringLocalCacheData
+                      let config = URLSessionConfiguration.default
+                      if #available(iOS 11.0, *) {
+                          config.waitsForConnectivity = true
+                      } else {
+                          // Fallback on earlier versions
+                      }
+                      URLSession(configuration: config).dataTask(with: request) {(data,response,error) in
+                          
+                          if(error != nil) {
+                              Utils.handleOnceException(bundleName:bundleName , exceptionName: error?.localizedDescription ?? "no found", className: tag_name, methodName: "getRequest", rid: "", cid: "", userInfo: nil)
+                              print(AppConstant.IZ_TAG,AppConstant.APP_ID_ERROR)
+                              
+                          }else
+                          {
+                              if let httpResponse = response as? HTTPURLResponse {
+                                  if httpResponse.statusCode == 200{
+                                      
+                                      do {
+                                          if let data = data {
+                                              guard let outputStr = String(data: data, encoding: .utf8) else {
+                                                  throw DataConversionError.encodingFailed
+                                              }
+                                              completionBlock(outputStr)
+                                          } else {
+                                              throw DataError.noData
+                                          }
+                                      } catch DataConversionError.encodingFailed {
+                                          print("Failed to encode data to a string.")
+                                          // Handle encoding error here
+                                          completionBlock("Encoding error occurred.")
+                                      } catch DataError.noData {
+                                          print("No data received.")
+                                          // Handle no data error here
+                                          completionBlock("No data error occurred.")
+                                      } catch {
+                                          print("An unexpected error occurred: \(error.localizedDescription)")
+                                          // Handle any other unexpected errors here
+                                          completionBlock("Unexpected error occurred.")
+                                      }
+                                  }
+                                  else
+                                  {
+                                      Utils.handleOnceException(bundleName: bundleName, exceptionName: "response error generated\(uuid)", className: tag_name, methodName: "getRequest", rid: "", cid: "", userInfo: nil)
+                                  }
+                              }
+                          }
+                      }.resume()
+                  }
+              }else{
+                  Utils.handleOnceException(bundleName: bundleName, exceptionName: "Momagic  app id is blank or null", className: tag_name, methodName: "getRequest", rid: "", cid: "", userInfo: nil)
+              }
+          }
 
     @objc static func currentTimeInMilliSeconds()-> Int
     {
@@ -348,6 +400,7 @@ enum DataError: Error {
                             ]
           var request = URLRequest(url: URL(string: RestAPI.EVENT_URL)!)
           request.httpMethod = AppConstant.iZ_POST_REQUEST
+          request.setValue(Bundle.main.bundleIdentifier, forHTTPHeaderField: "referrer")
           request.allHTTPHeaderFields = requestHeaders
           request.httpBody = requestBodyComponents.query?.data(using: .utf8)
           URLSession.shared.dataTask(with: request){(data,response,error) in
@@ -359,14 +412,14 @@ enum DataError: Error {
           }.resume()
         }
         else{
-            Utils.handleOnceException(exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD,  rid: "", cid: "")
-                        sharedUserDefault?.set(false,forKey: AppConstant.iZ_KEY_ADVERTISEMENT_ID)
+           
+            sharedUserDefault?.set(false,forKey: AppConstant.iZ_KEY_ADVERTISEMENT_ID)
         }
       }
     
     
     // send user properties to server
-      static func callUserProperties( data : NSString,pid : String,token : String)
+    static func callUserProperties(bundleName : String, data : NSString,pid : String,token : String)
       {
         if( data != "" && pid != ""){
           let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
@@ -380,6 +433,8 @@ enum DataError: Error {
                             ]
           var request = URLRequest(url: URL(string: RestAPI.PROPERTIES_URL)!)
           request.httpMethod = AppConstant.iZ_POST_REQUEST
+          request.setValue(Bundle.main.bundleIdentifier, forHTTPHeaderField: "referrer")
+
           request.allHTTPHeaderFields = requestHeaders
           request.httpBody = requestBodyComponents.query?.data(using: .utf8)
           URLSession.shared.dataTask(with: request){(data,response,error) in
@@ -392,200 +447,150 @@ enum DataError: Error {
         }
         else
         {
-            Utils.handleOnceException(exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD,  rid: "", cid: "")
+            Utils.handleOnceException(bundleName: bundleName, exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD,  rid: "", cid: "", userInfo: nil)
         }
       }
     
     
     
     // track the notification impression
-        static func callImpression(notificationData : Payload,pid : String,token : String)
-        {
-            if notificationData.ankey != nil{
-                if(notificationData.global?.rid != nil && pid != "" && token != "")
-                {
-                    let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
-                    var requestBodyComponents = URLComponents()
-                    requestBodyComponents.queryItems = [
-                        URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(pid)"),
-                        URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
-                        URLQueryItem(name: "cid", value: "\(String(describing: notificationData.global?.id ?? ""))"),
-                        URLQueryItem(name: "rid", value: "\(String(describing: notificationData.global?.rid ?? ""))"),
-                        URLQueryItem(name: "op", value: "view"),
-                        URLQueryItem(name: "ver", value: SDKVERSION)
-                    ]
-                    
-                    guard let url = URL(string: RestAPI.IMPRESSION_URL) else {
-                        // Handle the case where the URL is nil
-                        print("Error: Invalid URL")
-                        return
-                    }
-                    var request = URLRequest(url: url)
-                    request.httpMethod = AppConstant.iZ_POST_REQUEST
-                    request.allHTTPHeaderFields = requestHeaders
-                    request.httpBody = requestBodyComponents.query?.data(using: .utf8)
-                    let config = URLSessionConfiguration.default
-                    if #available(iOS 11.0, *) {
-                        config.waitsForConnectivity = true
-                    } else {
-                        // Fallback on earlier versions
-                    }
-                    URLSession(configuration: config).dataTask(with: request) {(data,response,error) in
-                        
-                        do {
-                            if let error = error {
-                                throw error
-                            }
-                            // Check the HTTP response status code
-                            if let httpResponse = response as? HTTPURLResponse {
-                                if httpResponse.statusCode == 200 {
-                                }else{
-                                    
-                                    Utils.handleOnceException(exceptionName:  "\(error?.localizedDescription ?? "Error code \(httpResponse.statusCode)")" , className: tag_name, methodName: "callImpression",  rid: notificationData.global?.rid ?? "no rid value here", cid: notificationData.global?.id ?? "no cid value here")
-                                }
-                            }
-                        } catch {
-                            Utils.handleOnceException(exceptionName:  "\(error.localizedDescription)" , className: tag_name, methodName: "callImpression", rid: notificationData.global?.rid ?? "no rid value here", cid: notificationData.global?.id ?? "no cid value here")
-                        }
-                    }.resume()
-                }
-                else
-                {
-                    Utils.handleOnceException(exceptionName:  "rid or cid value is  blank" , className: tag_name, methodName: "callImpression",  rid: notificationData.global?.rid ?? "no rid value here", cid: notificationData.global?.id ?? "no cid value here")
-                }
-            }else{
-                if(notificationData.rid != nil && pid != "" && token != "")
-                {
-                    let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
-                    var requestBodyComponents = URLComponents()
-                    requestBodyComponents.queryItems = [
-                        URLQueryItem(name: AppConstant.iZ_KEY_PID, value: pid),
-                        URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
-                        URLQueryItem(name: "cid", value: "\(notificationData.id ?? "")"),
-                        URLQueryItem(name: "rid", value: "\(notificationData.rid ?? "")"),
-                        URLQueryItem(name: "op", value: "view"),
-                        URLQueryItem(name: "ver", value: SDKVERSION)
-                    ]
-                    
-                    guard let url = URL(string: RestAPI.IMPRESSION_URL) else {
-                        // Handle the case where the URL is nil
-                        print("Error: Invalid URL")
-                        return
-                    }
-                    var request = URLRequest(url: url)
-                    request.httpMethod = AppConstant.iZ_POST_REQUEST
-                    request.allHTTPHeaderFields = requestHeaders
-                    request.httpBody = requestBodyComponents.query?.data(using: .utf8)
-                    let config = URLSessionConfiguration.default
-                    if #available(iOS 11.0, *) {
-                        config.waitsForConnectivity = true
-                    } else {
-                        // Fallback on earlier versions
-                    }
-                    URLSession(configuration: config).dataTask(with: request) {(data,response,error) in
-                        
-                        do {
-                            if let error = error {
-                                throw error
-                            }
-                            // Check the HTTP response status code
-                            if let httpResponse = response as? HTTPURLResponse {
-                                if httpResponse.statusCode == 200 {
-                                    
-                                }else{
-                                    Utils.handleOnceException(exceptionName:  error?.localizedDescription ?? "Error code " , className: tag_name, methodName: "callImpression",rid: notificationData.rid ?? "no rid value here", cid: notificationData.id ?? "no cid value here")
-                                    
-                                }
-                            }
-                        } catch let error {
-                            Utils.handleOnceException(exceptionName:  error.localizedDescription, className: tag_name, methodName: "callImpression",  rid: notificationData.rid ?? "no rid value here", cid: notificationData.id ?? "no cid value here")
-                        }
-                    }.resume()
-                }
-                else
-                {
-                    Utils.handleOnceException(exceptionName:  "rid or cid value is blank" , className: tag_name, methodName: "callImpression",  rid: notificationData.rid ?? "no rid value here", cid: notificationData.id ?? "no cid value here")
-                }
-            }
-        }
-    @objc static func callMoMagicImpression(notificationData : Payload,pid : String,token : String)
+    static func callImpression(notificationData : Payload,pid : String,token : String,bundleName : String, isSilentPush: Bool, userInfo: [AnyHashable : Any]?)
+       {
+           var cid: String? = nil
+           var rid: String? = nil
+           if notificationData.ankey != nil{
+               cid = notificationData.global?.id ?? nil
+               rid = notificationData.global?.rid ?? nil
+           }else{
+               cid = notificationData.id ?? nil
+               rid = notificationData.rid ?? nil
+           }
+           if(rid != nil && pid != "" && token != ""){
+               let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
+               var requestBodyComponents = URLComponents()
+               requestBodyComponents.queryItems = [
+                   URLQueryItem(name: AppConstant.iZ_KEY_PID, value: pid),
+                   URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                   URLQueryItem(name: "cid", value: cid),
+                   URLQueryItem(name: "rid", value: rid),
+                   URLQueryItem(name: "op", value: "view"),
+                   URLQueryItem(name: "ver", value: SDKVERSION)
+               ]
+               if isSilentPush {
+                   requestBodyComponents.queryItems?.append(URLQueryItem(name: "sn", value: "1"))
+               }
+               
+               guard let url = URL(string: RestAPI.IMPRESSION_URL) else {
+                   // Handle the case where the URL is nil
+                   print("Error: Invalid URL")
+                   return
+               }
+               var request = URLRequest(url: url)
+               request.httpMethod = AppConstant.iZ_POST_REQUEST
+               request.allHTTPHeaderFields = requestHeaders
+               request.setValue(bundleName, forHTTPHeaderField: "referrer")
+               request.httpBody = requestBodyComponents.query?.data(using: .utf8)
+               let config = URLSessionConfiguration.default
+               if #available(iOS 11.0, *) {
+                   config.waitsForConnectivity = true
+               } else {
+                   // Fallback on earlier versions
+               }
+               URLSession(configuration: config).dataTask(with: request) {(data,response,error) in
+                   
+                   do {
+                       if let error = error {
+                           throw error
+                       }
+                       // Check the HTTP response status code
+                       if let httpResponse = response as? HTTPURLResponse {
+                           if httpResponse.statusCode == 200 {
+                           }
+                       }
+                   } catch let error {
+                       Utils.handleOnceException(bundleName: bundleName, exceptionName:  error.localizedDescription, className: tag_name, methodName: "callImpression",  rid: rid, cid: cid, userInfo: userInfo)
+                   }
+               }.resume()
+           }
+           else{
+               print("Kindly check pid or token is empty")
+           }
+       }
+    
+    // momagic impression  api
+    @objc static func callMoMagicImpression(notificationData : Payload,pid : String,token : String,bundleName : String, isSilentPush: Bool, userInfo: [AnyHashable : Any]?)
     
     {
+        var cid: String? = nil
+        var rid: String? = nil
         if notificationData.ankey != nil{
-            if(notificationData.global?.rid != nil && pid != "" && token != "")
-            {
-                let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
-                var requestBodyComponents = URLComponents()
-                requestBodyComponents.queryItems = [
-                    URLQueryItem(name: AppConstant.iZ_KEY_PID, value: pid),
-                    URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
-                    URLQueryItem(name: "cid", value: "\(String(describing: notificationData.global?.id!))"),
-                    URLQueryItem(name: "rid", value: "\(String(describing: notificationData.global?.rid!))"),
-                    URLQueryItem(name: "op", value: "view"),
-                    URLQueryItem(name: "ver", value: SDKVERSION)
-                ]
-                var request = URLRequest(url: URL(string: "\(RestAPI.MOMAGIC_IMPRESSION)")!)
-                request.httpMethod = AppConstant.iZ_POST_REQUEST
-                request.allHTTPHeaderFields = requestHeaders
-                request.httpBody = requestBodyComponents.query?.data(using: .utf8)
-                URLSession.shared.dataTask(with: request){(data,response,error) in
-
-                    do {
-                        // print("imp","success")
-                    }
-                }.resume()
-            }
-            else
-            {
-                Utils.handleOnceException(exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD,  rid: "", cid: "")
-            }
+            cid = notificationData.global?.id ?? nil
+            rid = notificationData.global?.rid ?? nil
         }else{
-            if(notificationData.rid != nil && pid != "" && token != "")
-            {
-                let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
-                var requestBodyComponents = URLComponents()
-                requestBodyComponents.queryItems = [
-                    URLQueryItem(name: AppConstant.iZ_KEY_PID, value: pid),
-                    URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
-                    URLQueryItem(name: "cid", value: "\(notificationData.id ?? "")"),
-                    URLQueryItem(name: "rid", value: "\(notificationData.rid ?? "")"),
-                    URLQueryItem(name: "op", value: "view"),
-                    URLQueryItem(name: "ver", value: SDKVERSION)
-                ]
-                var request = URLRequest(url: URL(string: "\(RestAPI.IMPRESSION_URL)")!)
-                request.httpMethod = AppConstant.iZ_POST_REQUEST
-                request.allHTTPHeaderFields = requestHeaders
-                request.httpBody = requestBodyComponents.query?.data(using: .utf8)
-                URLSession.shared.dataTask(with: request){(data,response,error) in
-
-                    do {
-                        // print("imp","success")
-                    }
-                }.resume()
-            }
-            else
-            {
-                Utils.handleOnceException(exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD,  rid: "", cid: "")
-                            sharedUserDefault?.set(false,forKey: AppConstant.iZ_KEY_ADVERTISEMENT_ID)
-            }
+            cid = notificationData.id ?? nil
+            rid = notificationData.rid ?? nil
         }
+        if(rid != nil && pid != "" && token != ""){
+            let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
+            var requestBodyComponents = URLComponents()
+            requestBodyComponents.queryItems = [
+                URLQueryItem(name: AppConstant.iZ_KEY_PID, value: pid),
+                URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                URLQueryItem(name: "cid", value: cid),
+                URLQueryItem(name: "rid", value: rid),
+                URLQueryItem(name: "op", value: "view"),
+                URLQueryItem(name: "ver", value: SDKVERSION)
+            ]
+          
+            
+            guard let url = URL(string: RestAPI.MOMAGIC_IMPRESSION) else {
+                // Handle the case where the URL is nil
+                print("Error: Invalid URL")
+                return
+            }
+            var request = URLRequest(url: url)
+            request.httpMethod = AppConstant.iZ_POST_REQUEST
+            request.allHTTPHeaderFields = requestHeaders
+            request.setValue(bundleName, forHTTPHeaderField: "referrer")
+            request.httpBody = requestBodyComponents.query?.data(using: .utf8)
+            let config = URLSessionConfiguration.default
+            if #available(iOS 11.0, *) {
+                config.waitsForConnectivity = true
+            } else {
+                // Fallback on earlier versions
+            }
+            URLSession(configuration: config).dataTask(with: request) {(data,response,error) in
+                
+                do {
+                    if let error = error {
+                        throw error
+                    }
+                    // Check the HTTP response status code
+                    if let httpResponse = response as? HTTPURLResponse {
+                        if httpResponse.statusCode == 200 {
+                            print("MoMagic impression Successfully ")
+                        }
+                    }
+                } catch let error {
+                    Utils.handleOnceException(bundleName: bundleName, exceptionName:  error.localizedDescription, className: tag_name, methodName: "callImpression",  rid: rid, cid: cid, userInfo: userInfo)
+                }
+            }.resume()
+        }
+       
         
     }
     
     // track the notification click
-        static func clickTrack(notificationData : Payload,type : String, pid : String,token : String, userInfo:[AnyHashable : Any], globalLn: String, title: String)
+    static func clickTrack(bundleName : String,notificationData : Payload,type : String, pid : String,token : String, userInfo:[AnyHashable : Any], globalLn: String, title: String)
         {
             var clickLn = ""
-            if globalLn == ""{
-                clickLn = notificationData.url ?? ""
-            }else{
-                clickLn = globalLn
-            }
-
-            if let encodedURLString = clickLn.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
-                clickLn = encodedURLString
-            }
-            
+                    let allowedCharacterSet = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~#[]@!$'()*+,;")  //-> /:?&
+                    if globalLn == ""{
+                        clickLn = notificationData.url ?? ""
+                        clickLn = clickLn.addingPercentEncoding(withAllowedCharacters: allowedCharacterSet) ?? ""
+                    }else{
+                        clickLn = globalLn.addingPercentEncoding(withAllowedCharacters: allowedCharacterSet) ?? ""
+                    }
                 
             if notificationData.ankey != nil{
                 if(notificationData.global?.rid != nil && pid != "" && token != "")
@@ -628,6 +633,8 @@ enum DataError: Error {
                     }
                     var request = URLRequest(url: url)
                     request.httpMethod = AppConstant.iZ_POST_REQUEST
+                    request.setValue(Bundle.main.bundleIdentifier, forHTTPHeaderField: "referrer")
+
                     request.allHTTPHeaderFields = requestHeaders
                     request.httpBody = requestBodyComponents.query?.data(using: .utf8)
                     URLSession.shared.dataTask(with: request){(data,response,error) in
@@ -638,22 +645,21 @@ enum DataError: Error {
                             // Check the HTTP response status code
                             if let httpResponse = response as? HTTPURLResponse {
                                 if httpResponse.statusCode == 200 {
-                                    RestAPI.clickTrackWithMoMagic(notificationData: notificationData, type: type, pid: pid, token: token)
+
+                                    RestAPI.clickTrackWithMoMagic(bundleName: bundleName, notificationData: notificationData, type: type, pid: pid, token: token, userInfo: userInfo, globalLn: globalLn, title: title)
                                            
-                                }else{
-                                    Utils.handleOnceException(exceptionName: "\(error?.localizedDescription ?? "Error code \(httpResponse.statusCode)")" , className: tag_name, methodName: "clickTrack", rid: notificationData.global?.rid ?? "no rid value here", cid: notificationData.global?.id ?? "no cid value here")
                                 }
                             }
                         } catch let error{
                         
-                            Utils.handleOnceException(exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD,  rid: "", cid: "")
+                            Utils.handleOnceException(bundleName: bundleName, exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD,  rid: "", cid: "", userInfo: userInfo)
                                     sharedUserDefault?.set(false,forKey: AppConstant.iZ_KEY_ADVERTISEMENT_ID)
                         }
                     }.resume()
                 }
                 else
                 {
-                    Utils.handleOnceException(exceptionName: "rid or cid value is blank" , className: tag_name, methodName: "clickTrack",  rid: notificationData.global?.rid ?? "no rid value here", cid: notificationData.global?.id ?? "no cid value here")
+                    Utils.handleOnceException(bundleName: bundleName, exceptionName: "rid or cid value is blank" , className: tag_name, methodName: "clickTrack",  rid: notificationData.global?.rid ?? "no rid value here", cid: notificationData.global?.id ?? "no cid value here", userInfo: userInfo)
                 }
             }else{
                 if(notificationData.rid != nil && pid != "" && token != "")
@@ -672,6 +678,7 @@ enum DataError: Error {
                             URLQueryItem(name: "op", value: "click"),
                             URLQueryItem(name: "ver", value: SDKVERSION),
                             URLQueryItem(name: "ln", value: "\(clickLn)"),
+                            URLQueryItem(name: "ap", value: "\(String(describing: notificationData.ap ?? ""))"),
                             URLQueryItem(name: "ti", value: "\(title)"),
                         ]
                     }else{
@@ -696,6 +703,8 @@ enum DataError: Error {
                     }
                     var request = URLRequest(url: url)
                     request.httpMethod = AppConstant.iZ_POST_REQUEST
+                    request.setValue(Bundle.main.bundleIdentifier, forHTTPHeaderField: "referrer")
+
                     request.allHTTPHeaderFields = requestHeaders
                     request.httpBody = requestBodyComponents.query?.data(using: .utf8)
                     URLSession.shared.dataTask(with: request){(data,response,error) in
@@ -707,13 +716,13 @@ enum DataError: Error {
                             // Check the HTTP response status code
                             if let httpResponse = response as? HTTPURLResponse {
                                 if httpResponse.statusCode == 200 {
-                                }else{
-                                    Utils.handleOnceException(exceptionName: "\(error?.localizedDescription ?? "Error code \(httpResponse.statusCode)")", className: tag_name, methodName: "clickTrack", rid: notificationData.rid ?? "no rid value here", cid: notificationData.id ?? "no cid value here")
+                                    RestAPI.clickTrackWithMoMagic(bundleName: bundleName, notificationData: notificationData, type: type, pid: pid, token: token, userInfo: userInfo, globalLn: globalLn, title: title)
+                                   
                                 }
                             }
                         } catch let error{
                     
-                            Utils.handleOnceException(exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD,  rid: "", cid: "")
+                            Utils.handleOnceException(bundleName: bundleName, exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD,  rid: "", cid: "", userInfo: userInfo)
                                         sharedUserDefault?.set(false,forKey: AppConstant.iZ_KEY_ADVERTISEMENT_ID)
                             
                         }
@@ -721,14 +730,14 @@ enum DataError: Error {
                 }
                 else
                 {
-                    Utils.handleOnceException(exceptionName: "rid or cid value is blank", className: tag_name, methodName: "clickTrack", rid: notificationData.rid ?? "no rid value here", cid: notificationData.id ?? "no cid value here")
+                    Utils.handleOnceException(bundleName: bundleName, exceptionName: "rid or cid value is blank", className: tag_name, methodName: "clickTrack", rid: notificationData.rid ?? "no rid value here", cid: notificationData.id ?? "no cid value here", userInfo: userInfo)
                     
                 }
             }
         }
     
     //set subscriptionID
-    static func setSubscriberID(subscriberID : String, pid : String,token : String)
+    static func setSubscriberID(bundleName : String ,subscriberID : String, pid : String,token : String)
     {
         if(subscriberID != "" && pid != "" && token != "")
         {
@@ -747,24 +756,26 @@ enum DataError: Error {
             ]
             var request = URLRequest(url: URL(string: RestAPI.SUBSCRIBER_URL)!)
             request.httpMethod = AppConstant.iZ_POST_REQUEST
+            request.setValue(Bundle.main.bundleIdentifier, forHTTPHeaderField: "referrer")
+
             request.allHTTPHeaderFields = requestHeaders
             request.httpBody = requestBodyComponents.query?.data(using: .utf8)
             URLSession.shared.dataTask(with: request){(data,response,error) in
                 do {
                     sharedUserDefault?.set(subscriberID, forKey: SharedUserDefault.Key.subscriberID)
-                    setSubscriberIDWithMoMagic(subscriberID : subscriberID, pid : pid,token : token)
+                    setSubscriberIDWithMoMagic(bundleName : bundleName ,subscriberID : subscriberID, pid : pid,token : token)
                 }
             }.resume()
         }
         else
         {
             sharedUserDefault?.set(subscriberID, forKey: SharedUserDefault.Key.subscriberID)
-            Utils.handleOnceException(exceptionName: "subscriberID should not be blank", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "setSubscriberID",  rid: "", cid: "")
+            print("Subscriber id is empty or blank")
         }
     }
     
     //MoMagic set subscriptionID
-    static func setSubscriberIDWithMoMagic(subscriberID : String, pid : String,token : String){
+    static func setSubscriberIDWithMoMagic(bundleName : String,subscriberID : String, pid : String,token : String){
         if(subscriberID != "" && pid != "" && token != "")
         {
             let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
@@ -781,6 +792,8 @@ enum DataError: Error {
             ]
             var request = URLRequest(url: URL(string: RestAPI.MOMAGIC_USER_PROPERTY)!)
             request.httpMethod = AppConstant.iZ_POST_REQUEST
+            request.setValue(Bundle.main.bundleIdentifier, forHTTPHeaderField: "referrer")
+
             request.allHTTPHeaderFields = requestHeaders
             request.httpBody = requestBodyComponents.query?.data(using: .utf8)
             URLSession.shared.dataTask(with: request){(data,response,error) in
@@ -789,76 +802,155 @@ enum DataError: Error {
                 }
             }.resume()
         }
-        else
-        {
-           
-            Utils.handleOnceException(exceptionName: "subscriberID should not be blank", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "setSubscriberID",  rid: "", cid: "")
-        }
+       
     }
     
     
     //MoMagic click track
-    static func clickTrackWithMoMagic(notificationData : Payload,type : String, pid : String,token : String)
+    static func clickTrackWithMoMagic(bundleName : String,notificationData : Payload,type : String, pid : String,token : String, userInfo:[AnyHashable : Any], globalLn: String, title: String)
     {
+        var clickLn = ""
+                let allowedCharacterSet = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~#[]@!$'()*+,;")  //-> /:?&
+                if globalLn == ""{
+                    clickLn = notificationData.url ?? ""
+                    clickLn = clickLn.addingPercentEncoding(withAllowedCharacters: allowedCharacterSet) ?? ""
+                }else{
+                    clickLn = globalLn.addingPercentEncoding(withAllowedCharacters: allowedCharacterSet) ?? ""
+                }
+            
         if notificationData.ankey != nil{
             if(notificationData.global?.rid != nil && pid != "" && token != "")
             {
                 let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
                 var requestBodyComponents = URLComponents()
-                requestBodyComponents.queryItems = [
-                    URLQueryItem(name: AppConstant.iZ_KEY_PID, value: pid),
-                    URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
-                    URLQueryItem(name: "cid", value: "\(String(describing: notificationData.global?.id!))"),
-                    URLQueryItem(name: "rid", value: "\(String(describing: notificationData.global?.rid!))"),
-                    URLQueryItem(name: "op", value: "click"),
-                    URLQueryItem(name: "ver", value: SDKVERSION),
-                    URLQueryItem(name: "btn", value: "\(type)")
-                ]
-                var request = URLRequest(url: URL(string: RestAPI.MOMAGIC_CLICK)!)
+                
+                if type != "0"{
+                    requestBodyComponents.queryItems = [
+                        URLQueryItem(name: "btn", value: "\(type)"),
+                        URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(pid)"),
+                        URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                        URLQueryItem(name: "cid", value: "\(String(describing: notificationData.global?.id ?? ""))"),
+                        URLQueryItem(name: "rid", value: "\(String(describing: notificationData.global?.rid ?? ""))"),
+                        URLQueryItem(name: "op", value: "click"),
+                        URLQueryItem(name: "ver", value: SDKVERSION),
+                        URLQueryItem(name: "ln", value: "\(clickLn)"),
+                        URLQueryItem(name: "ap", value: ""),
+                        URLQueryItem(name:"ti",value: "\(title)")
+                        
+                    ]
+                }else{
+                    requestBodyComponents.queryItems = [
+                        URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(pid)"),
+                        URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                        URLQueryItem(name: "cid", value: "\(String(describing: notificationData.global?.id ?? ""))"),
+                        URLQueryItem(name: "rid", value: "\(String(describing: notificationData.global?.rid ?? ""))"),
+                        URLQueryItem(name: "ti", value: "\(title)"),
+                        URLQueryItem(name: "op", value: "click"),
+                        URLQueryItem(name: "ver", value: SDKVERSION),
+                        URLQueryItem(name: "ln", value: "\(clickLn)"),
+                        URLQueryItem(name: "ap", value: ""),
+                    ]
+                }
+               
+                guard let url = URL(string: RestAPI.MOMAGIC_CLICK) else {
+                    // Handle the case where the URL is nil
+                    print("Error: Invalid URL")
+                    return
+                }
+                var request = URLRequest(url: url)
                 request.httpMethod = AppConstant.iZ_POST_REQUEST
+                request.setValue(Bundle.main.bundleIdentifier, forHTTPHeaderField: "referrer")
+
                 request.allHTTPHeaderFields = requestHeaders
                 request.httpBody = requestBodyComponents.query?.data(using: .utf8)
                 URLSession.shared.dataTask(with: request){(data,response,error) in
                     do {
-                        
+                        if let error = error {
+                            throw error
+                        }
+                        // Check the HTTP response status code
+                        if let httpResponse = response as? HTTPURLResponse {
+                            if httpResponse.statusCode == 200 {
+                                print("Click  Successfully ")
+
+                              
+                                       
+                            }
+                        }
+                    } catch let error{
+                    
+                        Utils.handleOnceException(bundleName: bundleName, exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD,  rid: "", cid: "", userInfo: userInfo)
+                                sharedUserDefault?.set(false,forKey: AppConstant.iZ_KEY_ADVERTISEMENT_ID)
                     }
                 }.resume()
             }
-            else
-            {
-                Utils.handleOnceException(exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD,  rid: "", cid: "")
-            }
+           
         }else{
             if(notificationData.rid != nil && pid != "" && token != "")
             {
                 let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
                 var requestBodyComponents = URLComponents()
-                requestBodyComponents.queryItems = [
-                    URLQueryItem(name: AppConstant.iZ_KEY_PID, value: pid),
-                    URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
-                    URLQueryItem(name: "cid", value: "\(notificationData.id ?? "")"),
-                    URLQueryItem(name: "rid", value: "\(notificationData.rid ?? "")"),
-                    URLQueryItem(name: "op", value: "click"),
-                    URLQueryItem(name: "ver", value: SDKVERSION),
-                    URLQueryItem(name: "btn", value: "\(type)")
-                ]
-                var request = URLRequest(url: URL(string: RestAPI.MOMAGIC_CLICK)!)
+                
+                
+                if type != "0"{
+                    requestBodyComponents.queryItems = [
+                        URLQueryItem(name: "btn", value: "\(type)"),
+                        URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(pid)"),
+                        URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                        URLQueryItem(name: "cid", value: "\(notificationData.id ?? "")"),
+                        URLQueryItem(name: "rid", value: "\(notificationData.rid ?? "")"),
+                        URLQueryItem(name: "op", value: "click"),
+                        URLQueryItem(name: "ver", value: SDKVERSION),
+                        URLQueryItem(name: "ln", value: "\(clickLn)"),
+                        URLQueryItem(name: "ti", value: "\(title)"),
+                    ]
+                }else{
+                    requestBodyComponents.queryItems = [
+                        URLQueryItem(name: "ti", value: "\(title)"),
+                        URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(pid)"),
+                        URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                        URLQueryItem(name: "cid", value: "\(notificationData.id ?? "")"),
+                        URLQueryItem(name: "rid", value: "\(notificationData.rid ?? "")"),
+                        URLQueryItem(name: "op", value: "click"),
+                        URLQueryItem(name: "ver", value: SDKVERSION),
+                        URLQueryItem(name: "ln", value: "\(clickLn)"),
+                        URLQueryItem(name: "ap", value: "\(String(describing: notificationData.ap ?? ""))"),
+
+                    ]
+                }
+               
+                guard let url = URL(string: RestAPI.MOMAGIC_CLICK) else {
+                    // Handle the case where the URL is nil
+                    print("Error: Invalid URL")
+                    return
+                }
+                var request = URLRequest(url: url)
                 request.httpMethod = AppConstant.iZ_POST_REQUEST
+                request.setValue(Bundle.main.bundleIdentifier, forHTTPHeaderField: "referrer")
+
                 request.allHTTPHeaderFields = requestHeaders
                 request.httpBody = requestBodyComponents.query?.data(using: .utf8)
                 URLSession.shared.dataTask(with: request){(data,response,error) in
+                    
                     do {
+                        if let error = error {
+                            throw error
+                        }
+                        // Check the HTTP response status code
+                        if let httpResponse = response as? HTTPURLResponse {
+                            if httpResponse.statusCode == 200 {
+                               
+                            }
+                        }
+                    } catch let error{
+                
+                        Utils.handleOnceException(bundleName: bundleName, exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD,  rid: "", cid: "", userInfo: userInfo)
+                                    sharedUserDefault?.set(false,forKey: AppConstant.iZ_KEY_ADVERTISEMENT_ID)
+                        
                     }
                 }.resume()
             }
-            else
-            {
-                
-                Utils.handleOnceException(exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD,  rid: "", cid: "")
-                            sharedUserDefault?.set(false,forKey: AppConstant.iZ_KEY_ADVERTISEMENT_ID)
-                
-                
-            }
+          
         }
     }
     
@@ -903,7 +995,7 @@ enum DataError: Error {
     
    
     // last visit data send to server
-        @objc static func lastVisit(pid : String,token : String)
+    @objc static func lastVisit(bundleName : String,pid : String,token : String)
         {
             if(token != "" && pid != "")
             {
@@ -928,6 +1020,8 @@ enum DataError: Error {
                     }
                     var request = URLRequest(url: url)
                     request.httpMethod = AppConstant.iZ_POST_REQUEST
+                    request.setValue(Bundle.main.bundleIdentifier, forHTTPHeaderField: "referrer")
+
                     request.allHTTPHeaderFields = requestHeaders
                     request.httpBody = requestBodyComponents.query?.data(using: .utf8)
                     let config = URLSessionConfiguration.default
@@ -945,214 +1039,268 @@ enum DataError: Error {
                             // Check the HTTP response status code
                             if let httpResponse = response as? HTTPURLResponse {
                                 if httpResponse.statusCode == 200 {
-                                    print("last visit")
                                     
-                                }else{
-                                    Utils.handleOnceException(exceptionName: "\(error?.localizedDescription ?? "Error code \(httpResponse.statusCode)")", className: tag_name, methodName: "lastVisit" , rid: "",cid :"")
                                 }
                             }
                         } catch {
-                            Utils.handleOnceException(exceptionName: "\(error.localizedDescription)", className: tag_name, methodName: "lastVisit" , rid: "",cid :"")
+                            Utils.handleOnceException(bundleName: bundleName, exceptionName: "\(error.localizedDescription)", className: tag_name, methodName: "lastVisit" , rid: "",cid :"", userInfo: nil)
                         }
                     }.resume()
                 }
-                else
-                {
-                    Utils.handleOnceException(exceptionName: "json is not correct", className: tag_name, methodName: "lastVisit" , rid: "",cid :"")
-                }
+               
             }
             else
             {
-                Utils.handleOnceException(exceptionName: "pid is not found", className: tag_name, methodName: "lastVisit" , rid: "",cid :"")
+                print("pid or token is not available")
             }
         }
-
-
-
-
-
-    // last impression send to server
-    @objc  static func lastImpression(notificationData : Payload,pid : String,token : String)
-    {
-        if(notificationData != nil && pid != "" && token != "")
-        {
-            let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
-            var requestBodyComponents = URLComponents()
-            requestBodyComponents.queryItems = [
-                URLQueryItem(name: AppConstant.iZ_KEY_PID, value: pid),
-                URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
-                URLQueryItem(name: "cid", value: "\(notificationData.id ?? "")"),
-                URLQueryItem(name: "rid", value: "\(notificationData.rid ?? "")"),
-                URLQueryItem(name: "op", value: "view")
-            ]
-            var request = URLRequest(url: URL(string: RestAPI.LASTNOTIFICATIONVIEWURL)!)
-            request.httpMethod = AppConstant.iZ_POST_REQUEST
-            request.allHTTPHeaderFields = requestHeaders
-            request.httpBody = requestBodyComponents.query?.data(using: .utf8)
-            URLSession.shared.dataTask(with: request){(data,response,error) in
-                
-                do {
-                   // print("l","i")
-                }
-            }.resume()
-        }
-        else
-        {
-            
-            Utils.handleOnceException(exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD,  rid: "", cid: "")
-        }
-        
-    }
-    
-    // last click data send to server
-    @objc  static func lastClick(notificationData : Payload,pid : String,token : String)
-    {
-        if(pid != "" && token != "" && notificationData != nil)
-        {
-            let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
-            var requestBodyComponents = URLComponents()
-            requestBodyComponents.queryItems = [
-                URLQueryItem(name: AppConstant.iZ_KEY_PID, value: pid),
-                URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
-                URLQueryItem(name: "cid", value: "\(notificationData.id ?? "")"),
-                URLQueryItem(name: "rid", value: "\(notificationData.rid ?? "")"),
-                URLQueryItem(name: "op", value: "view")
-            ]
-            var request = URLRequest(url: URL(string: RestAPI.LASTNOTIFICATIONCLICKURL)!)
-            request.httpMethod = AppConstant.iZ_POST_REQUEST
-            request.allHTTPHeaderFields = requestHeaders
-            request.httpBody = requestBodyComponents.query?.data(using: .utf8)
-            URLSession.shared.dataTask(with: request){(data,response,error) in
-                
-                do {
-                   // print("l","c")
-                }
-            }.resume()
-        }
-        else
-        {
-            Utils.handleOnceException(exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD,  rid: "", cid: "")
-        }
-    }
-    
 
     // send exception to the server
-        @objc static func sendExceptionToServer(exceptionName: String, className: String, methodName: String,rid: String, cid: String, appId: String) {
-             let pid = Utils.getUserId() ?? ""
-             let token = Utils.getUserDeviceToken() ?? ""
-            let requestHeaders: [String: String] = [AppConstant.iZ_CONTENT_TYPE: AppConstant.iZ_CONTENT_TYPE_VALUE]
-            
-            var requestBodyComponents = URLComponents()
-            requestBodyComponents.queryItems = [
-                URLQueryItem(name: "pid", value: pid),
-                URLQueryItem(name: "appId", value: appId),// need to add moamgic app id
-                URLQueryItem(name: "exceptionName", value: exceptionName),
-                URLQueryItem(name: "methodName", value: methodName),
-                URLQueryItem(name: "className", value: className),
-                URLQueryItem(name: "bKey", value: token),
-                URLQueryItem(name: "av", value: SDKVERSION),
-                URLQueryItem(name: "rid", value: rid),
-                URLQueryItem(name: "cid", value: cid),
-                URLQueryItem(name: "osVersion", value: Utils.getVersion()),
-                URLQueryItem(name: "deviceName", value: Utils.getDeviceName()),
-                URLQueryItem(name: "appVersion", value: Utils.getAppVersion())
-            ]
-            guard let url = URL(string: RestAPI.EXCEPTION_URL) else {
-                // Handle the case where the URL is nil
-                print("Error: Invalid URL")
-                return
-            }
-            
-            var request = URLRequest(url: url)
-            request.httpMethod = AppConstant.iZ_POST_REQUEST
-            request.allHTTPHeaderFields = requestHeaders
-            request.httpBody = requestBodyComponents.query?.data(using: .utf8)
-            
-            let config = URLSessionConfiguration.default
-            config.waitsForConnectivity = true
-            
-            URLSession(configuration: config).dataTask(with: request) { data, response, error in
-                do {
-                    if let error = error {
-                        throw error
-                    }
-                    
-                    if let httpResponse = response as? HTTPURLResponse {
-                        if httpResponse.statusCode == 200 {
-                        } else {
-                            throw NSError(domain: "APIError", code: httpResponse.statusCode, userInfo: nil)
-                        }
-                    }
-                } catch {
-                    print("Failed to send exception to server: \(error)")
-                }
-            }.resume()
-        }
+    @objc static func sendExceptionToServer(bundleName : String ,exceptionName: String, className: String, methodName: String, rid: String?, cid: String?, appId: String, userInfo: [AnyHashable: Any]?) {
+           // Retrieve app and device details
+           let appDetails = AppManager.shared.appDetails
+           let deviceDetails = AppManager.shared.deviceInfo
+           let pid = Utils.getUserId(bundleName: bundleName) ?? ""
+           let token = Utils.getUserDeviceToken(bundleName: bundleName) ?? ""
+           let currentDate = Date()
+           let currentTimeStamp = Int(currentDate.timeIntervalSince1970)
+           
+           // Create the JSON payload
+           let exceptionDetails: [String: Any?] = [
+               "name": exceptionName,
+               "className": className,
+               "method": methodName,
+               "createdTime": "\(currentTimeStamp)",
+               "cid": cid,
+               "rid": rid,
+               "notification": userInfo
+           ]
+
+           let filteredExceptionDetails = exceptionDetails.compactMapValues { $0 }
+
+           let requestBody: [String: Any] = [
+               "deviceDetails": [
+                   "os": deviceDetails.os,
+                   "name": deviceDetails.name,
+                   "build": deviceDetails.build,
+                   "version": deviceDetails.version,
+                   "deviceID": deviceDetails.deviceID
+               ],
+               "appDetails": [
+                   "name": appDetails.name,
+                   "version": appDetails.version,
+                   "bundleID": appDetails.bundleId,
+               ],
+               "sdkDetails": [
+                   "pid": pid,
+                   "version": SDKVERSION,
+                   "appId": appId,
+                   "bKey": token,
+                   "pv": ""
+               ],
+               "exceptionDetails": filteredExceptionDetails
+           ]
+
+           
+           // Convert the dictionary to JSON data
+           guard let jsonData = try? JSONSerialization.data(withJSONObject: requestBody, options: []) else {
+               print("Error: Could not serialize JSON request body")
+               return
+           }
+           
+           // Prepare the URL and request headers
+           guard let url = URL(string: RestAPI.EXCEPTION_URL) else {
+               print("Error: Invalid URL")
+               return
+           }
+           
+           var request = URLRequest(url: url)
+           request.httpMethod = AppConstant.iZ_POST_REQUEST
+           request.setValue(Bundle.main.bundleIdentifier, forHTTPHeaderField: "referrer")
+           request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+           request.httpBody = jsonData
+           // Create the URL session configuration
+           let config = URLSessionConfiguration.default
+           config.waitsForConnectivity = true
+           
+           // Send the request
+           URLSession(configuration: config).dataTask(with: request) { data, response, error in
+               do {
+                   if let error = error {
+                       throw error
+                   }
+                   
+                   if let httpResponse = response as? HTTPURLResponse {
+                       if httpResponse.statusCode == 200 {
+                           print("Exception sent successfully to server")
+                       } else {
+                           throw NSError(domain: "APIError", code: httpResponse.statusCode, userInfo: nil)
+                       }
+                   }
+               } catch {
+                   print("Failed to send exception to server: \(error)")
+               }
+           }.resume()
+       }
 
 
     //Ad-Mediation Impression
-       @objc  static func callAdMediationImpressionApi(finalDict: NSDictionary){
+    @objc static func callAdMediationImpressionApi(finalDict: NSDictionary, bundleName: String, userInfo: [AnyHashable : Any]?){
+           
+           let defaults = UserDefaults.standard
            
            if (finalDict.count != 0) {
+               let rid = finalDict.value(forKey: "rid") as? String
                let jsonData = try? JSONSerialization.data(withJSONObject: finalDict as? [String: Any])
-               // create post request
-               let url = URL(string: "\(MEDIATION_IMPRESSION_URL)")!
+               
+               guard let url = URL(string: RestAPI.MEDIATION_IMPRESSION_URL) else {
+                   // Handle the case where the URL is nil
+                   print("Error: Invalid URL")
+                   return
+               }
                var request = URLRequest(url: url)
                request.httpMethod = "POST"
-               
-               // insert json data to the request
+               request.setValue(bundleName, forHTTPHeaderField: "referrer")
                request.httpBody = jsonData
                request.addValue("application/json", forHTTPHeaderField: "\(AppConstant.iZ_CONTENT_TYPE)")
                request.addValue("application/json", forHTTPHeaderField: "Accept")
-               let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                   guard let data = data, error == nil else {
-                       print(error?.localizedDescription ?? "No data")
-                       return
-                   }
-                   let responseJSON = try? JSONSerialization.jsonObject(with: data, options: [])
-                   if let responseJSON = responseJSON as? [String: Any] {
-                   }
+               let config = URLSessionConfiguration.default
+               if #available(iOS 11.0, *) {
+                   config.waitsForConnectivity = true
+               } else {
+                   // Fallback on earlier versions
                }
-               task.resume()
+               URLSession(configuration: config).dataTask(with: request) {data,response,error in
+                   
+                   do {
+                       if let error = error {
+                           throw error
+                       }
+                       // Check the HTTP response status code
+                       if let httpResponse = response as? HTTPURLResponse {
+                           if httpResponse.statusCode == 200 {
+                               
+                           }
+                       }
+                   } catch {
+                       Utils.handleOnceException(bundleName: bundleName, exceptionName: "\(error.localizedDescription)", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "CallAdMediationImpressionApi", rid: rid, cid: finalDict.value(forKey: "id") as? String, userInfo: userInfo)
+                   }
+               }.resume()
            }else{
-               Utils.handleOnceException(exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: AppConstant.iZ_REGISTER_TOKEN_METHOD,  rid: "", cid: "")
+               Utils.handleOnceException(bundleName: bundleName, exceptionName: "key's are blank in request parameter,\(finalDict) ", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "Ad-Mediation Impression API",  rid: finalDict.value(forKey: "rid") as? String, cid: finalDict.value(forKey: "id") as? String, userInfo: userInfo)
            }
        }
-       
+    
+    //
+    static func fetcherAdMediationClickApi(bundleName : String,url: String, title: String, rid: String, callForMedc: Bool, userInfo: [AnyHashable : Any]?) {
+
+           var pid = ""
+           var token = ""
+        
+        if let userDefault = UserDefaults(suiteName: Utils.getBundleName(bundleName: bundleName)){
+            pid = userDefault.value(forKey: AppConstant.REGISTERED_ID) as? String ?? ""
+               token = userDefault.value(forKey: AppConstant.IZ_GRPS_TKN) as? String ?? ""
+           }
+           
+           let served: [String: Any] = ["a": 0, "b": 0, "ln": url, "t": -1, "ti": title]
+           let bids: [String] = []
+           let currentUTS = Int(Date().timeIntervalSince1970 * 1000)
+           
+           // Create the final request dictionary
+           let requestDictionary: [String: Any] = ["bKey": token, "av": SDKVERSION, "served": served, "bids": bids, "pid": pid, "rid": rid, "ta": "\(currentUTS)"]
+           
+           // Serialize the final dictionary to JSON data
+           guard let jsonData = try? JSONSerialization.data(withJSONObject: requestDictionary, options: []),
+                 let jsonString = String(data: jsonData, encoding: .utf8) else {
+               Utils.handleOnceException(bundleName: bundleName, exceptionName: "error in converting dictionary to JSON", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "fetcherAdMediationClickApi", rid: rid, cid: nil, userInfo: userInfo)
+               return
+           }
+   //        print(jsonString)
+           var baseUrl = ""
+           if callForMedc {
+               baseUrl = RestAPI.MEDIATION_CLICK_URL
+           }else{
+               baseUrl = RestAPI.MEDIATION_IMPRESSION_URL
+           }
+           guard let url = URL(string: baseUrl) else {
+               // Handle the case where the URL is nil
+               print("Error: Invalid URL")
+               return
+           }
+           
+           var request = URLRequest(url: url)
+           request.httpMethod = "POST"
+           request.setValue(Bundle.main.bundleIdentifier, forHTTPHeaderField: "Referer")
+           request.httpBody = jsonData
+           request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+           request.addValue("application/json", forHTTPHeaderField: "Accept")
+           URLSession.shared.dataTask(with: request){(data,response,error) in
+               do {
+                   if let error = error {
+                       Utils.handleOnceException(bundleName: bundleName, exceptionName: "Network error: \(error.localizedDescription)", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "fetcherAdMediationClickApi", rid: rid, cid: nil, userInfo: userInfo)
+                   }
+                   // Check the HTTP response status code
+                   if let httpResponse = response as? HTTPURLResponse {
+                       if httpResponse.statusCode == 200 {
+                           print("Fetcher Click Success")
+                       }
+                   }
+               } catch {
+                   Utils.handleOnceException(bundleName: bundleName, exceptionName: "\(error.localizedDescription)", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "fetcherAdMediationClickApi", rid: rid, cid: nil, userInfo: userInfo)
+               }
+           }.resume()
+       }
        
        //Ad-Mediation ClickAPI
-       @objc  static func callAdMediationClickApi(finalDict: NSDictionary){
+    //Ad-Mediation ClickAPI
+    @objc static func callAdMediationClickApi(bundleName : String,finalDict: NSDictionary, userInfo: [AnyHashable : Any]?){
            
+           let defaults = UserDefaults.standard
            if (finalDict.count != 0) {
+               let rid = finalDict.value(forKey: "rid") as? String
                let jsonData = try? JSONSerialization.data(withJSONObject: finalDict)
                
-               // create post request
-               let url = URL(string: "\(MEDIATION_CLICK_URL)")!
+               guard let url = URL(string: RestAPI.MEDIATION_CLICK_URL) else {
+                   // Handle the case where the URL is nil
+                   print("Error: Invalid URL")
+                   return
+               }
+               
                var request = URLRequest(url: url)
                request.httpMethod = "POST"
-               
-               // insert json data to the request
                request.httpBody = jsonData
+               request.setValue(Bundle.main.bundleIdentifier, forHTTPHeaderField: "Referer")
                request.addValue("application/json", forHTTPHeaderField: "Content-Type")
                request.addValue("application/json", forHTTPHeaderField: "Accept")
-               
-               let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                   guard let data = data, error == nil else {
-                       print(error?.localizedDescription ?? "No data")
-                       return
+               URLSession.shared.dataTask(with: request){(data,response,error) in
+                   do {
+                       if let error = error {
+                           throw error
+                       }
+                       // Check the HTTP response status code
+                       if let httpResponse = response as? HTTPURLResponse {
+                           if httpResponse.statusCode == 200 {
+                               print("Mediation Click Success")
+                           }else{
+                               Utils.handleOnceException(bundleName: bundleName, exceptionName: "\(error?.localizedDescription ?? "Error code \(httpResponse.statusCode)")", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "Ad-Mediation Click API 1", rid: rid, cid: finalDict.value(forKey: "id") as? String, userInfo: userInfo)
+                           }
+                       }
+                   } catch {
+                       
+                       if let data = finalDict as? [String : Any] {
+                           self.mediationClickStoreData.append(data)
+                       }
+                       UserDefaults.standard.set(self.mediationClickStoreData, forKey: AppConstant.iZ_MED_CLICK_OFFLINE_DATA)
+                       
+                       Utils.handleOnceException(bundleName: bundleName, exceptionName: "\(error.localizedDescription)", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "Ad-Mediation Click API 2", rid: rid, cid: finalDict.value(forKey: "id") as? String, userInfo: userInfo)
                    }
-                   let responseJSON = try? JSONSerialization.jsonObject(with: data, options: [])
-                   if let responseJSON = responseJSON as? [String: Any] {
-                   }
-               }
-               task.resume()
-               
+               }.resume()
            }else{
-               Utils.handleOnceException(exceptionName: AppConstant.iZ_KEY_REGISTERED_ID_ERROR, className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "Ad-mediation Click API",  rid: "", cid: "")
-                           sharedUserDefault?.set(false,forKey: AppConstant.iZ_KEY_ADVERTISEMENT_ID)
+               Utils.handleOnceException(bundleName: bundleName, exceptionName: "key's are blank in request parameter, \(finalDict)", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "Ad-Mediation Click API 3",  rid: finalDict.value(forKey: "rid") as? String, cid: finalDict.value(forKey: "id") as? String, userInfo: userInfo)
            }
        }
-       
+    
+      
        
        static func callRV_RC_Request( urlString : String)
        {
@@ -1174,65 +1322,63 @@ enum DataError: Error {
        }
        
     // last impression send to server
-        @objc static func lastImpression(notificationData : Payload,pid : String,token : String,url : String)
-        {
-            if(notificationData.rid != nil && pid != "" && token != "")
-            {
-                let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
-                var requestBodyComponents = URLComponents()
-                requestBodyComponents.queryItems = [
-                    URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(pid)"),
-                    URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
-                    URLQueryItem(name: "cid", value: "\(notificationData.id ?? "")"),
-                    URLQueryItem(name: "rid", value: "\(notificationData.rid ?? "")"),
-                    URLQueryItem(name: "op", value: "view")
-                ]
-                guard let url = URL(string: url) else {
-                    // Handle the case where the URL is nil
-                    print("Error: Invalid URL")
-                    return
-                }
-                var request = URLRequest(url: url)
-                request.httpMethod = AppConstant.iZ_POST_REQUEST
-                request.allHTTPHeaderFields = requestHeaders
-                request.httpBody = requestBodyComponents.query?.data(using: .utf8)
-                let config = URLSessionConfiguration.default
-                if #available(iOS 11.0, *) {
-                    config.waitsForConnectivity = true
-                } else {
-                    // Fallback on earlier versions
-                }
-                URLSession(configuration: config).dataTask(with: request) {(data,response,error) in
-                    
-                    do {
-                        if let error = error {
-                            throw error
-                        }
-                        // Check the HTTP response status code
-                        if let httpResponse = response as? HTTPURLResponse {
-                            if httpResponse.statusCode == 200 {
-                                
-                            }else{
-                                Utils.handleOnceException(exceptionName: "\(error?.localizedDescription ?? "Error code \(httpResponse.statusCode)")", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastImpression" , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
-                            }
-                        }
-                    } catch {
-                        Utils.handleOnceException(exceptionName: "\(error.localizedDescription)", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastImpression" , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
-                    }
-                }.resume()
-            }
-            else
-            {
-                Utils.handleOnceException(exceptionName: "rid value is blank", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastImpression" , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
-            }
-        }
-    
+    @objc static func lastImpression(notificationData : Payload,pid : String,token : String,url : String,bundleName : String, userInfo: [AnyHashable : Any]? )
+       {
+           if(notificationData.rid != nil && pid != "" && token != "")
+           {
+               let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
+               var requestBodyComponents = URLComponents()
+               requestBodyComponents.queryItems = [
+                   URLQueryItem(name: AppConstant.iZ_KEY_PID, value: "\(pid)"),
+                   URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                   URLQueryItem(name: "cid", value: notificationData.id),
+                   URLQueryItem(name: "rid", value: notificationData.rid),
+                   URLQueryItem(name: "op", value: "view")
+               ]
+               guard let url = URL(string: url) else {
+                   // Handle the case where the URL is nil
+                   print("Error: Invalid URL")
+                   return
+               }
+               var request = URLRequest(url: url)
+               request.httpMethod = AppConstant.iZ_POST_REQUEST
+               request.setValue(bundleName, forHTTPHeaderField: "Referer")
+               request.allHTTPHeaderFields = requestHeaders
+               request.httpBody = requestBodyComponents.query?.data(using: .utf8)
+               let config = URLSessionConfiguration.default
+               if #available(iOS 11.0, *) {
+                   config.waitsForConnectivity = true
+               } else {
+                   // Fallback on earlier versions
+               }
+               URLSession(configuration: config).dataTask(with: request) {(data,response,error) in
+                   
+                   do {
+                       if let error = error {
+                           throw error
+                       }
+                       // Check the HTTP response status code
+                       if let httpResponse = response as? HTTPURLResponse {
+                           if httpResponse.statusCode == 200 {
+                               
+                           }
+                       }
+                   } catch {
+                       Utils.handleOnceException(bundleName: bundleName, exceptionName: "\(error.localizedDescription)", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastImpression" , rid: notificationData.rid, cid : notificationData.id, userInfo: userInfo)
+                   }
+               }.resume()
+           }
+           else
+           {
+               Utils.handleOnceException(bundleName: bundleName, exceptionName: "rid value is blank", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastImpression" , rid: notificationData.rid, cid : notificationData.id, userInfo: userInfo)
+           }
+       }
     
     
     
 
     // last click data send to server
-        @objc static func lastClick(notificationData : Payload,pid : String,token : String,url : String, userInfo: [AnyHashable: Any])
+        @objc static func lastClick(bundleName: String,notificationData : Payload,pid : String,token : String,url : String, userInfo: [AnyHashable: Any])
         {
             if(pid != "" && token != "" && notificationData.rid != nil)
             {
@@ -1271,78 +1417,73 @@ enum DataError: Error {
                         // Check the HTTP response status code
                         if let httpResponse = response as? HTTPURLResponse {
                             if httpResponse.statusCode == 200 {
-                            }else{
-                                Utils.handleOnceException(exceptionName: "\(error?.localizedDescription ?? "Error code \(httpResponse.statusCode)")", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastClick" , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
                             }
                         }
                         
                     } catch {
-                        Utils.handleOnceException(exceptionName: "\(error.localizedDescription)", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastClick" , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
+                        Utils.handleOnceException(bundleName: bundleName, exceptionName: "\(error.localizedDescription)", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastClick" , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here", userInfo: userInfo)
                     }
                 }.resume()
             }
             else
             {
-                Utils.handleOnceException(exceptionName: "rid value is blank", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastClick" , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here")
+                Utils.handleOnceException(bundleName: bundleName, exceptionName: "rid value is blank", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "lastClick" , rid: notificationData.rid ?? "no rid value here",cid : notificationData.id ?? "no cid value here", userInfo: userInfo)
             }
         }
-    static func fallbackClickTrack(title : String, landingUrl : String,rid :String, cid : String)
-       {
-           
-           let pid = Utils.getUserId() ?? ""
-           let token = Utils.getUserDeviceToken() ?? ""
+    static func fallbackClickTrack(bundleName: String,title : String, landingUrl : String,rid :String, cid : String, userInfo: [AnyHashable : Any]?)
+      {
           
-               if(rid != "" && cid != "")
-               {
-                   let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
-                   var requestBodyComponents = URLComponents()
-                   requestBodyComponents.queryItems = [
-                           URLQueryItem(name: "ti", value: title),
-                           URLQueryItem(name: AppConstant.iZ_KEY_PID, value: pid),
-                           URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
-                           URLQueryItem(name: "cid", value: cid),
-                           URLQueryItem(name: "rid", value: rid),
-                           URLQueryItem(name: "op", value: "click"),
-                           URLQueryItem(name: "ver", value: SDKVERSION),
-                           URLQueryItem(name: "ln", value: landingUrl),
-                           
-                       ]
-                   
-                   guard let url = URL(string: RestAPI.CLICK_URL) else {
-                       // Handle the case where the URL is nil
-                       print("Error: Invalid URL")
-                       return
-                   }
-                   var request = URLRequest(url: url)
-                   request.httpMethod = AppConstant.iZ_POST_REQUEST
-                   request.allHTTPHeaderFields = requestHeaders
-                   request.httpBody = requestBodyComponents.query?.data(using: .utf8)
-                   URLSession.shared.dataTask(with: request){(data,response,error) in
-                       
-                       do {
-                           if let error = error {
-                               throw error
-                           }
-                           // Check the HTTP response status code
-                           if let httpResponse = response as? HTTPURLResponse {
-                               if httpResponse.statusCode == 200 {
-                               }else{
-                                   Utils.handleOnceException(exceptionName: "\(error?.localizedDescription ?? "Error code \(httpResponse.statusCode)")", className: tag_name, methodName: "clickTrack", rid: rid ?? "no rid value here", cid: cid ?? "no cid value here")
-                               }
-                           }
-                       } catch let error{
-                           Utils.handleOnceException(exceptionName: "\(error.localizedDescription ?? "")", className: tag_name, methodName: "clickTrack", rid: rid ?? "no rid value here", cid: cid ?? "no cid value here")
-                           
-                       }
-                   }.resume()
-               }
-               else
-               {
-                   Utils.handleOnceException(exceptionName: "rid or cid value is blank", className: tag_name, methodName: "clickTrack", rid: rid ?? "no rid value here", cid: cid ?? "no cid value here")
-                   
-               }
-           
-       }
+          let pid = Utils.getUserId(bundleName: bundleName) ?? ""
+          let token = Utils.getUserDeviceToken(bundleName: bundleName) ?? ""
+         
+              if(rid != "" && cid != "")
+              {
+                  let requestHeaders:[String:String] = [AppConstant.iZ_CONTENT_TYPE:AppConstant.iZ_CONTENT_TYPE_VALUE]
+                  var requestBodyComponents = URLComponents()
+                  requestBodyComponents.queryItems = [
+                          URLQueryItem(name: "ti", value: title),
+                          URLQueryItem(name: AppConstant.iZ_KEY_PID, value: pid),
+                          URLQueryItem(name: AppConstant.iZ_KEY_DEVICE_TOKEN, value: token),
+                          URLQueryItem(name: "cid", value: cid),
+                          URLQueryItem(name: "rid", value: rid),
+                          URLQueryItem(name: "op", value: "click"),
+                          URLQueryItem(name: "ver", value: SDKVERSION),
+                          URLQueryItem(name: "ln", value: landingUrl),
+                      ]
+                  
+                  guard let url = URL(string: RestAPI.CLICK_URL) else {
+                      // Handle the case where the URL is nil
+                      print("Error: Invalid URL")
+                      return
+                  }
+                  var request = URLRequest(url: url)
+                  request.httpMethod = AppConstant.iZ_POST_REQUEST
+                  request.allHTTPHeaderFields = requestHeaders
+                  request.httpBody = requestBodyComponents.query?.data(using: .utf8)
+                  URLSession.shared.dataTask(with: request){(data,response,error) in
+                      
+                      do {
+                          if let error = error {
+                              throw error
+                          }
+                          // Check the HTTP response status code
+                          if let httpResponse = response as? HTTPURLResponse {
+                              if httpResponse.statusCode == 200 {
+                              }
+                          }
+                      } catch let error{
+                          Utils.handleOnceException(bundleName: bundleName, exceptionName: "\(error.localizedDescription ?? "")", className: tag_name, methodName: "clickTrack", rid: rid, cid: cid, userInfo: userInfo)
+                          
+                      }
+                  }.resume()
+              }
+              else
+              {
+                  Utils.handleOnceException(bundleName: bundleName, exceptionName: "rid or cid value is blank", className: tag_name, methodName: "clickTrack", rid: rid, cid: cid, userInfo: userInfo)
+                  
+              }
+          
+      }
     // All Notification Data
        @objc static func fetchDataFromAPI(isPagination: Bool,iZPID: String,completion: @escaping (String?, Error?) -> Void) {
            

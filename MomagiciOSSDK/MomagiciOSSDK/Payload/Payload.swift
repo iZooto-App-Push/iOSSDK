@@ -19,7 +19,7 @@ public class Payload  : NSObject{
     public var rid : String?
     public var ttl : Int?
     public var tag : String?
-    public var created_on : Int?
+    public var created_on : String?
     public var reqInt : Int?
     public var mutablecontent : Int?
     public var url : String?
@@ -73,18 +73,30 @@ public class Payload  : NSObject{
         rid = dictionary["r"] as? String  // rid
         ttl = dictionary["tl"] as? Int  // ttl
         tag = dictionary["tg"] as? String   //tag
-        created_on = dictionary["ct"] as? Int  // created_on
+        created_on = dictionary["ct"] as? String   // created_on
         reqInt = dictionary["ri"] as? Int   //required Int
         mutablecontent = dictionary["mutable-content"] as? Int
         url = dictionary["ln"] as? String   // link
+        if let url0 = dictionary["ln"] as? String {
+            self.url = Utils.addMacros(url: url0)
+        }
         //  icon = dictionary["icon"] as? String
         act1name = dictionary["b1"] as? String  // button1 name
         act1link = dictionary["l1"] as? String  // button 1link
+        if let url1 = dictionary["l1"] as? String {
+            act1link = Utils.addMacros(url: url1)
+        }
         act2name = dictionary["b2"] as? String   // button 2 name
         act2link = dictionary["l2"] as? String    // button 2 link
+        if let url2 = dictionary["l2"] as? String {
+            act2link = Utils.addMacros(url: url2)
+        }
         ap = dictionary["ap"] as? String          // additional parameeter
         cfg = dictionary["cfg"] as? String           // cfg
         fetchurl = dictionary["fu"] as? String    // fetch_url
+        if let fetch = dictionary["fu"] as? String {
+            fetchurl = Utils.addMacros(url: fetch)
+        }
         inApp = dictionary["ia"] as? String          // inApp
         act1id = dictionary["d1"] as? String //action1 id
         act2id = dictionary["d2"] as? String // action2 id
@@ -251,7 +263,7 @@ public class Global {
     public var act1name : String?
     public var act1Id : String?
     public var cfg : String?
-    public var created_on : Int?
+    public var created_on : String?
     public var inApp : String?
     public var id : String? // int
     public var key : Int?
@@ -281,7 +293,7 @@ public class Global {
         act1name = dictionary["b1"] as? String  // button1 name
         act1Id = dictionary["d1"] as? String  // button1 Id
         cfg = dictionary["cfg"] as? String     // cfg
-        created_on = dictionary["ct"] as? Int // created_on
+        created_on = dictionary["ct"] as? String // created_on
         inApp = dictionary["ia"] as? String   // inApp
         id = dictionary["id"] as? String   // id
         key = dictionary["k"] as? Int      // key
@@ -347,3 +359,5 @@ public class iZootoBase {
     }
     
 }
+
+

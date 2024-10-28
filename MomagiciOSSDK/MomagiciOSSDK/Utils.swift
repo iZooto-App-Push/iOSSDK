@@ -38,15 +38,23 @@ public class Utils : NSObject
             return ""
         }
     }
-    
-    public static func getUserDeviceToken() -> String? {
-        return sharedUserDefault?.string(forKey: SharedUserDefault.Key.token) ?? ""
-    }
-    
-    public static func getUserPID() -> Int? {
-        return sharedUserDefault?.integer(forKey: SharedUserDefault.Key.registerID) ?? 0
-    }
+
+    public static func getUserDeviceToken(bundleName : String) -> String? {
+        if let userDefault = UserDefaults(suiteName: Utils.getBundleName(bundleName: bundleName)){
+                return userDefault.string(forKey: AppConstant.IZ_GRPS_TKN)
+            }else{
+                return "token not found"
+            }
+        }
         
+        public static func getUserId(bundleName : String) -> String? {
+            if let userDefault = UserDefaults(suiteName: Utils.getBundleName(bundleName: bundleName)){
+                return userDefault.string(forKey: AppConstant.REGISTERED_ID)
+            }else{
+                return "pid not found"
+            }
+            
+        }
     public static func initFireBaseInialise(isInitialise : Bool)
     {
         let preference = UserDefaults.standard
@@ -101,14 +109,12 @@ public class Utils : NSObject
         return String(string[string.startIndex..<endIndex])
     }
     
-    public static func getBundleName() -> String {
-        if let bundleID = Bundle.main.bundleIdentifier {
-            return "group."+bundleID+".datb"
-        } else {
-            // Provide a fallback value or handle the case where bundleID is nil
-            return "group.default.bundle.datb"
+
+    public static func getBundleName(bundleName : String)->String
+        {
+          return "group."+bundleName+".datb"
+           
         }
-    }
     
     // get Bundle ID
     static func getAppInfo()->String {
@@ -156,30 +162,96 @@ public class Utils : NSObject
     static func  getVersion() -> String {
         return UIDevice.current.systemVersion
     }
+   
     
-    
-    public static  func handleOnceException(exceptionName: String, className: String, methodName: String,  rid: String, cid: String)
-        {
-            
-            
-            let userDefaults = UserDefaults.standard
-            guard let appid = (UserDefaults.standard.value(forKey: "appID") as? String) else {
-                print("App ID not found to send exception.")
-                return
-            }
-            if userDefaults.object(forKey: methodName) == nil{
-                   userDefaults.set("isPresent", forKey: methodName)
-                RestAPI.sendExceptionToServer(exceptionName: exceptionName, className: className, methodName: methodName,  rid: rid, cid: cid, appId: appid)
-                   
-               } else {
-                   print("Key \(methodName) already exists. Data not stored.")
+    static func handleOnceException(bundleName : String,exceptionName: String, className: String, methodName: String,  rid: String?, cid: String?, userInfo: [AnyHashable: Any]?)
+       {
+           let userDefaults = UserDefaults.standard
+           var appid = ""
+           if let userDefaults = UserDefaults(suiteName: Utils.getBundleName(bundleName: bundleName)){
+               appid = userDefaults.value(forKey: "appID") as? String ?? ""
+           }
+           if userDefaults.object(forKey: methodName) == nil{
+                  userDefaults.set("isPresent", forKey: methodName)
+               RestAPI.sendExceptionToServer(bundleName: bundleName,exceptionName: exceptionName, className: className, methodName: methodName,  rid: rid, cid: cid, appId: appid, userInfo: userInfo ?? nil)
+                  
+              } else {
+                  print("Key \(methodName) already exists. Data not stored.")
+              }
+       }
+    static func addMacros(url: String) -> String {
+         let bundleName = Bundle.main.object(forInfoDictionaryKey: "CFBundleIdentifier") as? String ?? ""
+           var finalUrl = url.trimmingCharacters(in: .whitespacesAndNewlines)
+           if finalUrl != "" && !finalUrl.isEmpty{
+               var registerTime: TimeInterval = 0
+               let token = Utils.getUserDeviceToken(bundleName: bundleName) ?? ""
+               let pid = Utils.getUserId(bundleName: bundleName) ?? ""
+               if let userDefaults = UserDefaults(suiteName: Utils.getBundleName(bundleName: bundleName)){
+                   registerTime = userDefaults.value(forKey: "unixTS") as? TimeInterval ?? 0
                }
-        }
-    
-    public static func getUserId() -> String? {
-            let userDefault = UserDefaults.standard
-            return userDefault.string(forKey: AppConstant.REGISTERED_ID)
-        }
+               let time = Utils.unixTimeDifference(unixTimestamp: registerTime )
+               
+               if finalUrl.contains("{~UUID~}") {
+                   finalUrl = finalUrl.replacingOccurrences(of: "{~UUID~}", with: token)
+               }
+               if finalUrl.contains("{~ADID~}") {
+                   finalUrl = finalUrl.replacingOccurrences(of: "{~ADID~}", with: RestAPI.identifierForAdvertising() ?? "")
+               }
+               if finalUrl.contains("{~PID~}") {
+                   finalUrl = finalUrl.replacingOccurrences(of: "{~PID~}", with: pid)
+               }
+               if finalUrl.contains("{~DEVICEID~}") {
+                   finalUrl = finalUrl.replacingOccurrences(of: "{~DEVICEID~}", with: token)
+               }
+               if finalUrl.contains("{~DEVICETOKEN~}")
+               {
+                   finalUrl = finalUrl.replacingOccurrences(of: "{~DEVICETOKEN~}", with: token)
+               }
+               if finalUrl.contains("{~SUBAGED~}")
+               {
+                   finalUrl = finalUrl.replacingOccurrences(of: "{~SUBAGED~}", with: String(time.days))
+               }
+               if finalUrl.contains("{~SUBAGEM~}")
+               {
+                   finalUrl = finalUrl.replacingOccurrences(of: "{~SUBAGEM~}", with: String(time.months))
+               }
+               if finalUrl.contains("{~SUBAGEY~}")
+               {
+                   finalUrl = finalUrl.replacingOccurrences(of: "{~SUBAGEY~}", with: String(time.years))
+               }
+               if finalUrl.contains("{~SUBUTS~}")
+               {
+                   finalUrl = finalUrl.replacingOccurrences(of: "{~SUBUTS~}", with: String(Int64(registerTime)))
+               }
+               
+           }
+           return finalUrl
+       }
+       
+      
+       static func unixTimeDifference(unixTimestamp: TimeInterval) -> (years: Int, months: Int, days: Int) {
+           
+           let registeredTimestampMillis: TimeInterval = unixTimestamp// Add your registered timestamp in milliseconds here
+           let currentTimestampMillis: TimeInterval = TimeInterval(Int(Date().timeIntervalSince1970 * 1000))
+           
+   //        let registeredTimestampMillis: TimeInterval = 1754718397000
+   //        let currentTimestampMillis: TimeInterval = 1838368000000
+           
+           let currentDate = Date(timeIntervalSince1970: currentTimestampMillis / 1000)
+           let registeredDate = Date(timeIntervalSince1970: registeredTimestampMillis / 1000)
+           
+           var calendar = Calendar.current
+           calendar.timeZone = .current
+           let components = calendar.dateComponents([.year, .month, .day], from: registeredDate, to: currentDate)
+           
+           let years = components.year ?? 0
+           let months = components.month ?? 0
+           let days = components.day ?? 0
+           let totalDays = calendar.dateComponents([.day], from: registeredDate, to: currentDate).day!
+           let totalMonths = months + years * 12
+           
+           return (years: years, months: totalMonths, days: totalDays)
+       }
     
 }
 

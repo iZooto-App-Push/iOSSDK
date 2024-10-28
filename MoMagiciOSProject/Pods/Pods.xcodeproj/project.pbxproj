@@ -19,6 +19,7 @@
 		643CFEA50209BBD03C0F90AE64CE606A /* Pods-MoMagiciOSProject-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = C729241A7FDE62201F693E8E9892BA48 /* Pods-MoMagiciOSProject-dummy.m */; };
 		65F2E1E028AF5FA67490C605A1BBE787 /* DATB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6049094672CBAEC554A1CD8F4DAC3C /* DATB.swift */; };
 		6C09A86B2C8728FD00831BCD /* DatParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C09A86A2C8728FD00831BCD /* DatParsing.swift */; };
+		6C339E2C2CCFAAFD0052D526 /* IZDeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C339E2B2CCFAAE60052D526 /* IZDeviceInfo.swift */; };
 		79C10ECB61D88089B9F06331B1E9E84D /* Pods-MoMagiciOSProject-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = B140142F16E6F962C7966A71ACC89E2E /* Pods-MoMagiciOSProject-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AB856B25AF87D31FCAE70A2DA8135736 /* AppConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F080ACD19F1C7A08279DCC824F011 /* AppConstant.swift */; };
 		C22D9C279CCCFF050866F04AA3D72033 /* MomagiciOSSDK-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = E6EB1DDD3991BE220A0ED8656F4D08C8 /* MomagiciOSSDK-dummy.m */; };
@@ -59,6 +60,7 @@
 		6541D18B12EFC7784273BFD67006D3DE /* Pods-MoMagiciOSProject-MoMagicExtesnionServices.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-MoMagiciOSProject-MoMagicExtesnionServices.release.xcconfig"; sourceTree = "<group>"; };
 		69CBDD7BA67708DE098E27EB7E80F4F9 /* Pods-MoMagiciOSProject-MoMagicExtesnionServices-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-MoMagiciOSProject-MoMagicExtesnionServices-acknowledgements.plist"; sourceTree = "<group>"; };
 		6C09A86A2C8728FD00831BCD /* DatParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatParsing.swift; sourceTree = "<group>"; };
+		6C339E2B2CCFAAE60052D526 /* IZDeviceInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IZDeviceInfo.swift; sourceTree = "<group>"; };
 		6CBA0A659458E10508FC7512E7A6CC3E /* MomagiciOSSDK-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "MomagiciOSSDK-umbrella.h"; sourceTree = "<group>"; };
 		73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		7537B82591495514388341B07D37D0A9 /* Pods-MoMagiciOSProject-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-MoMagiciOSProject-acknowledgements.markdown"; sourceTree = "<group>"; };
@@ -146,6 +148,7 @@
 		4956F0F23D34D8468E8FA3DE7195ACB2 /* MomagiciOSSDK */ = {
 			isa = PBXGroup;
 			children = (
+				6C339E2A2CCFAAC80052D526 /* AppManager */,
 				1F6049094672CBAEC554A1CD8F4DAC3C /* DATB.swift */,
 				AFD5685A6DE39E471A95CAEE185F69F6 /* Utils.swift */,
 				5EEE056727C450F6035235FF57F9BAE3 /* ViewController.swift */,
@@ -165,6 +168,14 @@
 				73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */,
 			);
 			name = iOS;
+			sourceTree = "<group>";
+		};
+		6C339E2A2CCFAAC80052D526 /* AppManager */ = {
+			isa = PBXGroup;
+			children = (
+				6C339E2B2CCFAAE60052D526 /* IZDeviceInfo.swift */,
+			);
+			path = AppManager;
 			sourceTree = "<group>";
 		};
 		6F28DE146988D28943C2562372BAD87A /* Pods-MoMagiciOSProject-MoMagicExtesnionServices */ = {
@@ -432,6 +443,7 @@
 				168ABD047F76FAFF79A271E0AF7EC15D /* UserDefaults.swift in Sources */,
 				575C39375447092C305726599CB6D778 /* Utils.swift in Sources */,
 				10842D654999176ECBD004DA5F31D8AD /* ViewController.swift in Sources */,
+				6C339E2C2CCFAAFD0052D526 /* IZDeviceInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
