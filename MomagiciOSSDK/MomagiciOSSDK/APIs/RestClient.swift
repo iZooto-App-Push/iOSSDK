@@ -42,7 +42,7 @@ enum DataError: Error {
     //fallback url
          static var fallBackLandingUrl = ""
          static var fallBackTitle = ""
-         static let SDKVERSION = "3.0.1"
+         static let SDKVERSION = "3.0.2"
     //Fallback
         static let FALLBACK_URL = "https://flbk.izooto.com/default.json"
      // MOMAGIC URL
@@ -1242,7 +1242,6 @@ enum DataError: Error {
                    // Check the HTTP response status code
                    if let httpResponse = response as? HTTPURLResponse {
                        if httpResponse.statusCode == 200 {
-                           print("Fetcher Click Success")
                        }
                    }
                } catch {
@@ -1280,7 +1279,6 @@ enum DataError: Error {
                        // Check the HTTP response status code
                        if let httpResponse = response as? HTTPURLResponse {
                            if httpResponse.statusCode == 200 {
-                               print("Mediation Click Success")
                            }else{
                                Utils.handleOnceException(bundleName: bundleName, exceptionName: "\(error?.localizedDescription ?? "Error code \(httpResponse.statusCode)")", className: AppConstant.iZ_REST_API_CLASS_NAME, methodName: "Ad-Mediation Click API 1", rid: rid, cid: finalDict.value(forKey: "id") as? String, userInfo: userInfo)
                            }

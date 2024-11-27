@@ -15,25 +15,20 @@ import CommonCrypto
 
 let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
 @objc public  class DATB : NSObject {
-    private  static var datbPid = Int()
     private static var pid = String()
-    private static var datb_app_id : String!
+
     static var  appDelegate = UIApplication.shared.delegate!
-    private static var rid : String!
-    private static var cid : String!
     private static var myIdLnArray: [[String:Any]] = []
     private static var myRCArray: [[String:Any]] = []
     private static var tokenData : String!
     private let application : UIApplication
     @available(iOS 11.0, *)
-    private static var firstAction : UNNotificationAction!
+   // private static var firstAction : UNNotificationAction!
     @available(iOS 11.0, *)
-    private static var secondAction : UNNotificationAction!
+   // private static var secondAction : UNNotificationAction!
     @available(iOS 11.0, *)
-    private static var category : UNNotificationCategory!
-    private static var type : String!
-    private static var actionType : String!
-    private static var updateURL : String!
+   // private static var category : UNNotificationCategory!
+    private static var type = "0"
     private static let checkData = 1 as Int
     static var  appId : String!
     static var  launchOptions : NSDictionary!
@@ -41,7 +36,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
     private static var isAnalytics = false as Bool
     private static var isNativeWebview = false as Bool
     private static var isWebView = false as Bool
-    private static var landingURL : String!
+   // private static var landingURL : String!
     private static var badgeNumber = 0 as NSInteger
     private static var badgeCount = 0 as NSInteger
     private static var storyBoardData = UIStoryboard.self
@@ -2116,9 +2111,7 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
            if let userDefaults = UserDefaults(suiteName: Utils.getBundleName(bundleName: bundleName)) {
                let badgeC = userDefaults.integer(forKey:"Badge")
                let isBadge = userDefaults.bool(forKey: "isBadge")
-               print("Click",Utils.getBundleName(bundleName: bundleName))
-                print("Click badgeC",badgeC)
-                print("Click isBadge ",isBadge)
+              
 
                 if isBadge{
                    self.badgeCount = badgeC-1
