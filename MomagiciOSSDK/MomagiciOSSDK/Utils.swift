@@ -8,54 +8,44 @@
 import Foundation
 import UIKit
 @objc
-public class Utils : NSObject
+internal class Utils : NSObject
 {
     public static  let TOKEN = "save_token"
     
-    public static func getDeviceName()->String
+    static func getDeviceName()->String
     {
         let deviceName = UIDevice.current.name
         return deviceName
     }
     
-    public static func getSystemVersion()->String{
+    static func getSystemVersion()->String{
         let systemVersion = UIDevice.current.systemVersion
         return systemVersion
     }
     
-    public static func saveAccessToken(access_token: String){
+    static func saveAccessToken(access_token: String){
         let preferences = UserDefaults.standard
         preferences.set(access_token, forKey: TOKEN)
         Utils.didSave(preferences: preferences)
     }
     
-    public static func getAccessToken() -> String{
-        let preferences = UserDefaults.standard
-        if preferences.string(forKey: TOKEN) != nil{
-            let access_token = preferences.string(forKey: TOKEN)
-            return access_token!
-        } else {
-            return ""
-        }
-    }
-
-    public static func getUserDeviceToken(bundleName : String) -> String? {
-        if let userDefault = UserDefaults(suiteName: Utils.getBundleName(bundleName: bundleName)){
+    static func getUserDeviceToken(bundleName : String) -> String? {
+        if let userDefault = UserDefaults(suiteName: Utils.getGroupName(bundleName: bundleName)){
                 return userDefault.string(forKey: AppConstant.IZ_GRPS_TKN)
             }else{
-                return "token not found"
+                return "Device token is not found"
             }
         }
         
-        public static func getUserId(bundleName : String) -> String? {
-            if let userDefault = UserDefaults(suiteName: Utils.getBundleName(bundleName: bundleName)){
+        static func getUserId(bundleName : String) -> String? {
+            if let userDefault = UserDefaults(suiteName: Utils.getGroupName(bundleName: bundleName)){
                 return userDefault.string(forKey: AppConstant.REGISTERED_ID)
             }else{
-                return "pid not found"
+                return "Pid not found"
             }
             
         }
-    public static func initFireBaseInialise(isInitialise : Bool)
+    static func initFireBaseInialise(isInitialise : Bool)
     {
         let preference = UserDefaults.standard
         preference.set(isInitialise, forKey: "INSTALL")
@@ -63,7 +53,7 @@ public class Utils : NSObject
     }
     
     // Checking the UserDefaults is saved or not
-    public static func didSave(preferences: UserDefaults){
+    static func didSave(preferences: UserDefaults){
         let didSave = preferences.synchronize()
         if !didSave{
             // Couldn't Save
@@ -71,14 +61,14 @@ public class Utils : NSObject
         }
     }
     
-    public static func eventValidate(eventName : String)->String
+    static func eventValidate(eventName : String)->String
     {
         let replaced = eventName.replacingOccurrences(of: " ", with: "_")
         let validataEventname = createSubstring(string: replaced, length: 32)
         return validataEventname.lowercased()
     }
     
-    public static func dataValidate(data: [String: Any]) -> [String: Any] {
+    static func dataValidate(data: [String: Any]) -> [String: Any] {
         var updatedData = [String: Any]()
         
         for (key, value) in data {
@@ -98,7 +88,7 @@ public class Utils : NSObject
     }
 
     
-    public static func createSubstring(string: String, length: Int) -> String {
+    static func createSubstring(string: String, length: Int) -> String {
         guard length > 0 else {
             // Return an empty string if length is non-positive
             return ""
@@ -110,23 +100,9 @@ public class Utils : NSObject
     }
     
 
-    public static func getBundleName(bundleName : String)->String
-        {
-          return "group."+bundleName+".datb"
-           
-        }
-    
-    // get Bundle ID
-    static func getAppInfo()->String {
-        let dictionary = Bundle.main.infoDictionary!
-        let version = dictionary["CFBundleShortVersionString"] as! String
-        return version
-    }
-    
-    // get App Name
-    static func getAppName()->String {
-        let appName = Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as! String
-        return appName
+    static func getGroupName(bundleName: String)->String
+    {
+        return "group."+bundleName+".datb"
     }
     
     // getOS Information
@@ -137,10 +113,7 @@ public class Utils : NSObject
     
     // get App version
     static func getAppVersion() -> String {
-        let dictionary = Bundle.main.infoDictionary!
-        let version = dictionary["CFBundleShortVersionString"] as! String
-        // print(version)
-        return "\(version)"
+        return Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0"
     }
     
     // current timestamp
@@ -149,13 +122,6 @@ public class Utils : NSObject
         let currentDate = Date()
         let since1970 = currentDate.timeIntervalSince1970
         return Int(since1970 * 1000)
-    }
-    
-    // get device id
-    static func getUUID()->String
-    {
-        let device_id = UIDevice.current.identifierForVendor!.uuidString
-        return device_id
     }
     
     //get add version
@@ -168,7 +134,7 @@ public class Utils : NSObject
        {
            let userDefaults = UserDefaults.standard
            var appid = ""
-           if let userDefaults = UserDefaults(suiteName: Utils.getBundleName(bundleName: bundleName)){
+           if let userDefaults = UserDefaults(suiteName: Utils.getGroupName(bundleName: bundleName)){
                appid = userDefaults.value(forKey: "appID") as? String ?? ""
            }
            if userDefaults.object(forKey: methodName) == nil{
@@ -186,7 +152,7 @@ public class Utils : NSObject
                var registerTime: TimeInterval = 0
                let token = Utils.getUserDeviceToken(bundleName: bundleName) ?? ""
                let pid = Utils.getUserId(bundleName: bundleName) ?? ""
-               if let userDefaults = UserDefaults(suiteName: Utils.getBundleName(bundleName: bundleName)){
+               if let userDefaults = UserDefaults(suiteName: Utils.getGroupName(bundleName: bundleName)){
                    registerTime = userDefaults.value(forKey: "unixTS") as? TimeInterval ?? 0
                }
                let time = Utils.unixTimeDifference(unixTimestamp: registerTime )
@@ -246,8 +212,7 @@ public class Utils : NSObject
            
            let years = components.year ?? 0
            let months = components.month ?? 0
-           let days = components.day ?? 0
-           let totalDays = calendar.dateComponents([.day], from: registeredDate, to: currentDate).day!
+           let totalDays = calendar.dateComponents([.day], from: registeredDate, to: currentDate).day ?? 0
            let totalMonths = months + years * 12
            
            return (years: years, months: totalMonths, days: totalDays)
@@ -255,7 +220,7 @@ public class Utils : NSObject
     
 }
 
-public  func checkTopicNameValidation(topicName : Dictionary<String,String>)-> Bool
+func checkTopicNameValidation(topicName : Dictionary<String,String>)-> Bool
 {
     let pattern = "[a-zA-Z0-9-_.~%]+"
     print(pattern)

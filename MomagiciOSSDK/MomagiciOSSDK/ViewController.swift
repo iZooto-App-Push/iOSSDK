@@ -11,20 +11,22 @@ import WebKit
 
 class ViewController: UIViewController,WKUIDelegate,WKNavigationDelegate {
     var window : UIWindow?
-    var webView: WKWebView!
-    static var seriveURL : String?
+    var webView: WKWebView?
+    static var serviceURL : String?
     static var title : String?
     
-    var activityIndicator: UIActivityIndicatorView!
+    var activityIndicator: UIActivityIndicatorView?
     
     override func loadView() {
         super.loadView()
         let webConfiguration = WKWebViewConfiguration()
         webView = WKWebView(frame: .zero, configuration: webConfiguration)
-        webView.uiDelegate = self
-        webView.navigationDelegate = self
-        webView.frame=self.view.bounds
-        view.addSubview(webView)
+        webView?.uiDelegate = self
+        webView?.navigationDelegate = self
+        webView?.frame=self.view.bounds
+        if let safeWebView = webView {
+            view.addSubview(safeWebView)
+        }
         
     }
     override func viewDidLoad() {
@@ -32,15 +34,20 @@ class ViewController: UIViewController,WKUIDelegate,WKNavigationDelegate {
         self.setToolBar()
 
         activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .gray) // Use the new initializer
-        activityIndicator.center = self.view.center
-        activityIndicator.hidesWhenStopped = true
+        activityIndicator?.center = self.view.center
+        activityIndicator?.hidesWhenStopped = true
 
-        view.addSubview(activityIndicator)
+        if let indicator = activityIndicator {
+            view.addSubview(indicator)
+        }
         
-        webView.scrollView.contentInset = UIEdgeInsets(top: 43,left: 0,bottom: 0,right: 0);
-        if let url = URL(string: ViewController.seriveURL!) {
+        webView?.scrollView.contentInset = UIEdgeInsets(top: 43,left: 0,bottom: 0,right: 0);
+        if let urlString = ViewController.serviceURL,
+            let url = URL(string: urlString) {
             let request = URLRequest(url: url)
-            webView.load(request)
+            webView?.load(request)
+        } else {
+            print("Invalid or missing service URL")
         }
     }
     private func setToolBar() {
@@ -62,21 +69,21 @@ class ViewController: UIViewController,WKUIDelegate,WKNavigationDelegate {
     
     func showActivityIndicator(show: Bool) {
         if show {
-            activityIndicator.startAnimating()
+            activityIndicator?.startAnimating()
         } else {
-            activityIndicator.stopAnimating()
+            activityIndicator?.stopAnimating()
         }
     }
     
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation) {
         showActivityIndicator(show: false)
     }
     
-    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation) {
         showActivityIndicator(show: true)
     }
     
-    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation, withError error: Error) {
         showActivityIndicator(show: false)
     }
     

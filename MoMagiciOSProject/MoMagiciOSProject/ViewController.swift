@@ -6,12 +6,14 @@
 //
 
 import UIKit
+import MomagiciOSSDK
 
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+      //  DATB.setSubscriberID(subscriberID: "12345678909090")
     }
 
 

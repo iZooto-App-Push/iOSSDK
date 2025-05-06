@@ -9,7 +9,7 @@ import Foundation
 struct SharedUserDefault {
     static let bundleName = Bundle.main.object(forInfoDictionaryKey: "CFBundleIdentifier") as? String ?? ""
     
-    static let suitName = Utils.getBundleName(bundleName: bundleName)
+    static let suitName = Utils.getGroupName(bundleName: bundleName)
     
     struct Key {
         static let token = "saveToken"
