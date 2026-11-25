@@ -7,14 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		280739AD2675DF0400B681BE /* MomagiciOSSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280739AC2675DF0400B681BE /* MomagiciOSSDK.swift */; };
-		280739B52675E29A00B681BE /* RestClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280739B42675E29A00B681BE /* RestClient.swift */; };
-		280739B82675E33100B681BE /* Payload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280739B72675E33100B681BE /* Payload.swift */; };
-		280739BB2675E36D00B681BE /* AppConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280739BA2675E36D00B681BE /* AppConstant.swift */; };
-		280739BE2675E38900B681BE /* SharedUserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280739BD2675E38900B681BE /* SharedUserDefault.swift */; };
-		280739C12675E3AB00B681BE /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280739C02675E3AB00B681BE /* UserDefaults.swift */; };
-		280739C42675E3C200B681BE /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280739C32675E3C200B681BE /* Utils.swift */; };
-		280739C72675EF3100B681BE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280739C62675EF3100B681BE /* ViewController.swift */; };
+		2CEE20D22A37B5E5C17FDC5E /* Pods_MomagiciOSSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F7967117306AA3D85E5A1C6 /* Pods_MomagiciOSSDK.framework */; };
+		B5F3435030B46EC300E93929 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F3434D30B46EC300E93929 /* Utils.swift */; };
+		B5F3435130B46EC300E93929 /* AppConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F3434530B46EC300E93929 /* AppConstant.swift */; };
+		B5F3435230B46EC300E93929 /* DATB.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F3434C30B46EC300E93929 /* DATB.swift */; };
+		B5F3435330B46EC300E93929 /* DatParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F3434630B46EC300E93929 /* DatParsing.swift */; };
+		B5F3435430B46EC300E93929 /* IZDeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F3434330B46EC300E93929 /* IZDeviceInfo.swift */; };
+		B5F3435530B46EC300E93929 /* SharedUserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F3434730B46EC300E93929 /* SharedUserDefault.swift */; };
+		B5F3435630B46EC300E93929 /* RestClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F3434130B46EC300E93929 /* RestClient.swift */; };
+		B5F3435730B46EC300E93929 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F3434830B46EC300E93929 /* UserDefaults.swift */; };
+		B5F3435830B46EC300E93929 /* Payload.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F3434A30B46EC300E93929 /* Payload.swift */; };
+		B5F3435930B46EC300E93929 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F3434E30B46EC300E93929 /* ViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -30,15 +33,20 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		280739A92675DF0400B681BE /* libMomagiciOSSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMomagiciOSSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		280739AC2675DF0400B681BE /* MomagiciOSSDK.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomagiciOSSDK.swift; sourceTree = "<group>"; };
-		280739B42675E29A00B681BE /* RestClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RestClient.swift; path = APIs/RestClient.swift; sourceTree = "<group>"; };
-		280739B72675E33100B681BE /* Payload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Payload.swift; path = Payload/Payload.swift; sourceTree = "<group>"; };
-		280739BA2675E36D00B681BE /* AppConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppConstant.swift; path = helper/AppConstant.swift; sourceTree = "<group>"; };
-		280739BD2675E38900B681BE /* SharedUserDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SharedUserDefault.swift; path = helper/SharedUserDefault.swift; sourceTree = "<group>"; };
-		280739C02675E3AB00B681BE /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UserDefaults.swift; path = helper/UserDefaults.swift; sourceTree = "<group>"; };
-		280739C32675E3C200B681BE /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
-		280739C62675EF3100B681BE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		280739A92675DF0400B681BE /* MomagiciOSSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MomagiciOSSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		283B271AADC391B1568A2AA6 /* Pods-MomagiciOSSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MomagiciOSSDK.release.xcconfig"; path = "Target Support Files/Pods-MomagiciOSSDK/Pods-MomagiciOSSDK.release.xcconfig"; sourceTree = "<group>"; };
+		8F7967117306AA3D85E5A1C6 /* Pods_MomagiciOSSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MomagiciOSSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B5F3434130B46EC300E93929 /* RestClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestClient.swift; sourceTree = "<group>"; };
+		B5F3434330B46EC300E93929 /* IZDeviceInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IZDeviceInfo.swift; sourceTree = "<group>"; };
+		B5F3434530B46EC300E93929 /* AppConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstant.swift; sourceTree = "<group>"; };
+		B5F3434630B46EC300E93929 /* DatParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatParsing.swift; sourceTree = "<group>"; };
+		B5F3434730B46EC300E93929 /* SharedUserDefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedUserDefault.swift; sourceTree = "<group>"; };
+		B5F3434830B46EC300E93929 /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
+		B5F3434A30B46EC300E93929 /* Payload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payload.swift; sourceTree = "<group>"; };
+		B5F3434C30B46EC300E93929 /* DATB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DATB.swift; sourceTree = "<group>"; };
+		B5F3434D30B46EC300E93929 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		B5F3434E30B46EC300E93929 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		F77909A90877196345097839 /* Pods-MomagiciOSSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MomagiciOSSDK.debug.xcconfig"; path = "Target Support Files/Pods-MomagiciOSSDK/Pods-MomagiciOSSDK.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,6 +54,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2CEE20D22A37B5E5C17FDC5E /* Pods_MomagiciOSSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -57,13 +66,15 @@
 			children = (
 				280739AB2675DF0400B681BE /* MomagiciOSSDK */,
 				280739AA2675DF0400B681BE /* Products */,
+				ED498F0ED0DF149E7CEAF5AC /* Pods */,
+				658BA85734080FB306B3ACCC /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
 		280739AA2675DF0400B681BE /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				280739A92675DF0400B681BE /* libMomagiciOSSDK.a */,
+				280739A92675DF0400B681BE /* MomagiciOSSDK.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -71,16 +82,75 @@
 		280739AB2675DF0400B681BE /* MomagiciOSSDK */ = {
 			isa = PBXGroup;
 			children = (
-				280739AC2675DF0400B681BE /* MomagiciOSSDK.swift */,
-				280739B42675E29A00B681BE /* RestClient.swift */,
-				280739B72675E33100B681BE /* Payload.swift */,
-				280739BA2675E36D00B681BE /* AppConstant.swift */,
-				280739BD2675E38900B681BE /* SharedUserDefault.swift */,
-				280739C02675E3AB00B681BE /* UserDefaults.swift */,
-				280739C32675E3C200B681BE /* Utils.swift */,
-				280739C62675EF3100B681BE /* ViewController.swift */,
+				B5F3434F30B46EC300E93929 /* Sources */,
 			);
 			path = MomagiciOSSDK;
+			sourceTree = "<group>";
+		};
+		658BA85734080FB306B3ACCC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8F7967117306AA3D85E5A1C6 /* Pods_MomagiciOSSDK.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B5F3434230B46EC300E93929 /* APIs */ = {
+			isa = PBXGroup;
+			children = (
+				B5F3434130B46EC300E93929 /* RestClient.swift */,
+			);
+			path = APIs;
+			sourceTree = "<group>";
+		};
+		B5F3434430B46EC300E93929 /* AppManager */ = {
+			isa = PBXGroup;
+			children = (
+				B5F3434330B46EC300E93929 /* IZDeviceInfo.swift */,
+			);
+			path = AppManager;
+			sourceTree = "<group>";
+		};
+		B5F3434930B46EC300E93929 /* helper */ = {
+			isa = PBXGroup;
+			children = (
+				B5F3434530B46EC300E93929 /* AppConstant.swift */,
+				B5F3434630B46EC300E93929 /* DatParsing.swift */,
+				B5F3434730B46EC300E93929 /* SharedUserDefault.swift */,
+				B5F3434830B46EC300E93929 /* UserDefaults.swift */,
+			);
+			path = helper;
+			sourceTree = "<group>";
+		};
+		B5F3434B30B46EC300E93929 /* Payload */ = {
+			isa = PBXGroup;
+			children = (
+				B5F3434A30B46EC300E93929 /* Payload.swift */,
+			);
+			path = Payload;
+			sourceTree = "<group>";
+		};
+		B5F3434F30B46EC300E93929 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				B5F3434230B46EC300E93929 /* APIs */,
+				B5F3434430B46EC300E93929 /* AppManager */,
+				B5F3434930B46EC300E93929 /* helper */,
+				B5F3434B30B46EC300E93929 /* Payload */,
+				B5F3434C30B46EC300E93929 /* DATB.swift */,
+				B5F3434D30B46EC300E93929 /* Utils.swift */,
+				B5F3434E30B46EC300E93929 /* ViewController.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		ED498F0ED0DF149E7CEAF5AC /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				F77909A90877196345097839 /* Pods-MomagiciOSSDK.debug.xcconfig */,
+				283B271AADC391B1568A2AA6 /* Pods-MomagiciOSSDK.release.xcconfig */,
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -90,6 +160,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 280739B02675DF0400B681BE /* Build configuration list for PBXNativeTarget "MomagiciOSSDK" */;
 			buildPhases = (
+				03EF00C053A67D9CB87082BB /* [CP] Check Pods Manifest.lock */,
 				280739A52675DF0400B681BE /* Sources */,
 				280739A62675DF0400B681BE /* Frameworks */,
 				280739A72675DF0400B681BE /* CopyFiles */,
@@ -100,8 +171,8 @@
 			);
 			name = MomagiciOSSDK;
 			productName = MomagiciOSSDK;
-			productReference = 280739A92675DF0400B681BE /* libMomagiciOSSDK.a */;
-			productType = "com.apple.product-type.library.static";
+			productReference = 280739A92675DF0400B681BE /* MomagiciOSSDK.framework */;
+			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
@@ -135,19 +206,46 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		03EF00C053A67D9CB87082BB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MomagiciOSSDK-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		280739A52675DF0400B681BE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				280739B82675E33100B681BE /* Payload.swift in Sources */,
-				280739B52675E29A00B681BE /* RestClient.swift in Sources */,
-				280739C12675E3AB00B681BE /* UserDefaults.swift in Sources */,
-				280739C42675E3C200B681BE /* Utils.swift in Sources */,
-				280739BE2675E38900B681BE /* SharedUserDefault.swift in Sources */,
-				280739AD2675DF0400B681BE /* MomagiciOSSDK.swift in Sources */,
-				280739C72675EF3100B681BE /* ViewController.swift in Sources */,
-				280739BB2675E36D00B681BE /* AppConstant.swift in Sources */,
+				B5F3435030B46EC300E93929 /* Utils.swift in Sources */,
+				B5F3435130B46EC300E93929 /* AppConstant.swift in Sources */,
+				B5F3435230B46EC300E93929 /* DATB.swift in Sources */,
+				B5F3435330B46EC300E93929 /* DatParsing.swift in Sources */,
+				B5F3435430B46EC300E93929 /* IZDeviceInfo.swift in Sources */,
+				B5F3435530B46EC300E93929 /* SharedUserDefault.swift in Sources */,
+				B5F3435630B46EC300E93929 /* RestClient.swift in Sources */,
+				B5F3435730B46EC300E93929 /* UserDefaults.swift in Sources */,
+				B5F3435830B46EC300E93929 /* Payload.swift in Sources */,
+				B5F3435930B46EC300E93929 /* ViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,6 +256,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -189,6 +288,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -205,7 +305,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -219,6 +320,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -250,6 +352,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -260,7 +363,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -272,12 +376,17 @@
 		};
 		280739B12675DF0400B681BE /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F77909A90877196345097839 /* Pods-MomagiciOSSDK.debug.xcconfig */;
 			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = N2T2473XHF;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACH_O_TYPE = staticlib;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
+				SKIP_INSTALL = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -285,12 +394,17 @@
 		};
 		280739B22675DF0400B681BE /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 283B271AADC391B1568A2AA6 /* Pods-MomagiciOSSDK.release.xcconfig */;
 			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = N2T2473XHF;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACH_O_TYPE = staticlib;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
+				SKIP_INSTALL = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

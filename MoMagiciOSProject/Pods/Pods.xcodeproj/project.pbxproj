@@ -3,40 +3,40 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		09155EFC39CF8528A76AEF1379F77BB0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
-		10842D654999176ECBD004DA5F31D8AD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EEE056727C450F6035235FF57F9BAE3 /* ViewController.swift */; };
-		168ABD047F76FAFF79A271E0AF7EC15D /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8360C0B59418299DEA2CAC4DA794C693 /* UserDefaults.swift */; };
-		1B8E1530A88D34BC8CDF3C2B2D0D8698 /* SharedUserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07FD91AA881260E74507345C93988DB7 /* SharedUserDefault.swift */; };
-		2A9A0C66A6FCCDF689BA10A3D39063DA /* Payload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172D1B065CE00DF659982A626D4D63C2 /* Payload.swift */; };
-		3C640A967B6B42DC2E63FE74CCC2295A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
-		43D82A86EB83C07C59707944BB6340D8 /* RestClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BDB952BD109C2070ECB21D16E9C12A /* RestClient.swift */; };
-		44514B1AFE92D44874FD00CF8A165C1C /* MomagiciOSSDK-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CBA0A659458E10508FC7512E7A6CC3E /* MomagiciOSSDK-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		575C39375447092C305726599CB6D778 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD5685A6DE39E471A95CAEE185F69F6 /* Utils.swift */; };
-		643CFEA50209BBD03C0F90AE64CE606A /* Pods-MoMagiciOSProject-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = C729241A7FDE62201F693E8E9892BA48 /* Pods-MoMagiciOSProject-dummy.m */; };
-		65F2E1E028AF5FA67490C605A1BBE787 /* DATB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F6049094672CBAEC554A1CD8F4DAC3C /* DATB.swift */; };
-		6C09A86B2C8728FD00831BCD /* DatParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C09A86A2C8728FD00831BCD /* DatParsing.swift */; };
-		6C339E2C2CCFAAFD0052D526 /* IZDeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C339E2B2CCFAAE60052D526 /* IZDeviceInfo.swift */; };
-		79C10ECB61D88089B9F06331B1E9E84D /* Pods-MoMagiciOSProject-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = B140142F16E6F962C7966A71ACC89E2E /* Pods-MoMagiciOSProject-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		AB856B25AF87D31FCAE70A2DA8135736 /* AppConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535F080ACD19F1C7A08279DCC824F011 /* AppConstant.swift */; };
-		C22D9C279CCCFF050866F04AA3D72033 /* MomagiciOSSDK-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = E6EB1DDD3991BE220A0ED8656F4D08C8 /* MomagiciOSSDK-dummy.m */; };
-		C2609E6F9F2F48EB3BF98A493DFB5DF3 /* Pods-MoMagiciOSProject-MoMagicExtesnionServices-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 373FE47C3D33EF052A08A5AFAB3292D7 /* Pods-MoMagiciOSProject-MoMagicExtesnionServices-dummy.m */; };
-		E06EA37AC733A095028A646119E09DA4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
-		ED05AA936A2689DFC839268172158E54 /* Pods-MoMagiciOSProject-MoMagicExtesnionServices-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = A4FD3A942D745E5BA15DF3F95ED8CB78 /* Pods-MoMagiciOSProject-MoMagicExtesnionServices-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0A332F24B6448EA8B48F7232D20BF475 /* IZDeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 130D20F52CBE3F76709E7D4D0C20CEEC /* IZDeviceInfo.swift */; };
+		0C8A023C8F20630B62BAD9E8DCE3D788 /* Pods-MoMagiciOSProject-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = C729241A7FDE62201F693E8E9892BA48 /* Pods-MoMagiciOSProject-dummy.m */; };
+		1714D784BC0DF9522A689C77654E44C8 /* AppConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5300DF5DAACD124AE1A4772ACE6FC3BA /* AppConstant.swift */; };
+		2F9712E8A0E9E0284B127B23358473B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 384DDA2CB25005BD6479B5987C619DD4 /* Foundation.framework */; };
+		421E3CA41D631C6AAF0FA68F8EF0A513 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 384DDA2CB25005BD6479B5987C619DD4 /* Foundation.framework */; };
+		4B54E5DF7BCEA34D0A3BAF007AAADA46 /* Pods-MoMagiciOSProject-MoMagicExtesnionServices-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 373FE47C3D33EF052A08A5AFAB3292D7 /* Pods-MoMagiciOSProject-MoMagicExtesnionServices-dummy.m */; };
+		4CF9415A1C49B71CBF9CABD197B7CEB9 /* Payload.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8D9305CCDC906B61375861E7465DCB /* Payload.swift */; };
+		51840109638189B35369D403064768B9 /* Pods-MoMagiciOSProject-MoMagicExtesnionServices-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = A4FD3A942D745E5BA15DF3F95ED8CB78 /* Pods-MoMagiciOSProject-MoMagicExtesnionServices-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		59654D55FAF4EC97DEE6EE306F4C2D50 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C183BD4FBCFDE54CECAD75D7EC61E810 /* ViewController.swift */; };
+		7B36D8DD0DE69C91220EA6F690104521 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA52BA1E5F2D3DF100ED436B0711328 /* Utils.swift */; };
+		83D412CE24D17D9FFE3F25F2EE07ABB3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 384DDA2CB25005BD6479B5987C619DD4 /* Foundation.framework */; };
+		B8BFCC9B61EF404667B65E5CD254BAF4 /* SharedUserDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A10DBED19D76AE388C5BF4A53BFA8F /* SharedUserDefault.swift */; };
+		BFB5682F06A61B267034274AC9833D8C /* DatParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2A2BC31963F994EE5D277528FCDE9C3 /* DatParsing.swift */; };
+		C4087476FA17BBB6B40B3586F4A29CD4 /* RestClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2573DA804CE986042ED29FCB91990C34 /* RestClient.swift */; };
+		CB13F2ED82FFEF964AAB687C428DEECC /* MomagiciOSSDK-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 83ABB1198679D3E758388D91B28696EF /* MomagiciOSSDK-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		ED898240DA21865884697EEB5B776C7E /* Pods-MoMagiciOSProject-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = B140142F16E6F962C7966A71ACC89E2E /* Pods-MoMagiciOSProject-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F7E44C46BAB41BF718A181DD719EA57A /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0944E2DFD0DE17C805BFF12131BF5CB0 /* UserDefaults.swift */; };
+		FA1F334728055D3C49F79EB893592201 /* MomagiciOSSDK-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = F20008BB09BF22576FCE377207EB71CB /* MomagiciOSSDK-dummy.m */; };
+		FE9A012A8E77AF680CC0A615DE4569F0 /* DATB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477E3B8D1EFAA1494C7E2B180C1F1B9F /* DATB.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		688FBA81F6E29124DA1E6A687C56542C /* PBXContainerItemProxy */ = {
+		12233B21BF3E8D3B383E2DE684731EB2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = F26196BA4CD40EECE83A15D0347FFB5C;
 			remoteInfo = MomagiciOSSDK;
 		};
-		94FA0178C4388146C8F497F5AC7EC33F /* PBXContainerItemProxy */ = {
+		1ABFBE0DAFE37DF508FE5804ECE9B990 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
@@ -46,70 +46,70 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		07FD91AA881260E74507345C93988DB7 /* SharedUserDefault.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SharedUserDefault.swift; sourceTree = "<group>"; };
-		097693962E4EB536B1255829A5D8A46E /* Pods_MoMagiciOSProject.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MoMagiciOSProject.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		172D1B065CE00DF659982A626D4D63C2 /* Payload.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Payload.swift; sourceTree = "<group>"; };
-		1F6049094672CBAEC554A1CD8F4DAC3C /* DATB.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DATB.swift; path = MomagiciOSSDK/DATB.swift; sourceTree = "<group>"; };
+		0643A9F211B01C7D762D465FE2B8F225 /* MomagiciOSSDK.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = MomagiciOSSDK.modulemap; sourceTree = "<group>"; };
+		0944E2DFD0DE17C805BFF12131BF5CB0 /* UserDefaults.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
+		097693962E4EB536B1255829A5D8A46E /* Pods-MoMagiciOSProject */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-MoMagiciOSProject"; path = Pods_MoMagiciOSProject.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0FA52BA1E5F2D3DF100ED436B0711328 /* Utils.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Utils.swift; path = MomagiciOSSDK/Sources/Utils.swift; sourceTree = "<group>"; };
+		130D20F52CBE3F76709E7D4D0C20CEEC /* IZDeviceInfo.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = IZDeviceInfo.swift; sourceTree = "<group>"; };
+		2573DA804CE986042ED29FCB91990C34 /* RestClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RestClient.swift; sourceTree = "<group>"; };
+		27594943C3109C3DB85D3B3A888EBAB1 /* MomagiciOSSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = MomagiciOSSDK.release.xcconfig; sourceTree = "<group>"; };
+		29BC7FAA4122C5A0A0F93DC8F89C4704 /* MomagiciOSSDK-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "MomagiciOSSDK-Info.plist"; sourceTree = "<group>"; };
 		31169B6E67A9160F8348769FE622BD0F /* Pods-MoMagiciOSProject-MoMagicExtesnionServices-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-MoMagiciOSProject-MoMagicExtesnionServices-acknowledgements.markdown"; sourceTree = "<group>"; };
 		373FE47C3D33EF052A08A5AFAB3292D7 /* Pods-MoMagiciOSProject-MoMagicExtesnionServices-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-MoMagiciOSProject-MoMagicExtesnionServices-dummy.m"; sourceTree = "<group>"; };
+		384DDA2CB25005BD6479B5987C619DD4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		3D8885D95502C53A30ABC528C2B5BE8C /* Pods-MoMagiciOSProject-MoMagicExtesnionServices.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-MoMagiciOSProject-MoMagicExtesnionServices.modulemap"; sourceTree = "<group>"; };
-		46E42ADB87EB67E9D33E324BA2F7EFEA /* MomagiciOSSDK-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "MomagiciOSSDK-prefix.pch"; sourceTree = "<group>"; };
-		535F080ACD19F1C7A08279DCC824F011 /* AppConstant.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppConstant.swift; sourceTree = "<group>"; };
-		5EEE056727C450F6035235FF57F9BAE3 /* ViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = MomagiciOSSDK/ViewController.swift; sourceTree = "<group>"; };
+		3E06040CE4ADEC641EC4026F4E186C20 /* MomagiciOSSDK.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = MomagiciOSSDK.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		477E3B8D1EFAA1494C7E2B180C1F1B9F /* DATB.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DATB.swift; path = MomagiciOSSDK/Sources/DATB.swift; sourceTree = "<group>"; };
+		5300DF5DAACD124AE1A4772ACE6FC3BA /* AppConstant.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppConstant.swift; sourceTree = "<group>"; };
 		621AC42655887ECB5BCFE54AA3B45FCA /* Pods-MoMagiciOSProject-MoMagicExtesnionServices-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-MoMagiciOSProject-MoMagicExtesnionServices-Info.plist"; sourceTree = "<group>"; };
 		6541D18B12EFC7784273BFD67006D3DE /* Pods-MoMagiciOSProject-MoMagicExtesnionServices.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-MoMagiciOSProject-MoMagicExtesnionServices.release.xcconfig"; sourceTree = "<group>"; };
 		69CBDD7BA67708DE098E27EB7E80F4F9 /* Pods-MoMagiciOSProject-MoMagicExtesnionServices-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-MoMagiciOSProject-MoMagicExtesnionServices-acknowledgements.plist"; sourceTree = "<group>"; };
-		6C09A86A2C8728FD00831BCD /* DatParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatParsing.swift; sourceTree = "<group>"; };
-		6C339E2B2CCFAAE60052D526 /* IZDeviceInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IZDeviceInfo.swift; sourceTree = "<group>"; };
-		6CBA0A659458E10508FC7512E7A6CC3E /* MomagiciOSSDK-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "MomagiciOSSDK-umbrella.h"; sourceTree = "<group>"; };
-		73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		73A10DBED19D76AE388C5BF4A53BFA8F /* SharedUserDefault.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SharedUserDefault.swift; sourceTree = "<group>"; };
 		7537B82591495514388341B07D37D0A9 /* Pods-MoMagiciOSProject-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-MoMagiciOSProject-acknowledgements.markdown"; sourceTree = "<group>"; };
 		7D760DBDF1C548EFD5272493FB1395F9 /* Pods-MoMagiciOSProject.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-MoMagiciOSProject.modulemap"; sourceTree = "<group>"; };
 		801CB1BF1AD8B6A70952DB1103ADE32C /* Pods-MoMagiciOSProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-MoMagiciOSProject.debug.xcconfig"; sourceTree = "<group>"; };
-		8360C0B59418299DEA2CAC4DA794C693 /* UserDefaults.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
-		8C861E9568DD904A187C255A18EA3D3D /* MomagiciOSSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = MomagiciOSSDK.debug.xcconfig; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		A0C71E8AD58087E6308A3D33F56294C6 /* MomagiciOSSDK-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "MomagiciOSSDK-Info.plist"; sourceTree = "<group>"; };
+		83ABB1198679D3E758388D91B28696EF /* MomagiciOSSDK-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "MomagiciOSSDK-umbrella.h"; sourceTree = "<group>"; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A4FD3A942D745E5BA15DF3F95ED8CB78 /* Pods-MoMagiciOSProject-MoMagicExtesnionServices-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-MoMagiciOSProject-MoMagicExtesnionServices-umbrella.h"; sourceTree = "<group>"; };
 		A68D16A72B20F374D6B7E56FB9C4ADD8 /* Pods-MoMagiciOSProject-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-MoMagiciOSProject-acknowledgements.plist"; sourceTree = "<group>"; };
 		AC7A34771A7EB9C9B3E5DB7C2060E2C5 /* Pods-MoMagiciOSProject-MoMagicExtesnionServices.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-MoMagiciOSProject-MoMagicExtesnionServices.debug.xcconfig"; sourceTree = "<group>"; };
-		AFD5685A6DE39E471A95CAEE185F69F6 /* Utils.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Utils.swift; path = MomagiciOSSDK/Utils.swift; sourceTree = "<group>"; };
-		B0BDB952BD109C2070ECB21D16E9C12A /* RestClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RestClient.swift; sourceTree = "<group>"; };
 		B140142F16E6F962C7966A71ACC89E2E /* Pods-MoMagiciOSProject-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-MoMagiciOSProject-umbrella.h"; sourceTree = "<group>"; };
 		B1FE50BB6F791175D26351CA8B89FD5B /* Pods-MoMagiciOSProject.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-MoMagiciOSProject.release.xcconfig"; sourceTree = "<group>"; };
-		B89907E078A755C586F1ED9C1DAF00F7 /* MomagiciOSSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MomagiciOSSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B9079CDA0C764DD8EE0DAFD45E137AD7 /* MomagiciOSSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = MomagiciOSSDK.release.xcconfig; sourceTree = "<group>"; };
-		BAB783FA8AB66BF26E1C80DE9B582CD2 /* MomagiciOSSDK.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = MomagiciOSSDK.modulemap; sourceTree = "<group>"; };
+		B89907E078A755C586F1ED9C1DAF00F7 /* MomagiciOSSDK */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = MomagiciOSSDK; path = MomagiciOSSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BC52CB8D60D173D87D4F57C38A155124 /* MomagiciOSSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = MomagiciOSSDK.debug.xcconfig; sourceTree = "<group>"; };
+		BC8D9305CCDC906B61375861E7465DCB /* Payload.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Payload.swift; sourceTree = "<group>"; };
+		C183BD4FBCFDE54CECAD75D7EC61E810 /* ViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = MomagiciOSSDK/Sources/ViewController.swift; sourceTree = "<group>"; };
 		C729241A7FDE62201F693E8E9892BA48 /* Pods-MoMagiciOSProject-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-MoMagiciOSProject-dummy.m"; sourceTree = "<group>"; };
 		C751D470624960407E358797003A7733 /* Pods-MoMagiciOSProject-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-MoMagiciOSProject-Info.plist"; sourceTree = "<group>"; };
-		CBD1A2B43A90E6A6A53B74200A81C597 /* MomagiciOSSDK.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = MomagiciOSSDK.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		E1AD0931BFE8D98C1EE0E56D617B7165 /* Pods-MoMagiciOSProject-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-MoMagiciOSProject-frameworks.sh"; sourceTree = "<group>"; };
-		E6EB1DDD3991BE220A0ED8656F4D08C8 /* MomagiciOSSDK-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "MomagiciOSSDK-dummy.m"; sourceTree = "<group>"; };
-		FAAEB6986DD66AFADFB18FF332C963B9 /* Pods_MoMagiciOSProject_MoMagicExtesnionServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MoMagiciOSProject_MoMagicExtesnionServices.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E9D5F8EC1670A661F029D53DA4812E6E /* MomagiciOSSDK-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "MomagiciOSSDK-prefix.pch"; sourceTree = "<group>"; };
+		F20008BB09BF22576FCE377207EB71CB /* MomagiciOSSDK-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "MomagiciOSSDK-dummy.m"; sourceTree = "<group>"; };
+		F2A2BC31963F994EE5D277528FCDE9C3 /* DatParsing.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DatParsing.swift; sourceTree = "<group>"; };
+		FAAEB6986DD66AFADFB18FF332C963B9 /* Pods-MoMagiciOSProject-MoMagicExtesnionServices */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-MoMagiciOSProject-MoMagicExtesnionServices"; path = Pods_MoMagiciOSProject_MoMagicExtesnionServices.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		234ECE2DB8765514E238A7128B3FADE5 /* Frameworks */ = {
+		36EB16377FE1EEC2CD30994B496FAFDF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3C640A967B6B42DC2E63FE74CCC2295A /* Foundation.framework in Frameworks */,
+				421E3CA41D631C6AAF0FA68F8EF0A513 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		92F29475E4A6F76C929A847154928430 /* Frameworks */ = {
+		4AE97F15041997F95101FD7603A83E8C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E06EA37AC733A095028A646119E09DA4 /* Foundation.framework in Frameworks */,
+				83D412CE24D17D9FFE3F25F2EE07ABB3 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F8D4CBE11801187CA44CCCF25D1640C2 /* Frameworks */ = {
+		6D03F313A8BF538B717570A8DB4EF867 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				09155EFC39CF8528A76AEF1379F77BB0 /* Foundation.framework in Frameworks */,
+				2F9712E8A0E9E0284B127B23358473B1 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,49 +133,31 @@
 			path = "Target Support Files/Pods-MoMagiciOSProject";
 			sourceTree = "<group>";
 		};
-		0F4A2C9EF06B2F584187E8762FE4A2A1 /* helper */ = {
+		280871FCF95F06226FA6AAB7FDB14129 /* MomagiciOSSDK */ = {
 			isa = PBXGroup;
 			children = (
-				535F080ACD19F1C7A08279DCC824F011 /* AppConstant.swift */,
-				07FD91AA881260E74507345C93988DB7 /* SharedUserDefault.swift */,
-				8360C0B59418299DEA2CAC4DA794C693 /* UserDefaults.swift */,
-				6C09A86A2C8728FD00831BCD /* DatParsing.swift */,
-			);
-			name = helper;
-			path = MomagiciOSSDK/helper;
-			sourceTree = "<group>";
-		};
-		4956F0F23D34D8468E8FA3DE7195ACB2 /* MomagiciOSSDK */ = {
-			isa = PBXGroup;
-			children = (
-				6C339E2A2CCFAAC80052D526 /* AppManager */,
-				1F6049094672CBAEC554A1CD8F4DAC3C /* DATB.swift */,
-				AFD5685A6DE39E471A95CAEE185F69F6 /* Utils.swift */,
-				5EEE056727C450F6035235FF57F9BAE3 /* ViewController.swift */,
-				9501F3C5FF34090A74EE089178019DBB /* APIs */,
-				0F4A2C9EF06B2F584187E8762FE4A2A1 /* helper */,
-				8113862C8CD6246563E1C713AA2B6EFB /* Payload */,
-				8878B63AC8E316526ECF1C4074C70613 /* Pod */,
-				BD671FD8B9E1A328DC9BB880EC05865A /* Support Files */,
+				477E3B8D1EFAA1494C7E2B180C1F1B9F /* DATB.swift */,
+				0FA52BA1E5F2D3DF100ED436B0711328 /* Utils.swift */,
+				C183BD4FBCFDE54CECAD75D7EC61E810 /* ViewController.swift */,
+				99E7668C97018BB8AB1B9E24FE4E3AC3 /* APIs */,
+				93C42FED0B0E4DF6FE8A7ED743DA853E /* AppManager */,
+				CCD98FCFC96A84866D1095D1A16B5F05 /* helper */,
+				9A2635671804D780B801129C37866C55 /* Payload */,
+				869F8F4F94D947B32B098BD2758585BD /* Pod */,
+				8AD7D22D95C09F8B25AC48C40C3A8A02 /* Support Files */,
 			);
 			name = MomagiciOSSDK;
 			path = ../../MomagiciOSSDK;
 			sourceTree = "<group>";
 		};
-		578452D2E740E91742655AC8F1636D1F /* iOS */ = {
+		64559DBF552AAA9EB1521AC0C1C0AD35 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */,
+				B89907E078A755C586F1ED9C1DAF00F7 /* MomagiciOSSDK */,
+				097693962E4EB536B1255829A5D8A46E /* Pods-MoMagiciOSProject */,
+				FAAEB6986DD66AFADFB18FF332C963B9 /* Pods-MoMagiciOSProject-MoMagicExtesnionServices */,
 			);
-			name = iOS;
-			sourceTree = "<group>";
-		};
-		6C339E2A2CCFAAC80052D526 /* AppManager */ = {
-			isa = PBXGroup;
-			children = (
-				6C339E2B2CCFAAE60052D526 /* IZDeviceInfo.swift */,
-			);
-			path = AppManager;
+			name = Products;
 			sourceTree = "<group>";
 		};
 		6F28DE146988D28943C2562372BAD87A /* Pods-MoMagiciOSProject-MoMagicExtesnionServices */ = {
@@ -194,40 +176,62 @@
 			path = "Target Support Files/Pods-MoMagiciOSProject-MoMagicExtesnionServices";
 			sourceTree = "<group>";
 		};
-		8113862C8CD6246563E1C713AA2B6EFB /* Payload */ = {
+		869F8F4F94D947B32B098BD2758585BD /* Pod */ = {
 			isa = PBXGroup;
 			children = (
-				172D1B065CE00DF659982A626D4D63C2 /* Payload.swift */,
-			);
-			name = Payload;
-			path = MomagiciOSSDK/Payload;
-			sourceTree = "<group>";
-		};
-		820F8C0DBBA539D45D3AE9BAE611E775 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				B89907E078A755C586F1ED9C1DAF00F7 /* MomagiciOSSDK.framework */,
-				097693962E4EB536B1255829A5D8A46E /* Pods_MoMagiciOSProject.framework */,
-				FAAEB6986DD66AFADFB18FF332C963B9 /* Pods_MoMagiciOSProject_MoMagicExtesnionServices.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		8878B63AC8E316526ECF1C4074C70613 /* Pod */ = {
-			isa = PBXGroup;
-			children = (
-				CBD1A2B43A90E6A6A53B74200A81C597 /* MomagiciOSSDK.podspec */,
+				3E06040CE4ADEC641EC4026F4E186C20 /* MomagiciOSSDK.podspec */,
 			);
 			name = Pod;
 			sourceTree = "<group>";
 		};
-		9501F3C5FF34090A74EE089178019DBB /* APIs */ = {
+		8AD7D22D95C09F8B25AC48C40C3A8A02 /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				B0BDB952BD109C2070ECB21D16E9C12A /* RestClient.swift */,
+				0643A9F211B01C7D762D465FE2B8F225 /* MomagiciOSSDK.modulemap */,
+				F20008BB09BF22576FCE377207EB71CB /* MomagiciOSSDK-dummy.m */,
+				29BC7FAA4122C5A0A0F93DC8F89C4704 /* MomagiciOSSDK-Info.plist */,
+				E9D5F8EC1670A661F029D53DA4812E6E /* MomagiciOSSDK-prefix.pch */,
+				83ABB1198679D3E758388D91B28696EF /* MomagiciOSSDK-umbrella.h */,
+				BC52CB8D60D173D87D4F57C38A155124 /* MomagiciOSSDK.debug.xcconfig */,
+				27594943C3109C3DB85D3B3A888EBAB1 /* MomagiciOSSDK.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "../MoMagiciOSProject/Pods/Target Support Files/MomagiciOSSDK";
+			sourceTree = "<group>";
+		};
+		8B0512EF4C1458FF742633A1E55241C9 /* Development Pods */ = {
+			isa = PBXGroup;
+			children = (
+				280871FCF95F06226FA6AAB7FDB14129 /* MomagiciOSSDK */,
+			);
+			name = "Development Pods";
+			sourceTree = "<group>";
+		};
+		93C42FED0B0E4DF6FE8A7ED743DA853E /* AppManager */ = {
+			isa = PBXGroup;
+			children = (
+				130D20F52CBE3F76709E7D4D0C20CEEC /* IZDeviceInfo.swift */,
+			);
+			name = AppManager;
+			path = MomagiciOSSDK/Sources/AppManager;
+			sourceTree = "<group>";
+		};
+		99E7668C97018BB8AB1B9E24FE4E3AC3 /* APIs */ = {
+			isa = PBXGroup;
+			children = (
+				2573DA804CE986042ED29FCB91990C34 /* RestClient.swift */,
 			);
 			name = APIs;
-			path = MomagiciOSSDK/APIs;
+			path = MomagiciOSSDK/Sources/APIs;
+			sourceTree = "<group>";
+		};
+		9A2635671804D780B801129C37866C55 /* Payload */ = {
+			isa = PBXGroup;
+			children = (
+				BC8D9305CCDC906B61375861E7465DCB /* Payload.swift */,
+			);
+			name = Payload;
+			path = MomagiciOSSDK/Sources/Payload;
 			sourceTree = "<group>";
 		};
 		A5C9F77110D9309168BAE2900C868D8F /* Targets Support Files */ = {
@@ -239,28 +243,25 @@
 			name = "Targets Support Files";
 			sourceTree = "<group>";
 		};
-		BD671FD8B9E1A328DC9BB880EC05865A /* Support Files */ = {
+		CCD98FCFC96A84866D1095D1A16B5F05 /* helper */ = {
 			isa = PBXGroup;
 			children = (
-				BAB783FA8AB66BF26E1C80DE9B582CD2 /* MomagiciOSSDK.modulemap */,
-				E6EB1DDD3991BE220A0ED8656F4D08C8 /* MomagiciOSSDK-dummy.m */,
-				A0C71E8AD58087E6308A3D33F56294C6 /* MomagiciOSSDK-Info.plist */,
-				46E42ADB87EB67E9D33E324BA2F7EFEA /* MomagiciOSSDK-prefix.pch */,
-				6CBA0A659458E10508FC7512E7A6CC3E /* MomagiciOSSDK-umbrella.h */,
-				8C861E9568DD904A187C255A18EA3D3D /* MomagiciOSSDK.debug.xcconfig */,
-				B9079CDA0C764DD8EE0DAFD45E137AD7 /* MomagiciOSSDK.release.xcconfig */,
+				5300DF5DAACD124AE1A4772ACE6FC3BA /* AppConstant.swift */,
+				F2A2BC31963F994EE5D277528FCDE9C3 /* DatParsing.swift */,
+				73A10DBED19D76AE388C5BF4A53BFA8F /* SharedUserDefault.swift */,
+				0944E2DFD0DE17C805BFF12131BF5CB0 /* UserDefaults.swift */,
 			);
-			name = "Support Files";
-			path = "../MoMagiciOSProject/Pods/Target Support Files/MomagiciOSSDK";
+			name = helper;
+			path = MomagiciOSSDK/Sources/helper;
 			sourceTree = "<group>";
 		};
 		CF1408CF629C7361332E53B88F7BD30C = {
 			isa = PBXGroup;
 			children = (
 				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
-				F3326CEC08FA810D0146F06803D127C7 /* Development Pods */,
+				8B0512EF4C1458FF742633A1E55241C9 /* Development Pods */,
 				D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */,
-				820F8C0DBBA539D45D3AE9BAE611E775 /* Products */,
+				64559DBF552AAA9EB1521AC0C1C0AD35 /* Products */,
 				A5C9F77110D9309168BAE2900C868D8F /* Targets Support Files */,
 			);
 			sourceTree = "<group>";
@@ -268,43 +269,43 @@
 		D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				578452D2E740E91742655AC8F1636D1F /* iOS */,
+				E4801F62A6B08CD9B5410329F1A18FDE /* iOS */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		F3326CEC08FA810D0146F06803D127C7 /* Development Pods */ = {
+		E4801F62A6B08CD9B5410329F1A18FDE /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				4956F0F23D34D8468E8FA3DE7195ACB2 /* MomagiciOSSDK */,
+				384DDA2CB25005BD6479B5987C619DD4 /* Foundation.framework */,
 			);
-			name = "Development Pods";
+			name = iOS;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		86A093EF62D4F40D2BDD53ECAB118D38 /* Headers */ = {
+		2231448A7D5A244FC10135B7B1252A01 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				79C10ECB61D88089B9F06331B1E9E84D /* Pods-MoMagiciOSProject-umbrella.h in Headers */,
+				ED898240DA21865884697EEB5B776C7E /* Pods-MoMagiciOSProject-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A5A45773B84767911D03BE406F3AE72A /* Headers */ = {
+		65CCE40EBEAE378FF654B85290F89912 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ED05AA936A2689DFC839268172158E54 /* Pods-MoMagiciOSProject-MoMagicExtesnionServices-umbrella.h in Headers */,
+				CB13F2ED82FFEF964AAB687C428DEECC /* MomagiciOSSDK-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		EA4557AD054EB237A83A5EBB2F7C0B0C /* Headers */ = {
+		950C14CEFC4426AB606F201A6EE2D39D /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				44514B1AFE92D44874FD00CF8A165C1C /* MomagiciOSSDK-umbrella.h in Headers */,
+				51840109638189B35369D403064768B9 /* Pods-MoMagiciOSProject-MoMagicExtesnionServices-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -313,50 +314,50 @@
 /* Begin PBXNativeTarget section */
 		63DF06EE3CD03C7066CDB3C08890F02D /* Pods-MoMagiciOSProject-MoMagicExtesnionServices */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B95CE86785EEA1333CE4407FB147DFA5 /* Build configuration list for PBXNativeTarget "Pods-MoMagiciOSProject-MoMagicExtesnionServices" */;
+			buildConfigurationList = 0AB38D731A86CC28EA29F372272F962A /* Build configuration list for PBXNativeTarget "Pods-MoMagiciOSProject-MoMagicExtesnionServices" */;
 			buildPhases = (
-				A5A45773B84767911D03BE406F3AE72A /* Headers */,
-				E34E9053E43CC910121FAA7F91E94E3D /* Sources */,
-				F8D4CBE11801187CA44CCCF25D1640C2 /* Frameworks */,
-				75CDECAD3B87A6500C6E458DC3CFFB2F /* Resources */,
+				950C14CEFC4426AB606F201A6EE2D39D /* Headers */,
+				65E3A6A1FF7CB48279C7679C6BED93A5 /* Sources */,
+				4AE97F15041997F95101FD7603A83E8C /* Frameworks */,
+				47029E6E12A40C4ED7ED4F196A271DEA /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				61E7A59699A13D678A16A1F91271498D /* PBXTargetDependency */,
+				CCB6AF19A4BC61D9FC11FC1140E35087 /* PBXTargetDependency */,
 			);
 			name = "Pods-MoMagiciOSProject-MoMagicExtesnionServices";
-			productName = "Pods-MoMagiciOSProject-MoMagicExtesnionServices";
-			productReference = FAAEB6986DD66AFADFB18FF332C963B9 /* Pods_MoMagiciOSProject_MoMagicExtesnionServices.framework */;
+			productName = Pods_MoMagiciOSProject_MoMagicExtesnionServices;
+			productReference = FAAEB6986DD66AFADFB18FF332C963B9 /* Pods-MoMagiciOSProject-MoMagicExtesnionServices */;
 			productType = "com.apple.product-type.framework";
 		};
 		84D5C00EF3925955B49592F74735B386 /* Pods-MoMagiciOSProject */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B639E41EB5832C4BDA47B33F671D7B2C /* Build configuration list for PBXNativeTarget "Pods-MoMagiciOSProject" */;
+			buildConfigurationList = 688A354E084E6B1D9F99D142555261AE /* Build configuration list for PBXNativeTarget "Pods-MoMagiciOSProject" */;
 			buildPhases = (
-				86A093EF62D4F40D2BDD53ECAB118D38 /* Headers */,
-				7552E0529EB98AAC700B4E63764533A5 /* Sources */,
-				234ECE2DB8765514E238A7128B3FADE5 /* Frameworks */,
-				1254722D7F4540CEC430E7C2C01C2A03 /* Resources */,
+				2231448A7D5A244FC10135B7B1252A01 /* Headers */,
+				B18A27A8CB01AC164742E1CAA113A6F5 /* Sources */,
+				36EB16377FE1EEC2CD30994B496FAFDF /* Frameworks */,
+				5F7627F363C22A5C728630A4BE95B36A /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				EA554409A779093B5DCFAE070C968F73 /* PBXTargetDependency */,
+				4BC5D2FC11606B24CEC6DFA5339F2E75 /* PBXTargetDependency */,
 			);
 			name = "Pods-MoMagiciOSProject";
-			productName = "Pods-MoMagiciOSProject";
-			productReference = 097693962E4EB536B1255829A5D8A46E /* Pods_MoMagiciOSProject.framework */;
+			productName = Pods_MoMagiciOSProject;
+			productReference = 097693962E4EB536B1255829A5D8A46E /* Pods-MoMagiciOSProject */;
 			productType = "com.apple.product-type.framework";
 		};
 		F26196BA4CD40EECE83A15D0347FFB5C /* MomagiciOSSDK */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 21F35B279B1EE9E2DED77C3BAB40AAC0 /* Build configuration list for PBXNativeTarget "MomagiciOSSDK" */;
+			buildConfigurationList = 2DB2B81A536313920EFC52BA55078D0F /* Build configuration list for PBXNativeTarget "MomagiciOSSDK" */;
 			buildPhases = (
-				EA4557AD054EB237A83A5EBB2F7C0B0C /* Headers */,
-				C8FB60384E3A8250545F4AAAF13A8A3C /* Sources */,
-				92F29475E4A6F76C929A847154928430 /* Frameworks */,
-				D2FBCDF070C935CC5CB4A9E363E5C0D3 /* Resources */,
+				65CCE40EBEAE378FF654B85290F89912 /* Headers */,
+				6A247C1065AD7B6994A9FF17BB6D0D2E /* Sources */,
+				6D03F313A8BF538B717570A8DB4EF867 /* Frameworks */,
+				26C7DB999B418B9E04E995780CB8CE36 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -364,7 +365,7 @@
 			);
 			name = MomagiciOSSDK;
 			productName = MomagiciOSSDK;
-			productReference = B89907E078A755C586F1ED9C1DAF00F7 /* MomagiciOSSDK.framework */;
+			productReference = B89907E078A755C586F1ED9C1DAF00F7 /* MomagiciOSSDK */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -373,19 +374,21 @@
 		BFDFE7DC352907FC980B868725387E98 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
 			};
 			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
-			compatibilityVersion = "Xcode 10.0";
+			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
+				en,
 			);
 			mainGroup = CF1408CF629C7361332E53B88F7BD30C;
-			productRefGroup = 820F8C0DBBA539D45D3AE9BAE611E775 /* Products */;
+			minimizedProjectReferenceProxies = 0;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 64559DBF552AAA9EB1521AC0C1C0AD35 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -397,21 +400,21 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		1254722D7F4540CEC430E7C2C01C2A03 /* Resources */ = {
+		26C7DB999B418B9E04E995780CB8CE36 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		75CDECAD3B87A6500C6E458DC3CFFB2F /* Resources */ = {
+		47029E6E12A40C4ED7ED4F196A271DEA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D2FBCDF070C935CC5CB4A9E363E5C0D3 /* Resources */ = {
+		5F7627F363C22A5C728630A4BE95B36A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -421,307 +424,59 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		7552E0529EB98AAC700B4E63764533A5 /* Sources */ = {
+		65E3A6A1FF7CB48279C7679C6BED93A5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				643CFEA50209BBD03C0F90AE64CE606A /* Pods-MoMagiciOSProject-dummy.m in Sources */,
+				4B54E5DF7BCEA34D0A3BAF007AAADA46 /* Pods-MoMagiciOSProject-MoMagicExtesnionServices-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C8FB60384E3A8250545F4AAAF13A8A3C /* Sources */ = {
+		6A247C1065AD7B6994A9FF17BB6D0D2E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6C09A86B2C8728FD00831BCD /* DatParsing.swift in Sources */,
-				AB856B25AF87D31FCAE70A2DA8135736 /* AppConstant.swift in Sources */,
-				65F2E1E028AF5FA67490C605A1BBE787 /* DATB.swift in Sources */,
-				C22D9C279CCCFF050866F04AA3D72033 /* MomagiciOSSDK-dummy.m in Sources */,
-				2A9A0C66A6FCCDF689BA10A3D39063DA /* Payload.swift in Sources */,
-				43D82A86EB83C07C59707944BB6340D8 /* RestClient.swift in Sources */,
-				1B8E1530A88D34BC8CDF3C2B2D0D8698 /* SharedUserDefault.swift in Sources */,
-				168ABD047F76FAFF79A271E0AF7EC15D /* UserDefaults.swift in Sources */,
-				575C39375447092C305726599CB6D778 /* Utils.swift in Sources */,
-				10842D654999176ECBD004DA5F31D8AD /* ViewController.swift in Sources */,
-				6C339E2C2CCFAAFD0052D526 /* IZDeviceInfo.swift in Sources */,
+				1714D784BC0DF9522A689C77654E44C8 /* AppConstant.swift in Sources */,
+				FE9A012A8E77AF680CC0A615DE4569F0 /* DATB.swift in Sources */,
+				BFB5682F06A61B267034274AC9833D8C /* DatParsing.swift in Sources */,
+				0A332F24B6448EA8B48F7232D20BF475 /* IZDeviceInfo.swift in Sources */,
+				FA1F334728055D3C49F79EB893592201 /* MomagiciOSSDK-dummy.m in Sources */,
+				4CF9415A1C49B71CBF9CABD197B7CEB9 /* Payload.swift in Sources */,
+				C4087476FA17BBB6B40B3586F4A29CD4 /* RestClient.swift in Sources */,
+				B8BFCC9B61EF404667B65E5CD254BAF4 /* SharedUserDefault.swift in Sources */,
+				F7E44C46BAB41BF718A181DD719EA57A /* UserDefaults.swift in Sources */,
+				7B36D8DD0DE69C91220EA6F690104521 /* Utils.swift in Sources */,
+				59654D55FAF4EC97DEE6EE306F4C2D50 /* ViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E34E9053E43CC910121FAA7F91E94E3D /* Sources */ = {
+		B18A27A8CB01AC164742E1CAA113A6F5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C2609E6F9F2F48EB3BF98A493DFB5DF3 /* Pods-MoMagiciOSProject-MoMagicExtesnionServices-dummy.m in Sources */,
+				0C8A023C8F20630B62BAD9E8DCE3D788 /* Pods-MoMagiciOSProject-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		61E7A59699A13D678A16A1F91271498D /* PBXTargetDependency */ = {
+		4BC5D2FC11606B24CEC6DFA5339F2E75 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = MomagiciOSSDK;
 			target = F26196BA4CD40EECE83A15D0347FFB5C /* MomagiciOSSDK */;
-			targetProxy = 688FBA81F6E29124DA1E6A687C56542C /* PBXContainerItemProxy */;
+			targetProxy = 12233B21BF3E8D3B383E2DE684731EB2 /* PBXContainerItemProxy */;
 		};
-		EA554409A779093B5DCFAE070C968F73 /* PBXTargetDependency */ = {
+		CCB6AF19A4BC61D9FC11FC1140E35087 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = MomagiciOSSDK;
 			target = F26196BA4CD40EECE83A15D0347FFB5C /* MomagiciOSSDK */;
-			targetProxy = 94FA0178C4388146C8F497F5AC7EC33F /* PBXContainerItemProxy */;
+			targetProxy = 1ABFBE0DAFE37DF508FE5804ECE9B990 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		021C078CEDE350B1AB2F15A22E09EA98 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8C861E9568DD904A187C255A18EA3D3D /* MomagiciOSSDK.debug.xcconfig */;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = NO;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/MomagiciOSSDK/MomagiciOSSDK-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/MomagiciOSSDK/MomagiciOSSDK-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MODULEMAP_FILE = "Target Support Files/MomagiciOSSDK/MomagiciOSSDK.modulemap";
-				PRODUCT_MODULE_NAME = MomagiciOSSDK;
-				PRODUCT_NAME = MomagiciOSSDK;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		4A0C6CBA1B1972ED25483E893C41DC8C /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6541D18B12EFC7784273BFD67006D3DE /* Pods-MoMagiciOSProject-MoMagicExtesnionServices.release.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-MoMagiciOSProject-MoMagicExtesnionServices/Pods-MoMagiciOSProject-MoMagicExtesnionServices-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-MoMagiciOSProject-MoMagicExtesnionServices/Pods-MoMagiciOSProject-MoMagicExtesnionServices.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		7EE7A78859F657F6BEFC651185B43192 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"POD_CONFIGURATION_RELEASE=1",
-					"$(inherited)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				MTL_FAST_MATH = YES;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 5.0;
-				SYMROOT = "${SRCROOT}/../build";
-			};
-			name = Release;
-		};
-		911C41019501BA41A82C78025052CAB8 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = B9079CDA0C764DD8EE0DAFD45E137AD7 /* MomagiciOSSDK.release.xcconfig */;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = NO;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/MomagiciOSSDK/MomagiciOSSDK-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/MomagiciOSSDK/MomagiciOSSDK-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MODULEMAP_FILE = "Target Support Files/MomagiciOSSDK/MomagiciOSSDK.modulemap";
-				PRODUCT_MODULE_NAME = MomagiciOSSDK;
-				PRODUCT_NAME = MomagiciOSSDK;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		B7158A343340A2283704E120B168B1D8 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = B1FE50BB6F791175D26351CA8B89FD5B /* Pods-MoMagiciOSProject.release.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-MoMagiciOSProject/Pods-MoMagiciOSProject-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-MoMagiciOSProject/Pods-MoMagiciOSProject.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		C7A7DE3B49FD80601E6ECACB76460AC5 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = AC7A34771A7EB9C9B3E5DB7C2060E2C5 /* Pods-MoMagiciOSProject-MoMagicExtesnionServices.debug.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-MoMagiciOSProject-MoMagicExtesnionServices/Pods-MoMagiciOSProject-MoMagicExtesnionServices-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-MoMagiciOSProject-MoMagicExtesnionServices/Pods-MoMagiciOSProject-MoMagicExtesnionServices.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		D299434AB35E7FD6F7921C8EF24742FF /* Debug */ = {
+		2B9E26EAE2CD392AD762421F663075A1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -774,7 +529,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -787,7 +542,7 @@
 			};
 			name = Debug;
 		};
-		D6742C6DF81598C63EE690D4B1EBCA26 /* Debug */ = {
+		62A61FC0FD2B714BD0A42C112DCA112F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 801CB1BF1AD8B6A70952DB1103ADE32C /* Pods-MoMagiciOSProject.debug.xcconfig */;
 			buildSettings = {
@@ -801,9 +556,11 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = "Target Support Files/Pods-MoMagiciOSProject/Pods-MoMagiciOSProject-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -824,14 +581,283 @@
 			};
 			name = Debug;
 		};
+		63FAF33E1C55B71A5F5A8B3CC8749F99 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Release;
+		};
+		6C307498D27EAED8EA20770BD10E0046 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AC7A34771A7EB9C9B3E5DB7C2060E2C5 /* Pods-MoMagiciOSProject-MoMagicExtesnionServices.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				INFOPLIST_FILE = "Target Support Files/Pods-MoMagiciOSProject-MoMagicExtesnionServices/Pods-MoMagiciOSProject-MoMagicExtesnionServices-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-MoMagiciOSProject-MoMagicExtesnionServices/Pods-MoMagiciOSProject-MoMagicExtesnionServices.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		9069AE7A53F93C910328044BF424BA64 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BC52CB8D60D173D87D4F57C38A155124 /* MomagiciOSSDK.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_PREFIX_HEADER = "Target Support Files/MomagiciOSSDK/MomagiciOSSDK-prefix.pch";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Target Support Files/MomagiciOSSDK/MomagiciOSSDK-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/MomagiciOSSDK/MomagiciOSSDK.modulemap";
+				PRODUCT_MODULE_NAME = MomagiciOSSDK;
+				PRODUCT_NAME = MomagiciOSSDK;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		994E6F15016498F53046E274EB1ED733 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B1FE50BB6F791175D26351CA8B89FD5B /* Pods-MoMagiciOSProject.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				INFOPLIST_FILE = "Target Support Files/Pods-MoMagiciOSProject/Pods-MoMagiciOSProject-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-MoMagiciOSProject/Pods-MoMagiciOSProject.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		C98F2F334028523E7837860F6B05052A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6541D18B12EFC7784273BFD67006D3DE /* Pods-MoMagiciOSProject-MoMagicExtesnionServices.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				INFOPLIST_FILE = "Target Support Files/Pods-MoMagiciOSProject-MoMagicExtesnionServices/Pods-MoMagiciOSProject-MoMagicExtesnionServices-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-MoMagiciOSProject-MoMagicExtesnionServices/Pods-MoMagiciOSProject-MoMagicExtesnionServices.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		FE8BCB15962DE135DD0B41C68F373468 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 27594943C3109C3DB85D3B3A888EBAB1 /* MomagiciOSSDK.release.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_PREFIX_HEADER = "Target Support Files/MomagiciOSSDK/MomagiciOSSDK-prefix.pch";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Target Support Files/MomagiciOSSDK/MomagiciOSSDK-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/MomagiciOSSDK/MomagiciOSSDK.modulemap";
+				PRODUCT_MODULE_NAME = MomagiciOSSDK;
+				PRODUCT_NAME = MomagiciOSSDK;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		21F35B279B1EE9E2DED77C3BAB40AAC0 /* Build configuration list for PBXNativeTarget "MomagiciOSSDK" */ = {
+		0AB38D731A86CC28EA29F372272F962A /* Build configuration list for PBXNativeTarget "Pods-MoMagiciOSProject-MoMagicExtesnionServices" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				021C078CEDE350B1AB2F15A22E09EA98 /* Debug */,
-				911C41019501BA41A82C78025052CAB8 /* Release */,
+				6C307498D27EAED8EA20770BD10E0046 /* Debug */,
+				C98F2F334028523E7837860F6B05052A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2DB2B81A536313920EFC52BA55078D0F /* Build configuration list for PBXNativeTarget "MomagiciOSSDK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9069AE7A53F93C910328044BF424BA64 /* Debug */,
+				FE8BCB15962DE135DD0B41C68F373468 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -839,26 +865,17 @@
 		4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D299434AB35E7FD6F7921C8EF24742FF /* Debug */,
-				7EE7A78859F657F6BEFC651185B43192 /* Release */,
+				2B9E26EAE2CD392AD762421F663075A1 /* Debug */,
+				63FAF33E1C55B71A5F5A8B3CC8749F99 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B639E41EB5832C4BDA47B33F671D7B2C /* Build configuration list for PBXNativeTarget "Pods-MoMagiciOSProject" */ = {
+		688A354E084E6B1D9F99D142555261AE /* Build configuration list for PBXNativeTarget "Pods-MoMagiciOSProject" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D6742C6DF81598C63EE690D4B1EBCA26 /* Debug */,
-				B7158A343340A2283704E120B168B1D8 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		B95CE86785EEA1333CE4407FB147DFA5 /* Build configuration list for PBXNativeTarget "Pods-MoMagiciOSProject-MoMagicExtesnionServices" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				C7A7DE3B49FD80601E6ECACB76460AC5 /* Debug */,
-				4A0C6CBA1B1972ED25483E893C41DC8C /* Release */,
+				62A61FC0FD2B714BD0A42C112DCA112F /* Debug */,
+				994E6F15016498F53046E274EB1ED733 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
