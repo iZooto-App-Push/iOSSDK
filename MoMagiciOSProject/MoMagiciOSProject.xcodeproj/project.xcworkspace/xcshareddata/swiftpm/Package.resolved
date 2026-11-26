@@ -1,0 +1,15 @@
+{
+  "originHash" : "ea4acb5f3d87de134ffade2fcb049bd349852128df62e9b45bbe9e4d251b4e68",
+  "pins" : [
+    {
+      "identity" : "momagic-xcframework",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/iZooto-App-Push/Momagic-XCFramework.git",
+      "state" : {
+        "revision" : "80e760d88ab5e83652973e438b01913a7dc73ba7",
+        "version" : "1.0.1"
+      }
+    }
+  ],
+  "version" : 3
+}

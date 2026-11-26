@@ -19,7 +19,9 @@ import AdSupport
 let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
 @available(iOS 11.0, *)
 @objc public  class DATB : NSObject {
-    static var appDelegate = UIApplication.shared.delegate
+    static var appDelegate: UIApplicationDelegate? {
+        return UIApplication.shared.delegate
+    }
     private let application : UIApplication
     private static var type = "0"
     private static let checkData = 1 as Int
@@ -150,15 +152,19 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
                 debugPrint(AppConstant.IZ_TAG,AppConstant.iZ_KEY_AUTO_PROMPT_NOT_FOUND)
                 Utils.handleOnceException(bundleName: bundleName, exceptionName: AppConstant.iZ_KEY_AUTO_PROMPT_NOT_FOUND, className: AppConstant.IZ_TAG, methodName: AppConstant.iZ_KEY_INITIALISE,  rid: nil, cid: nil, userInfo: nil)
             }
-            if #available(iOS 11.0, *) {
-                UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
+            
+            if let delegate = appDelegate as? UNUserNotificationCenterDelegate {
+                UNUserNotificationCenter.current().delegate = delegate
             }
+            
         }
         else{
             registerForPushNotifications() // check for prompt
-            if #available(iOS 11.0, *) {
-                UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
+            
+            if let delegate = appDelegate as? UNUserNotificationCenterDelegate {
+                UNUserNotificationCenter.current().delegate = delegate
             }
+            
         }
         if let userPropertiesData = sharedUserDefault?.dictionary(forKey:AppConstant.iZ_USERPROPERTIES_KEY)
         {
@@ -256,17 +262,19 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
     
     // register for pushNotification Setting
     @objc public  static  func registerForPushNotifications() {
-        if #available(iOS 11.0, *) {
-            UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
+        
+        if let delegate = appDelegate as? UNUserNotificationCenterDelegate {
+            UNUserNotificationCenter.current().delegate = delegate
         }
-        if #available(iOS 11.0, *) {
-            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
-                (granted, error) in
-                UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
-                debugPrint(AppConstant.PERMISSION_GRANTED ,"\(granted)")
-                guard granted else { return }
-                getNotificationSettings()
+        
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
+            (granted, error) in
+            if let delegate = appDelegate as? UNUserNotificationCenterDelegate {
+                UNUserNotificationCenter.current().delegate = delegate
             }
+            debugPrint(AppConstant.PERMISSION_GRANTED ,"\(granted)")
+            guard granted else { return }
+            getNotificationSettings()
         }
     }
     
@@ -1943,12 +1951,10 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
     // To handle badgeCount, Sound and call impression
     @objc static func setupBadgeSoundAndHandleImpression( bundleName: String, isBadge: Bool, bestAttemptContent :UNMutableNotificationContent, notificationData: Payload, userInfo: [AnyHashable : Any]? , isEnabled: Bool, soundName:String) {
         // custom notification sound
-        if (soundName != "")
-        {
-            bestAttemptContent.sound = UNNotificationSound(named: UNNotificationSoundName(string: soundName) as String)
-        }
-        else
-        {
+        if soundName != "" {
+            bestAttemptContent.sound = UNNotificationSound(
+                named: UNNotificationSoundName(string: soundName) as String)
+        } else {
             bestAttemptContent.sound = .default()
         }
         if(bundleName != "") {
@@ -3076,19 +3082,21 @@ let sharedUserDefault = UserDefaults(suiteName: SharedUserDefault.suitName)
     
     // promptForPushNotifications
     @objc public  static  func promptForPushNotifications() {
-        if #available(iOS 10.0, *) {
-            UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
+        
+        if let delegate = appDelegate as? UNUserNotificationCenterDelegate {
+            UNUserNotificationCenter.current().delegate = delegate
         }
-        if #available(iOS 10.0, *) {
-            
-            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
-                (granted, error) in
-                UNUserNotificationCenter.current().delegate = appDelegate as? UNUserNotificationCenterDelegate
-                debugPrint(AppConstant.PERMISSION_GRANTED ,"\(granted)")
-                guard granted else { return }
-                getNotificationSettings()
+        
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
+            (granted, error) in
+            if let delegate = appDelegate as? UNUserNotificationCenterDelegate {
+                UNUserNotificationCenter.current().delegate = delegate
             }
+            debugPrint(AppConstant.PERMISSION_GRANTED ,"\(granted)")
+            guard granted else { return }
+            getNotificationSettings()
         }
+        
     }
     @objc private static func handleBroserNotification(url : String)
     {
